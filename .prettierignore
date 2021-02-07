@@ -1,0 +1,11 @@
+node_modules
+coverage
+build
+!prisma/
+primsa/*
+!primsa/seeders
+.next
+out
+.github
+.vscode
+.vercel
