@@ -13,6 +13,14 @@ const getSlugFromFilePath = filePath => {
   return split[split.length - 2]
 }
 
+const dateSortDesc = (a, b) => {
+  if (a < b) {
+    return 1
+  } else {
+    return -1
+  }
+}
+
 export function getPostsSortedByDate() {
   const allPostsData = postFilePaths.map(filePath => {
     const slug = getSlugFromFilePath(filePath)
@@ -26,13 +34,7 @@ export function getPostsSortedByDate() {
   })
 
   // Sort posts by date
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1
-    } else {
-      return -1
-    }
-  })
+  return allPostsData.sort((a, b) => dateSortDesc(a.date, b.date))
 }
 
 // =================
@@ -100,15 +102,15 @@ export async function getCategoryBySlug(slug: string | string[]) {
     const source = fs.readFileSync(filePath, 'utf8')
     const {data} = matter(source)
 
-    console.log(data)
-
     return {
       slug: getSlugFromFilePath(filePath),
       frontMatter: {...data}
     }
   })
 
-  const postsForCategory = allPostsData.filter(({frontMatter: {category}}) => category === slug)
+  const postsForCategory = allPostsData
+    .filter(({frontMatter: {category}}) => category === slug)
+    .sort((a, b) => dateSortDesc(a.frontMatter.date, b.frontMatter.date))
 
   return {
     name: slug,
