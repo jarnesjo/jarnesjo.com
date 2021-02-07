@@ -154,16 +154,18 @@ const DefaultLayout = ({children}: {children: React.ReactNode}) => {
         <main id="main" className="pb-10">
           {children}
         </main>
-        <footer className="space-x-10 text-gray-500 text-center mt-16">
+        <footer className="text-gray-500 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
           {menuItems.map(item => (
             <Link href={item.href} key={item.title}>
-              <a>{item.title}</a>
+              <a className="p-4">{item.title}</a>
             </Link>
           ))}
           <Link href="/uses">
-            <a>Uses</a>
+            <a className="p-4">Uses</a>
           </Link>
-          <a href="https://twitter.com/jarnesjo">Twitter</a>
+          <a className="p-4" href="https://twitter.com/jarnesjo">
+            Twitter
+          </a>
         </footer>
       </div>
     </>

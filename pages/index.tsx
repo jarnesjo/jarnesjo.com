@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Date from '@/components/date'
 import Link from 'next/link'
 import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
+import {Teaser} from '@/components/Teaser'
 // import Img from 'react-optimized-image'
 
 export default function Home({allPostsData}) {
@@ -26,15 +27,7 @@ export default function Home({allPostsData}) {
         <h2 className="text-3xl font-bold tracking-tight mb-4">Latest writings</h2>
         <div className="space-y-4">
           {allPostsData.map(({slug, date, title}) => (
-            <article className="" key={slug}>
-              <Link href={`/blog/${slug}`}>
-                <a className="text-xl font-semibold">{title}</a>
-              </Link>
-              <br />
-              <small className="">
-                <Date dateString={date} />
-              </small>
-            </article>
+            <Teaser title={title} slug={slug} date={date} key={slug} />
           ))}
         </div>
       </div>

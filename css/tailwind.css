@@ -55,7 +55,7 @@
   .token.atrule,
   .token.attr-value,
   .token.keyword {
-    @apply text-blue-500;
+    @apply text-blue-400;
   }
 
   .token.function,
@@ -67,5 +67,9 @@
   .token.important,
   .token.variable {
     @apply text-yellow-500;
+  }
+
+  .prose pre {
+    @apply bg-gray-800 -mx-4 md:-mx-8;
   }
 }
