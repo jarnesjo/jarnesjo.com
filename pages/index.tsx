@@ -1,10 +1,7 @@
-import {getAllPostSlugs, getPostsSortedByDate} from '../lib/mdx'
+import {getPostsSortedByDate} from '../lib/mdx'
 import Head from 'next/head'
-import Date from '@/components/date'
-import Link from 'next/link'
 import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
-// import Img from 'react-optimized-image'
 
 export default function Home({allPostsData}) {
   return (
