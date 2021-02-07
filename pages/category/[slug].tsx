@@ -1,5 +1,6 @@
 import Date from '@/components/date'
 import {DefaultLayout} from '@/components/layouts/DefaultLayout'
+import {Teaser} from '@/components/Teaser'
 import {getAllCategorySlugs, getCategoryBySlug} from '@/lib/mdx'
 import {FrontMatterType} from '@/types/FrontMatterType'
 import {GetStaticPaths, GetStaticProps} from 'next'
@@ -20,18 +21,8 @@ export default function CategoryPage({
       </div>
       <div className="space-y-4">
         {posts &&
-          posts.map(({slug, frontMatter: {title, description, date}}) => (
-            <div key={slug}>
-              <Link href={`/posts/${slug}`}>
-                <a className="text-xl font-semibold">{title}</a>
-              </Link>
-              <div className="text-gray-500">
-                <small>
-                  <Date dateString={date} />
-                </small>
-                {/* {description && <> &bull; {description}</>} */}
-              </div>
-            </div>
+          posts.map(({slug, frontMatter: {title, date}}) => (
+            <Teaser title={title} slug={slug} date={date} key={slug} />
           ))}
       </div>
     </DefaultLayout>
