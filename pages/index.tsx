@@ -2,6 +2,7 @@ import {getPostsSortedByDate} from '../lib/mdx'
 import Head from 'next/head'
 import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
+import {CustomImage} from '@/components/CustomImage'
 
 export default function Home({allPostsData}) {
   return (
@@ -31,24 +32,9 @@ export default function Home({allPostsData}) {
 
       <h2 className="text-3xl font-bold tracking-tight mb-4">Things I have build</h2>
       <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-        {/* <div className="relative">
-          <Img
-            src={require('../public/images/snittranta.png?lqip')}
-            webp
-            alt=""
-            className="w-full absolute"
-            loading="lazy"
-          />
-          <Img
-            src={require('../public/images/snittranta.png')}
-            webp
-            alt=""
-            sizes={[300, 600]}
-            breakpoints={[600]}
-            className="absolute inset-x-0 w-full"
-            loading="lazy"
-          />
-        </div> */}
+        <div className="relative">
+          <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
+        </div>
         <div></div>
       </div>
     </DefaultLayout>
