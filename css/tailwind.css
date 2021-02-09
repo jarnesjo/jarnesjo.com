@@ -9,8 +9,24 @@
 }
 
 @layer components {
-  .img-blur {
-    filter: blur(5px);
+  .img-placeholder {
+    filter: blur(20px);
+    transform: scale(1.1);
+    margin: 0;
+  }
+
+  .prose .remark-code-title + pre,
+  .prose-lg .remark-code-title + pre {
+    @apply mt-0 rounded-t-none;
+  }
+
+  .prose pre,
+  .remark-code-title {
+    @apply -mx-4 md:-mx-8;
+  }
+
+  .remark-code-title {
+    @apply bg-gray-700 rounded-t-md px-6 py-3 text-gray-200 text-base font-mono font-medium;
   }
 
   /* @apply text-gray-700 dark:text-gray-300; */
@@ -41,7 +57,7 @@
   .token.char,
   .token.builtin,
   .token.inserted {
-    @apply text-purple-500;
+    @apply text-red-400;
   }
 
   .token.operator,
@@ -67,9 +83,5 @@
   .token.important,
   .token.variable {
     @apply text-yellow-500;
-  }
-
-  .prose pre {
-    @apply bg-gray-800 -mx-4 md:-mx-8;
   }
 }

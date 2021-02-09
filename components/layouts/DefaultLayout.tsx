@@ -151,7 +151,7 @@ const DefaultLayout = ({children}: {children: React.ReactNode}) => {
             </Transition>
           </nav>
         </header>
-        <main id="main" className="pb-10">
+        <main id="main" className="pb-10 max-w-2xl mx-auto">
           {children}
         </main>
         <footer className="text-gray-500 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
