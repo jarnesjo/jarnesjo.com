@@ -21,20 +21,22 @@ const dateSortDesc = (a, b) => {
   }
 }
 
-export function getPostsSortedByDate() {
+export function getPostsSortedByDate(limit?: number) {
   const allPostsData = postFilePaths.map(filePath => {
     const slug = getSlugFromFilePath(filePath)
 
     const source = fs.readFileSync(filePath, 'utf8')
     const {
-      data: {date, title}
+      data: {date, title, category}
     } = matter(source)
 
-    return {slug, date, title}
+    return {slug, date, title, category}
   })
 
   // Sort posts by date
-  return allPostsData.sort((a, b) => dateSortDesc(a.date, b.date))
+  return allPostsData
+    .sort((a, b) => dateSortDesc(a.date, b.date))
+    .slice(0, limit ?? allPostsData.length)
 }
 
 // =================
