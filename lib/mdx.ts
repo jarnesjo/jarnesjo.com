@@ -84,7 +84,7 @@ export async function getPostBySlug(slug: string | string[]) {
       remarkPlugins: [
         // require('remark-autolink-headings'),
         // require('remark-slug'),
-        // require('remark-code-titles')
+        require('remark-code-titles')
       ],
       rehypePlugins: [require('@mapbox/rehype-prism')]
     }
