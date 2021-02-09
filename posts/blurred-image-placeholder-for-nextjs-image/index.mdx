@@ -1,0 +1,130 @@
+---
+title: 'Blurred image placeholder for Next JS image (next/image)'
+description:
+date: '2021-02-09'
+published: false
+category: code
+tags:
+  - nextjs
+  - image
+# featuredImage: ./image.jpg
+author: Nicklas Jarnesjö
+---
+
+<Image
+  src="blurred-placeholder-animation.gif"
+  width={800}
+  height={629}
+  alt="Blurred image as placeholder beside real image"
+/>
+
+As seen in gif above (a bit distorted) is what I have accomplished described in the post below. And
+on this image below you can see the blurred image which is a base64-encoded image loaded first and
+it's created from the image to the right with a webpack-loader.
+
+<Image
+  src="next-image-blurred-placeholder.png"
+  width={1464}
+  height={578}
+  alt="Blurred image as placeholder beside real image"
+/>
+
+When I started using Next JS for the first time for real were just in break between version 9
+and 10. So when I heard they should include a new optimized image component I were excited.
+
+It's nice when the framework adds things like this which is build together with framework and
+optimized for it. But as in many cases it could missing features you thought would be nice to have.
+One of those things are some sort of placeholder for the image before it's loads because of the lazy
+loading.
+
+I have experiment with a lot of other npm packages such as `next-optimized-images` and got to know
+lqip for the first time. So why didn't I went that way? It have it's pros and cons as `next/image`
+and I want to stick to it and see how it evolves and in my opinion feels a bit more future-proof.
+
+## The solution
+
+So the solution were that it implemented a webpack loader which gives me a base64 string of the
+image I can add into a wrapper together with `next/image` which is absolute positioned and when the
+image loads it will appear above the placeholder and you will get the illusion they are stitched
+together.
+
+```bash
+npm install lqip-loader --save-dev
+```
+
+Add the lqip-loader into the _next.config.js_ and it will provided you with the base64 image which
+we uses in our custom image component.
+
+```js:next.config.js
+module.exports = {
+  webpack: (config, options) => {
+    config.module.rules.push({
+      test: /\.(png|jpe?g)$/i,
+      use: [
+        {
+          loader: 'lqip-loader',
+          options: {
+            base64: true,
+            palette: false,
+            publicPath: '/_next',
+            name: 'static/media/[name].[hash].[ext]'
+          }
+        }
+      ]
+    })
+    return config
+  }
+}
+```
+
+We still using the Next JS pattern to store our images into the `public`-directory and when we're
+doing the required we
+
+```js:CustomImage.tsx
+import Image, {ImageProps} from 'next/image'
+
+const CustomImage = ({src, ...props}: ImageProps) => {
+  const image = require(`../public${src}`)
+
+  return (
+    <div className="relative overflow-hidden flex">
+      <img
+        src={image.preSrc}
+        className="absolute inset-0 w-full h-full"
+        style={{filter: 'blur(20px)', transform: 'scale(1.1)', margin: '0'}}
+        aria-hidden="true"
+        alt=""
+      />
+      <Image src={src} {...props} />
+    </div>
+  )
+}
+
+export {CustomImage}
+```
+
+Here you can see an example of what you will get back from
+`const image = require('../public' + src)`
+
+```js
+// const image output
+{
+  src: '/_next/static/media/home-office.c67d540c7a63dc217dd4fb97837caf01.jpeg',
+  preSrc: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIAAgACgMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APjH9o/4S/sn+P8A4C/DyLxn8Xfinf8AjC/1q40Pxp4F8O6B4D8cp8M/D2jJdvZfEXwtoHjTwVoGra5rGq6ZqWoaFbeHdC+O/h/VBqaWmr3OqWkAe1l4sww2aYbEYyjl+Co1PZ0qbwtatVnRw+JqP2fNSrSowr1KPs488k/Y1FUlHlfIpKcftsyyhwxUIqlz4VKnCbpypwlFRg1KfLLnnKTaSbUbq6lCDad/xov/AIO6/rl9e63BYeKTBrF3c6pCdS8LTWmomLUJnu4/t9rGIY7a92TD7VbxwxJDP5kaxoqhR6FPDYj2cLwUXyRvFKTUXZXSbs2k9LtJvqkeY8p5m5KFW0m5Lmoy5rPXW7vfvfW5/9k='
+}
+```
+
+And an example of the CustomImage component in use. Still needing every necessary properties as
+`next/image`
+
+```js
+<CustomImage
+  src="/static/images/home-office.jpeg"
+  alt="My computer desk at home"
+  width="4032"
+  height="3024"
+/>
+```
+
+Hope you find this useful and if you have any questions or improvements suggestion just reach out to
+me on Twitter [@jarnesjo](https://twitter.com/jarnesjo)
