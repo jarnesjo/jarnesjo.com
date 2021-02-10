@@ -52,7 +52,7 @@ together.
 npm install lqip-loader --save-dev
 ```
 
-Add the lqip-loader into the _next.config.js_ and it will provided you with the base64 image which
+Add the `lqip-loader` into the _next.config.js_ and it will provided you with the base64 image which
 we uses in our custom image component.
 
 ```js:next.config.js
@@ -80,7 +80,7 @@ module.exports = {
 We still using the Next JS pattern to store our images into the `public`-directory and when we're
 doing the required we
 
-```js:CustomImage.tsx
+```tsx:CustomImage.tsx
 import Image, {ImageProps} from 'next/image'
 
 const CustomImage = ({src, ...props}: ImageProps) => {
@@ -106,24 +106,97 @@ export {CustomImage}
 Here you can see an example of what you will get back from
 `const image = require('../public' + src)`
 
-```js
+```json
 // const image output
 {
-  src: '/_next/static/media/home-office.c67d540c7a63dc217dd4fb97837caf01.jpeg',
-  preSrc: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIAAgACgMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APjH9o/4S/sn+P8A4C/DyLxn8Xfinf8AjC/1q40Pxp4F8O6B4D8cp8M/D2jJdvZfEXwtoHjTwVoGra5rGq6ZqWoaFbeHdC+O/h/VBqaWmr3OqWkAe1l4sww2aYbEYyjl+Co1PZ0qbwtatVnRw+JqP2fNSrSowr1KPs488k/Y1FUlHlfIpKcftsyyhwxUIqlz4VKnCbpypwlFRg1KfLLnnKTaSbUbq6lCDad/xov/AIO6/rl9e63BYeKTBrF3c6pCdS8LTWmomLUJnu4/t9rGIY7a92TD7VbxwxJDP5kaxoqhR6FPDYj2cLwUXyRvFKTUXZXSbs2k9LtJvqkeY8p5m5KFW0m5Lmoy5rPXW7vfvfW5/9k='
+  "src": "/_next/static/media/home-office.c67d540c7a63dc217dd4fb97837caf01.jpeg",
+  "preSrc": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIAAgACgMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APjH9o/4S/sn+P8A4C/DyLxn8Xfinf8AjC/1q40Pxp4F8O6B4D8cp8M/D2jJdvZfEXwtoHjTwVoGra5rGq6ZqWoaFbeHdC+O/h/VBqaWmr3OqWkAe1l4sww2aYbEYyjl+Co1PZ0qbwtatVnRw+JqP2fNSrSowr1KPs488k/Y1FUlHlfIpKcftsyyhwxUIqlz4VKnCbpypwlFRg1KfLLnnKTaSbUbq6lCDad/xov/AIO6/rl9e63BYeKTBrF3c6pCdS8LTWmomLUJnu4/t9rGIY7a92TD7VbxwxJDP5kaxoqhR6FPDYj2cLwUXyRvFKTUXZXSbs2k9LtJvqkeY8p5m5KFW0m5Lmoy5rPXW7vfvfW5/9k="
 }
 ```
 
 And an example of the CustomImage component in use. Still needing every necessary properties as
 `next/image`
 
-```js
+```jsx
 <CustomImage
   src="/static/images/home-office.jpeg"
   alt="My computer desk at home"
   width="4032"
   height="3024"
 />
+```
+
+## Caveats
+
+One problem with this solution are that it's **only supports jpg and png** at the moment. And to
+have fallback solutions is to add another webpack loader `file-loader`.
+
+```bash
+npm install file-loader
+```
+
+We then update `next.config.js` with the following code
+
+```js:next.config.js
+module.exports = {
+  webpack: (config, options) => {
+    config.module.rules.push(
+      {
+        test: /\.(png|jpe?g)$/i,
+        use: [
+          {
+            loader: 'lqip-loader',
+            options: {
+              base64: true,
+              palette: false,
+              publicPath: '/_next',
+              name: 'static/media/[name].[hash].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(svg|png|jpe?g|gif|mp4)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: '/_next',
+              name: 'static/media/[name].[hash].[ext]'
+            }
+          }
+        ]
+      }
+    )
+    return config
+  }
+}
+```
+
+Update the `CustomImage`-component to support fallback source for not supported image types.
+
+```tsx:CustomImage.tsx
+import Image, {ImageProps} from 'next/image'
+
+const CustomImage = ({src, ...props}: ImageProps) => {
+  const image = require(`../public${src}`)
+
+  return (
+    <div className="relative overflow-hidden flex">
+      {image.preSrc && (
+        <img
+          src={image.preSrc}
+          className="absolute inset-0 w-full h-full img-placeholder"
+          aria-hidden="true"
+          alt=""
+        />
+      )}
+      <Image src={image?.src || image.default} {...props} />
+    </div>
+  )
+}
+
+export {CustomImage}
 ```
 
 Hope you find this useful and if you have any questions or improvements suggestion just reach out to
