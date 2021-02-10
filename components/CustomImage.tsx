@@ -5,13 +5,15 @@ const CustomImage = ({src, ...props}: ImageProps) => {
 
   return (
     <div className="relative overflow-hidden flex">
-      <img
-        src={image.preSrc}
-        alt=""
-        className="absolute inset-0 w-full h-full img-placeholder"
-        aria-hidden
-      />
-      <Image src={src} {...props} />
+      {image.preSrc && (
+        <img
+          src={image.preSrc}
+          alt=""
+          className="absolute inset-0 w-full h-full img-placeholder"
+          aria-hidden="true"
+        />
+      )}
+      <Image src={image?.src || image.default} {...props} />
     </div>
   )
 }
