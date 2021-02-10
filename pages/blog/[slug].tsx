@@ -54,7 +54,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-  const postData = await getPostBySlug(params.slug)
+  let {slug} = params
+  slug = Array.isArray(slug) ? slug[slug.length - 1] : slug
+
+  const postData = await getPostBySlug(slug)
   return {
     props: {
       slug: params.slug,

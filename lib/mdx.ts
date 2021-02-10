@@ -70,7 +70,7 @@ export function getAllCategorySlugs() {
     })
 }
 
-export async function getPostBySlug(slug: string | string[]) {
+export async function getPostBySlug(slug: string) {
   const fullPath = path.join(BLOG_POST_PATH, `/${slug}/index.mdx`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
 
