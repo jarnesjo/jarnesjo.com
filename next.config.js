@@ -5,15 +5,14 @@ module.exports = {
     ]
   },
   webpack: (config, options) => {
-    // Blurred image loader
     config.module.rules.push({
-      test: /\.(png|jpe?g)$/i,
+      test: /\.(gif|png|jpe?g)$/i,
       use: [
         {
-          loader: 'lqip-loader',
+          loader: 'lqip-modern-loader',
           options: {
-            base64: true,
-            palette: false
+            publicPath: '/_next',
+            name: 'static/media/[name].[hash].[ext]'
           }
         }
       ]

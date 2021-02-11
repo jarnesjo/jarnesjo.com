@@ -19,10 +19,11 @@ export default function UsesPage() {
 
         <div className="-mx-4 md:-mx-8 text-center overflow-hidden">
           <CustomImage
-            src="/static/images/home-office.jpeg"
+            src="/static/images/home-office.jpg"
             alt="My computer desk at home"
             width="4032"
             height="3024"
+            className="rotate-180"
           />
         </div>
 
