@@ -1,4 +1,4 @@
-import {getPostsSortedByDate} from '../lib/mdx'
+import {getPostsSortedByDate} from '@/lib/mdx'
 import Head from 'next/head'
 import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
@@ -17,7 +17,7 @@ export default function Home({allPostsData}) {
         </div>
         <h1 className="text-6xl font-extrabold tracking-tight pt-2 pb-6">I like to build things</h1>
         <div className="text-2xl text-gray-500">
-          I'm one of the founder of Webready, a development agency in Kalmar, Sweden.
+          I'm one of the founders of Webready, a development agency in Kalmar, Sweden.
         </div>
       </div>
 
