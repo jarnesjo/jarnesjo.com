@@ -1,3 +1,5 @@
+# Source: https://github.com/vercel/next.js/discussions/16995#discussioncomment-132339
+
 # Install dependencies only when needed
 FROM node:lts-alpine AS deps
 
