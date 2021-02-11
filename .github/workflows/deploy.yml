@@ -56,6 +56,6 @@ jobs:
           script: |
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull docker.pkg.github.com/jarnesjo/jarnesjo.com/nextjs:latest
-            docker stop jarnesjo_com
+            docker stop jarnesjo.com
             docker system prune -f
-            docker run --name jarnesjo_com -dit docker.pkg.github.com/jarnesjo/jarnesjo.com/nextjs:latest
+            docker run --name jarnesjo.com -dit docker.pkg.github.com/jarnesjo/jarnesjo.com/nextjs:latest
