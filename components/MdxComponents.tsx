@@ -18,13 +18,13 @@ const CustomLink = props => {
 
 const MdxComponents = (slug: string) => ({
   Image: ({src, ...props}: ImageProps) => {
-    const image = require(`../posts/${slug}/${src}`)
+    const image = require(`../posts/${slug}/${src}?lqip`)
 
     return (
       <div className="-mx-4 md:-mx-8 text-center relative overflow-hidden flex">
-        {image.preSrc && (
+        {image.dataURI && (
           <img
-            src={image.preSrc}
+            src={image.dataURI}
             className="w-full h-full absolute inset-0 mx-0 img-placeholder"
             aria-hidden="true"
             alt=""
