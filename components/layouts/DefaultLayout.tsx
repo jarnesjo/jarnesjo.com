@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import Head from 'next/head'
 import {Transition} from '@headlessui/react'
 import {useCallback, useEffect, useState} from 'react'
+import {CustomImage} from '../CustomImage'
 
 export const siteTitle = 'Nicklas Jarnesjö'
 const menuItems = [
@@ -41,13 +41,14 @@ const DefaultLayout = ({children}: {children: React.ReactNode}) => {
           <div>
             <Link href="/">
               <a className="flex items-center">
-                <div className="rounded-full ring-1 ring-gray-200 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
-                  <Image
+                <div className="rounded-full ring-1 ring-gray-300 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
+                  <CustomImage
                     src="https://pbs.twimg.com/profile_images/1057609789692395522/Zr34NB7E_400x400.jpg"
-                    alt=""
-                    width={100}
-                    height={100}
+                    alt="Avatar of Nicklas Jarnesjö"
+                    width={400}
+                    height={400}
                     quality={100}
+                    priority
                   />
                 </div>
                 <div className="ml-4 font-semibold">Nicklas Jarnesjö</div>

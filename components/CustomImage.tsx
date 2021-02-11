@@ -1,7 +1,7 @@
 import Image, {ImageProps} from 'next/image'
 
 const CustomImage = ({src, ...props}: ImageProps) => {
-  const image = require(`../public${src}`)
+  const image = src.startsWith('http') ? {src} : require(`../public${src}`)
 
   return (
     <div className="relative overflow-hidden flex">
