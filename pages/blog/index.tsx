@@ -14,9 +14,12 @@ export default function BlogIndexPage({allPostsData}) {
       <div className="prose md:prose-lg">
         <p>
           I started my first blog 2009 as my first PHP-project in WordPress. It was on my first
-          local hack in Kalmar, Sweden 🇸🇪. Since then I have primarily worked with PHP, Laravel and
-          WordPress, but in the last years starting leaning more to JS. So I'm going trying to share
-          interesting thing I trip over and develop here. Enjoy!
+          local hack in Kalmar, Sweden 🇸🇪.
+        </p>
+        <p>
+          Since then I have primarily worked with PHP - Laravel and WordPress. But in the last years
+          I'm starting leaning more to JS. So I'm going trying to share interesting thing I trip
+          over and develop here. Enjoy!
         </p>
       </div>
       <div className="pt-12 space-y-8">
