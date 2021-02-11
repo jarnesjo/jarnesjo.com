@@ -30,13 +30,13 @@ export default function Home({allPostsData}) {
         </div>
       </div>
 
-      <h2 className="text-3xl font-bold tracking-tight mb-4">Things I have build</h2>
+      {/* <h2 className="text-3xl font-bold tracking-tight mb-4">Things I have build</h2>
       <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
         <div className="relative">
           <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
         </div>
         <div></div>
-      </div>
+      </div> */}
     </DefaultLayout>
   )
 }

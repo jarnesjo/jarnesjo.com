@@ -2,7 +2,7 @@ import {getAllPostSlugs, getPostBySlug} from '@/lib/mdx'
 import Head from 'next/head'
 import Date from '@/components/date'
 import {GetStaticPaths, GetStaticProps} from 'next'
-import {DefaultLayout} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
 import hydrate from 'next-mdx-remote/hydrate'
 import {MdxRemote} from 'next-mdx-remote/types'
 import {MdxComponents} from '@/components/MdxComponents'
@@ -26,7 +26,9 @@ export default function Post({
   return (
     <DefaultLayout>
       <Head>
-        <title>{title}</title>
+        <title>
+          {title} - {siteTitle}
+        </title>
       </Head>
       <article id="single-article">
         <header className="py-12 md:py-16 text-center">

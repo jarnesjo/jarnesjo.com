@@ -87,7 +87,7 @@ const CustomImage = ({src, ...props}: ImageProps) => {
   const image = require(`../public${src}`)
 
   return (
-    <div className="relative overflow-hidden flex">
+    <div className="relative overflow-hidden">
       <img
         src={image.preSrc}
         className="absolute inset-0 w-full h-full"
@@ -182,7 +182,7 @@ const CustomImage = ({src, ...props}: ImageProps) => {
   const image = require(`../public${src}`)
 
   return (
-    <div className="relative overflow-hidden flex">
+    <div className="relative overflow-hidden">
       {image.preSrc && (
         <img
           src={image.preSrc}

@@ -1,10 +1,9 @@
-import Date from '@/components/date'
-import {DefaultLayout} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
 import {getAllCategorySlugs, getCategoryBySlug} from '@/lib/mdx'
 import {FrontMatterType} from '@/types/FrontMatterType'
 import {GetStaticPaths, GetStaticProps} from 'next'
-import Link from 'next/link'
+import Head from 'next/head'
 
 export default function CategoryPage({
   categoryData
@@ -15,6 +14,11 @@ export default function CategoryPage({
 
   return (
     <DefaultLayout>
+      <Head>
+        <title>
+          {name} posts - {siteTitle}
+        </title>
+      </Head>
       <div className="text-center py-20">
         <h1 className="text-5xl font-bold tracking-tight mb-4 uppercase">{name}</h1>
         <p className="text-gray-500">This is a cateogry page about {name}</p>

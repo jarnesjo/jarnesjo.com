@@ -1,11 +1,14 @@
 import {CustomImage} from '@/components/CustomImage'
-import {DefaultLayout} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
-import Image from 'next/image'
+import Head from 'next/head'
 
 export default function UsesPage() {
   return (
     <DefaultLayout>
+      <Head>
+        <title>Uses - {siteTitle}</title>
+      </Head>
       <PageHeading>What do I use?</PageHeading>
 
       <div className="prose md:prose-lg mx-auto">
@@ -14,12 +17,14 @@ export default function UsesPage() {
           Most of the things have been accumilated over years and
         </p>
 
-        <CustomImage
-          src="/static/images/home-office.jpeg"
-          alt="My computer desk at home"
-          width="4032"
-          height="3024"
-        />
+        <div className="-mx-4 md:-mx-8 text-center overflow-hidden">
+          <CustomImage
+            src="/static/images/home-office.jpeg"
+            alt="My computer desk at home"
+            width="4032"
+            height="3024"
+          />
+        </div>
 
         <h3>Computer / Office</h3>
         <ul>
