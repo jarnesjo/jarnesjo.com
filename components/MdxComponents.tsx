@@ -1,4 +1,3 @@
-import {TestComponent} from '@/components/TestComponent'
 import Link from 'next/link'
 import Image, {ImageProps} from 'next/image'
 
@@ -35,8 +34,7 @@ const MdxComponents = (slug: string) => ({
       </div>
     )
   },
-  a: CustomLink,
-  TestComponent
+  a: CustomLink
 })
 
 export {MdxComponents}
