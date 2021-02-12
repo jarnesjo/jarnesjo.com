@@ -7,9 +7,8 @@ import {CustomImage} from '../CustomImage'
 export const siteTitle = 'Nicklas Jarnesjö'
 const menuItems = [
   {title: 'Home', href: '/'},
-  {title: 'Blog', href: '/blog'}
-  // {title: 'Stuff', href: '/'},
-  // {title: 'About', href: '/'}
+  {title: 'Blog', href: '/blog'},
+  {title: 'About', href: '/about'}
 ]
 
 const DefaultLayout = ({children}: {children: React.ReactNode}) => {
@@ -67,7 +66,7 @@ const DefaultLayout = ({children}: {children: React.ReactNode}) => {
               ))}
             </ul>
             {/* <button
-              className="rounded-full p-2 bg-gray-100 hover:bg-red-500 hover:text-white transition-all focus:outline-none outline-none focus:ring-1 focus:ring-red-700"
+              className="rounded-full p-2 bg-gray-200 hover:bg-red-500 hover:text-white transition-all focus:outline-none outline-none focus:ring-1 focus:ring-red-700"
               onClick={() => switchToggle()}
             >
               <svg
@@ -86,7 +85,7 @@ const DefaultLayout = ({children}: {children: React.ReactNode}) => {
               </svg>
             </button> */}
             <button
-              className="bg-gray-100 p-2 rounded-full md:hidden ml-6 hover:bg-red-500 hover:text-white transition-all focus:outline-none outline-none focus:ring-1 focus:ring-red-700"
+              className="bg-gray-200 p-2 rounded-full md:hidden ml-6 hover:bg-red-500 hover:text-white transition-all focus:outline-none outline-none focus:ring-1 focus:ring-red-700"
               onClick={() => toggleMobileMenu()}
             >
               <svg
@@ -112,7 +111,7 @@ const DefaultLayout = ({children}: {children: React.ReactNode}) => {
               enter="transition-all duration-200"
               enterFrom="opacity-0"
               enterTo="opacity-100"
-              className="bg-black bg-opacity-90 text-white absolute inset-0 z-10"
+              className="bg-black bg-opacity-90 text-white fixed inset-0 z-10"
               as="div"
             >
               <button
