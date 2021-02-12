@@ -47,15 +47,16 @@ jobs:
         env:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.APP_NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
-          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          envs: GITHUB_USERNAME, GITHUB_TOKEN, NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
           script: |
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull docker.pkg.github.com/jarnesjo/jarnesjo.com/nextjs:latest
             docker stop jarnesjo.com
             docker system prune -f
-            docker run --name jarnesjo.com -dit -p 3000:3000 docker.pkg.github.com/jarnesjo/jarnesjo.com/nextjs:latest
+            docker run --name jarnesjo.com -dit -p 3000:3000 --env NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=NEXT_PUBLIC_GOOGLE_ANALYTICS_ID docker.pkg.github.com/jarnesjo/jarnesjo.com/nextjs:latest
