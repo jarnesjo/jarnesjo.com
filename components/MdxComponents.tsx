@@ -21,7 +21,7 @@ const MdxComponents = (slug: string) => ({
     const image = require(`../posts/${slug}/${src}?lqip`)
 
     return (
-      <div className="-mx-4 md:-mx-8 text-center relative overflow-hidden flex">
+      <div className="-mx-4 md:-mx-8 text-center relative overflow-hidden flex sm:rounded-md">
         {image.dataURI && (
           <img
             src={image.dataURI}

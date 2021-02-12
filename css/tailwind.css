@@ -16,7 +16,7 @@
 
 .prose .remark-code-title + pre,
 .prose-lg .remark-code-title + pre {
-  @apply mt-0 rounded-t-none;
+  @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
 }
 
 .prose pre,
@@ -24,8 +24,12 @@
   @apply -mx-4 md:-mx-8;
 }
 
+.prose pre {
+  @apply rounded-none sm:rounded-md;
+}
+
 .remark-code-title {
-  @apply bg-gray-700 rounded-t-md px-6 py-3 text-gray-200 text-base font-mono font-medium;
+  @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md;
 }
 
 /* @apply text-gray-700 dark:text-gray-300; */
