@@ -1,16 +1,20 @@
 import Image, {ImageProps} from 'next/image'
 
-const CustomImage = ({src, ...props}: ImageProps) => {
+export type CustomImageType = ImageProps & {
+  noPlaceholder?: boolean
+}
+
+const CustomImage = ({src, noPlaceholder, ...props}: CustomImageType) => {
   const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`)
 
   return (
-    <div className="relative overflow-hidden flex">
-      {image.dataURI && (
+    <div className="relative overflow-hidden flex rounded-none sm:rounded-md">
+      {image.dataURI && !noPlaceholder && (
         <img
           src={image.dataURI}
-          alt=""
-          className={`absolute inset-0 w-full h-full img-placeholder`}
+          className="absolute inset-0 w-full h-full img-placeholder"
           aria-hidden="true"
+          alt=""
         />
       )}
       <Image src={image?.src || image.default} {...props} />
