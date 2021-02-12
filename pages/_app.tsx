@@ -1,6 +1,9 @@
-import { AppProps } from "next/dist/next-server/lib/router/router";
-import "@/css/tailwind.css";
+import '@/css/tailwind.css'
+import {useGoogleAnalytics} from '@/lib/googleAnalytics'
+import {AppProps} from 'next/app'
 
-export default function App({ Component, pageProps }: AppProps) {
-    return <Component {...pageProps} />;
+export default function App({Component, pageProps}: AppProps) {
+  useGoogleAnalytics()
+
+  return <Component {...pageProps} />
 }
