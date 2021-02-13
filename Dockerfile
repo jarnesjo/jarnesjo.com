@@ -13,6 +13,9 @@ RUN npm ci
 # but the code hasn't changed.
 FROM node:lts-alpine AS builder
 
+ARG NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
+ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=$NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
+
 ENV NODE_ENV=production
 WORKDIR /opt/app
 COPY . .
