@@ -1,0 +1,56 @@
+---
+title: 'Hot reload with next-remote-mdx in Next.js'
+description:
+date: '2021-02-13'
+published: false
+category: code
+tags:
+  - nextjs
+  - next-remote-mdx
+  - mdx
+author: Nicklas Jarnesjö
+---
+
+When starting this blog I was investigating what kind of package I would you for mdx. It was a
+couple of options. Next.js has their on package but it you have to place all of your posts in the
+`pages`-directory. Often this wouldn't be a problem but I would to have them outside and the
+structure like this:
+
+```
+public/
+pages/
+posts/
+├── unbalance-sound-on-mace/
+│   ├── index.mdx
+│   └── unbalance-sound-on-mace.png
+└── blurred-image-placeholder-for-nextjs-image/
+    ├── index.mdx
+    ├── blurred-placeholder-animation.gif
+    └── next-image-blurred-placeholder.png
+```
+
+My choice fell on `next-remote-mdx` because it felt more flexible. By making this choice I had to
+make a trade off to not getting the automatic hot reload I would have get if I have chosen Next.js
+own implementation. Util I found that the author of `next-remote-mdx` had wrote a npm package
+solving just that and lets you watch directories outside of the regular Next.js and trigger hot
+reload of it's own.
+
+They are doing by using undocumented API in Next.js so by that mean it could stop working in future
+updates without notice. So it could be a good idea to lock your Next.js version in `package.json` or
+just keep it mind.
+
+## The solution
+
+```bash
+npm install --save-dev next-remote-watch
+```
+
+Update your npm script for dev to use this new package to get hot reload out of the box on changes
+in specified directory, in my case `./posts` in the root.
+
+```json:package.json
+"scripts": {
+    "dev": "next-remote-watch ./posts",
+    ...
+}
+```
