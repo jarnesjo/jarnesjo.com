@@ -3,34 +3,83 @@ import Head from 'next/head'
 import {Transition} from '@headlessui/react'
 import {useCallback, useEffect, useState} from 'react'
 import {CustomImage} from '../CustomImage'
+import {useRouter} from 'next/dist/client/router'
 
-export const siteTitle = 'Nicklas Jarnesjö'
 const menuItems = [
   {title: 'Home', href: '/'},
   {title: 'Blog', href: '/blog'},
   {title: 'About', href: '/about'}
 ]
 
-const DefaultLayout = ({children}: {children: React.ReactNode}) => {
+export const defaultMeta = {
+  title: 'Nicklas Jarnesjö',
+  description: `Web developer who loves building and learning new things`,
+  siteUrl: 'https://jarnesjo.com',
+  twitterHandle: '@jarnesjo',
+  type: 'site',
+  image: {
+    src: 'https://jarnesjo.com/static/images/default-sharing.png',
+    alt: 'jarnesjo.com written in red on white background'
+  }
+}
+
+export type PageMeta = {
+  title?: string
+  description?: string
+  type?: string
+  image?: {
+    src: string
+    alt: string
+  }
+}
+
+const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMeta?: PageMeta}) => {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false)
   const toggleMobileMenu = () => {
     setMobileMenuIsOpen(!mobileMenuIsOpen)
   }
-  const [switchSound, setSwitchSound] = useState(null)
-  useEffect(() => {
-    setSwitchSound(new Audio('/switch.mp3'))
-  }, [])
 
-  const switchToggle = useCallback(() => {
-    if (switchSound) {
-      switchSound.play()
-    }
-  }, [switchSound])
+  const meta = {
+    ...defaultMeta,
+    ...pageMeta
+  }
+
+  const router = useRouter()
+  // const [switchSound, setSwitchSound] = useState(null)
+  // useEffect(() => {
+  //   setSwitchSound(new Audio('/statics/sounds/switch.mp3'))
+  // }, [])
+
+  // const switchToggle = useCallback(() => {
+  //   if (switchSound) {
+  //     switchSound.play()
+  //   }
+  // }, [switchSound])
 
   return (
     <>
       <Head>
-        <title>{siteTitle}</title>
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
+        <meta name="image" content={meta.image.src} />
+
+        {/* Facebook */}
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:description" content={meta.description} />
+        <meta property="og:url" content={`${meta.siteUrl}${router.asPath}`} />
+        <meta property="og:type" content={meta.type} />
+        <meta property="og:image" content={meta.image.src} />
+        <meta property="og:image:alt" content={meta.image.alt} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content={meta.twitterHandle} />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta name="twitter:image" content={meta.image.src} />
+        <meta name="twitter:creator" content={meta.twitterHandle} />
       </Head>
       <div className="max-w-4xl mx-auto pt-8 px-4 sm:px-8">
         <Link href="#main">

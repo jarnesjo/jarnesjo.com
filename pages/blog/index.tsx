@@ -1,15 +1,17 @@
-import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
 import {Teaser} from '@/components/Teaser'
 import {getPostsSortedByDate} from '@/lib/mdx'
-import Head from 'next/head'
 
 export default function BlogIndexPage({allPostsData}) {
   return (
-    <DefaultLayout>
-      <Head>
-        <title>Blog - {siteTitle}</title>
-      </Head>
+    <DefaultLayout
+      pageMeta={{
+        title: 'Blog',
+        description:
+          'Here I will share my thoughts and cool bits of the internet I find. Code, dev, js and similar stuff.'
+      }}
+    >
       <PageHeading>Writings</PageHeading>
       <div className="prose md:prose-lg">
         <p>

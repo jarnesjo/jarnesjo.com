@@ -1,14 +1,10 @@
 import {CustomImage} from '@/components/CustomImage'
 import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
-import Head from 'next/head'
 
 export default function AboutPage() {
   return (
-    <DefaultLayout>
-      <Head>
-        <title>About Nicklas Jarnesjö</title>
-      </Head>
+    <DefaultLayout pageMeta={{title: 'About Nicklas Jarnesjö'}}>
       <PageHeading>Who's Jarnesjö?</PageHeading>
       <div className="prose prose-lg md:prose-2xl mb-12">
         <div className="md:grid md:grid-cols-3 md:gap-4">

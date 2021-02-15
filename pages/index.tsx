@@ -1,16 +1,13 @@
 import {getPostsSortedByDate} from '@/lib/mdx'
 import Head from 'next/head'
-import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
 import {CustomImage} from '@/components/CustomImage'
+import Link from 'next/link'
 
 export default function Home({allPostsData}) {
   return (
     <DefaultLayout>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-
       <div className="py-12 md:py-20">
         <div className="uppercase tracking-wide text-lg font-semibold text-red-500">
           Hi, my name is Nicklas
@@ -23,10 +20,15 @@ export default function Home({allPostsData}) {
 
       <div className="pb-20 pt-4">
         <h2 className="text-3xl font-bold tracking-tight mb-4">Latest writings</h2>
-        <div className="space-y-4">
+        <div className="space-y-5">
           {allPostsData.map(({slug, date, title}) => (
             <Teaser title={title} slug={slug} date={date} key={slug} />
           ))}
+          <div className="font-semibold text-red-500 hover:text-red-700">
+            <Link href="/blog">
+              <a>See all posts →</a>
+            </Link>
+          </div>
         </div>
       </div>
 

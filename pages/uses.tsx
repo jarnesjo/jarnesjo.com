@@ -1,14 +1,11 @@
 import {CustomImage} from '@/components/CustomImage'
-import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout, defaultMeta} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
 import Head from 'next/head'
 
 export default function UsesPage() {
   return (
-    <DefaultLayout>
-      <Head>
-        <title>Uses - {siteTitle}</title>
-      </Head>
+    <DefaultLayout pageMeta={{title: `Uses - ${defaultMeta.title}`}}>
       <PageHeading>What do I use?</PageHeading>
 
       <div className="prose md:prose-lg mx-auto">

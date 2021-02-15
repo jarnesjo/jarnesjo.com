@@ -1,4 +1,4 @@
-import {DefaultLayout, siteTitle} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
 import {getAllCategorySlugs, getCategoryBySlug} from '@/lib/mdx'
 import {FrontMatterType} from '@/types/FrontMatterType'
@@ -13,12 +13,12 @@ export default function CategoryPage({
   const {name, posts} = categoryData
 
   return (
-    <DefaultLayout>
-      <Head>
-        <title>
-          {name} posts - {siteTitle}
-        </title>
-      </Head>
+    <DefaultLayout
+      pageMeta={{
+        title: `${name} posts`,
+        description: `Here you found every posts and writing about ${name}`
+      }}
+    >
       <div className="text-center py-20">
         <h1 className="text-5xl font-bold tracking-tight mb-4 uppercase">{name}</h1>
         <p className="text-gray-500">This is a cateogry page about {name}</p>
@@ -26,7 +26,7 @@ export default function CategoryPage({
       <div className="space-y-4">
         {posts &&
           posts.map(({slug, frontMatter: {title, date}}) => (
-            <Teaser title={title} slug={slug} date={date} key={slug} />
+            <Teaser title={title} slug={slug} date={date} key={slug} size="large" />
           ))}
       </div>
     </DefaultLayout>
