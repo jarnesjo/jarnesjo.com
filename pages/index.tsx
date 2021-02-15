@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export default function Home({allPostsData}) {
   return (
-    <DefaultLayout pageMeta={{title: 'Nicklas Jarnesjö likes web, dev and business'}}>
+    <DefaultLayout pageMeta={{title: 'Nicklas Jarnesjö - web, dev and business'}}>
       <div className="py-12 md:py-20">
         <div className="uppercase tracking-wide text-lg font-semibold text-red-500">
           Hi, my name is Nicklas
