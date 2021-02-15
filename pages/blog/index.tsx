@@ -1,4 +1,4 @@
-import {DefaultLayout} from '@/components/layouts/DefaultLayout'
+import {DefaultLayout, defaultMeta} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
 import {Teaser} from '@/components/Teaser'
 import {getPostsSortedByDate} from '@/lib/mdx'
@@ -7,7 +7,7 @@ export default function BlogIndexPage({allPostsData}) {
   return (
     <DefaultLayout
       pageMeta={{
-        title: 'Blog',
+        title: `Blog - ${defaultMeta.title}`,
         description:
           'Here I will share my thoughts and cool bits of the internet I find. Code, dev, js and similar stuff.'
       }}
