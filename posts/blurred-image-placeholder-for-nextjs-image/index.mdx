@@ -28,6 +28,14 @@ it's created from the image to the right with a webpack-loader.
   alt="Blurred image as placeholder beside real image"
 />
 
+<hr />
+
+**UPDATE**  
+It was initial written about `lqip-loader` but after some npm vulnerabilities and lack of support
+and decided to rewrite it and luckily found `lqip-modern-loader`. So updated content follows
+
+<hr />
+
 When I started using Next.js for the first time for real were just in break between version 9
 and 10. So when I heard they should include a new optimized image component I were excited.
 
@@ -48,26 +56,20 @@ image loads it will appear above the placeholder and you will get the illusion t
 together.
 
 ```bash
-npm install lqip-loader --save-dev
+npm install lqip-modern-loader --save-dev
 ```
 
-Add the `lqip-loader` into the _next.config.js_ and it will provided you with the base64 image which
-we uses in our custom image component.
+Add the `lqip-modern-loader` into the _next.config.js_ and it will provided you with the base64
+image which we uses in our custom image component.
 
 ```js:next.config.js
 module.exports = {
   webpack: (config, options) => {
     config.module.rules.push({
-      test: /\.(png|jpe?g)$/i,
+      test: /\.(gif|png|webp|jpe?g)$/i,
       use: [
         {
-          loader: 'lqip-loader',
-          options: {
-            base64: true,
-            palette: false,
-            publicPath: '/_next',
-            name: 'static/media/[name].[hash].[ext]'
-          }
+          loader: 'lqip-modern-loader'
         }
       ]
     })
@@ -77,39 +79,43 @@ module.exports = {
 ```
 
 We still using the Next.js pattern to store our images into the `public`-directory and when we're
-doing the required we
+doing the required we are loading it through our newly added webpack loader.
 
 ```tsx:CustomImage.tsx
 import Image, {ImageProps} from 'next/image'
 
 const CustomImage = ({src, ...props}: ImageProps) => {
-  const image = require(`../public${src}`)
+  const image = require(`../public${src}?lqip`)
 
   return (
-    <div className="relative overflow-hidden">
-      <img
-        src={image.preSrc}
-        className="absolute inset-0 w-full h-full"
-        style={{filter: 'blur(20px)', transform: 'scale(1.1)', margin: '0'}}
-        aria-hidden="true"
-        alt=""
-      />
-      <Image src={src} {...props} />
+    <div className="relative overflow-hidden flex rounded-none sm:rounded-md">
+        <img
+          src={image.dataURI}
+          className="absolute inset-0 w-full h-full transform scale-110 m-0"
+          style={{filter: 'blur(20px)'}}
+          aria-hidden="true"
+          alt=""
+        />
+      <Image src={image.src} {...props} />
     </div>
   )
 }
 
 export {CustomImage}
+
 ```
 
 Here you can see an example of what you will get back from
-`const image = require('../public' + src)`
+`` const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`) ``
 
 ```json
-// const image output
+// const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`)
+// console.log(image)
 {
-  "src": "/_next/static/media/home-office.c67d540c7a63dc217dd4fb97837caf01.jpeg",
-  "preSrc": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIAAgACgMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APjH9o/4S/sn+P8A4C/DyLxn8Xfinf8AjC/1q40Pxp4F8O6B4D8cp8M/D2jJdvZfEXwtoHjTwVoGra5rGq6ZqWoaFbeHdC+O/h/VBqaWmr3OqWkAe1l4sww2aYbEYyjl+Co1PZ0qbwtatVnRw+JqP2fNSrSowr1KPs488k/Y1FUlHlfIpKcftsyyhwxUIqlz4VKnCbpypwlFRg1KfLLnnKTaSbUbq6lCDad/xov/AIO6/rl9e63BYeKTBrF3c6pCdS8LTWmomLUJnu4/t9rGIY7a92TD7VbxwxJDP5kaxoqhR6FPDYj2cLwUXyRvFKTUXZXSbs2k9LtJvqkeY8p5m5KFW0m5Lmoy5rPXW7vfvfW5/9k="
+  "src": "/_next/static/media/home-office.0484ab3be39e7d374d77eea012746d12.jpg",
+  "width": 24,
+  "height": 18,
+  "dataURI": "data:image/jpg;base64,/9j/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAASABgDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAgJCgYH/8QAJxAAAQUBAAIBBAIDAQAAAAAAAwECBAUGBwAIEQkSExQVMRYYJTL/xAAXAQADAQAAAAAAAAAAAAAAAAAEBQYH/8QAKhEAAwABAgMFCQAAAAAAAAAAAQIDBAARBRITBjNyc7EUISIkQkNRssH/2gAMAwEAAhEDEQA/AKW+C8s93vaXq1bG41yN3U+fR+aUWrk0+FrGzdcDPTayPGj6C3A+UaWCazQMLCd9z4tUaKUZFEE5EYOfvoP6wV3uh2bQcdW+jc9uMzSZ+xLZmgzOgfmtNDro2PjVEulyDm2FHEhWMlXW2lsyJS1j2Miy3Cecb0pbxXsp3TgPNuS2fP8AoNvy+p2VJL5tYbet1Gtzv8a11lMlfrapmOmRbK4yTTxLpo4oRq6vPUDmi/JIGiOt14T9Q33d59iq6FyfC/T56rZc4y9JHl6HDy8yzWWOOkn/AIxpt5+pFo93oDXKoqFsrXWOkyLxG2kxHTWCRFVMvtA2RxJevhyxGMhwm8S/tUSJwGS2clyYUWeQLiYgyfL0jzIKo70qzxUoMWmNl0LBnrlxtFaBwygzlj1Ioy/lVMQikMDR9yFlP7Heq3+s3Uthyo95B0snGWI6mRe10WTBhTyvgQpz3giSyFOBA/uNC5rykVSic5r1arV8ecz3b2Z2nZ87Xb7rfJMpwTY02Tubfd0HNlu7L/qo+wSsnzbnQ3F5HuySWxoLXPAR6RRyVZIG9RoTx5V4HHFxcLEnnE2yhGYtWfS5K1VVWlAA4ADuCwA93KQBsNWsO02Hi4+KuVuavCVGZOlsSQoYlUcBGLKxMyAyH4SoI21lq7Gc7uE44LjFcEN9JUInEeoxKtvrCKomK77RqrzFev2ony8pHf29yr719MBV/wA07eT5X8ichhNR/wAr96Nd0XGI5Ed/6RHIiIqfPwvwnz/SePHiQ9zl+bT0TWTL30fBP1bWiDusmTJveoVsiQc9cfC7gR4BikLCMOMHmbo4yxXucAjI7pUlwWPGrRLIOo0apifc8ePEzfT4R/dGW+z5S/vr/9k="
 }
 ```
 
@@ -139,34 +145,28 @@ We then update `next.config.js` with the following code
 ```js:next.config.js
 module.exports = {
   webpack: (config, options) => {
-    config.module.rules.push(
-      {
-        test: /\.(png|jpe?g)$/i,
-        use: [
-          {
-            loader: 'lqip-loader',
-            options: {
-              base64: true,
-              palette: false,
-              publicPath: '/_next',
-              name: 'static/media/[name].[hash].[ext]'
-            }
+    config.module.rules.push({
+      test: /\.(gif|png|webp|jpe?g)$/i,
+      use: [
+        {
+          loader: 'lqip-modern-loader'
+        }
+      ]
+    })
+
+    config.module.rules.push({
+      test: /\.(svg|png|jpe?g|gif|webp|mp4)$/i,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            publicPath: '/_next',
+            name: 'static/media/[name].[hash].[ext]'
           }
-        ]
-      },
-      {
-        test: /\.(svg|png|jpe?g|gif|mp4)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              publicPath: '/_next',
-              name: 'static/media/[name].[hash].[ext]'
-            }
-          }
-        ]
-      }
-    )
+        }
+      ]
+    })
+
     return config
   }
 }
@@ -177,15 +177,20 @@ Update the `CustomImage`-component to support fallback source for not supported 
 ```tsx:CustomImage.tsx
 import Image, {ImageProps} from 'next/image'
 
-const CustomImage = ({src, ...props}: ImageProps) => {
-  const image = require(`../public${src}`)
+export type CustomImageType = ImageProps & {
+  noPlaceholder?: boolean
+}
+
+const CustomImage = ({src, noPlaceholder, ...props}: CustomImageType) => {
+  const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`)
 
   return (
-    <div className="relative overflow-hidden">
-      {image.preSrc && (
+    <div className="relative overflow-hidden flex rounded-none sm:rounded-md">
+      {image.dataURI && !noPlaceholder && (
         <img
-          src={image.preSrc}
-          className="absolute inset-0 w-full h-full img-placeholder"
+          src={image.dataURI}
+          className="absolute inset-0 w-full h-full transform scale-110 m-0"
+          style={{filter: 'blur(20px)'}}
           aria-hidden="true"
           alt=""
         />
@@ -197,6 +202,10 @@ const CustomImage = ({src, ...props}: ImageProps) => {
 
 export {CustomImage}
 ```
+
+As you seen above I have added support for external images and also added the property
+`noPlaceholder` if you have transparent images and it be a bit weird when you get a blurred image
+behind it. So with new prop you have opt-out the placeholder.
 
 Hope you find this useful and if you have any questions or improvements suggestion just reach out to
 me on Twitter [@jarnesjo](https://twitter.com/jarnesjo)
