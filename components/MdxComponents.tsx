@@ -35,6 +35,15 @@ const MdxComponents = (slug: string) => ({
       </div>
     )
   },
+  Video: ({src, type = 'video/mp4', width}: {src: string; type?: string; width?: number}) => {
+    const video = require(`../posts/${slug}/${src}`)
+
+    return (
+      <video className="w-full" width={width ?? ''}>
+        <source src={video.default} type={type} />
+      </video>
+    )
+  },
   a: CustomLink
 })
 
