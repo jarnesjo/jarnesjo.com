@@ -12,7 +12,8 @@ const CustomImage = ({src, noPlaceholder, ...props}: CustomImageType) => {
       {image.dataURI && !noPlaceholder && (
         <img
           src={image.dataURI}
-          className="absolute inset-0 w-full h-full img-placeholder"
+          className="absolute inset-0 w-full h-full transform scale-110 m-0"
+          style={{filter: 'blur(20px)'}}
           aria-hidden="true"
           alt=""
         />

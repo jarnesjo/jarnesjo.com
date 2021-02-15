@@ -25,7 +25,8 @@ const MdxComponents = (slug: string) => ({
         {image.dataURI && (
           <img
             src={image.dataURI}
-            className="w-full h-full absolute inset-0 mx-0 img-placeholder"
+            className="absolute inset-0 w-full h-full transform scale-110 m-0"
+            style={{filter: 'blur(20px)'}}
             aria-hidden="true"
             alt=""
           />

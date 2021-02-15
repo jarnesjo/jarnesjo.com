@@ -6,21 +6,17 @@ module.exports = {
   },
   webpack: (config, options) => {
     config.module.rules.push({
-      test: /\.(gif|png|jpe?g)$/i,
+      test: /\.(gif|png|webp|jpe?g)$/i,
       use: [
         {
-          loader: 'lqip-modern-loader',
-          options: {
-            publicPath: '/_next',
-            name: 'static/media/[name].[hash].[ext]'
-          }
+          loader: 'lqip-modern-loader'
         }
       ]
     })
 
     // Loading images outside of public-directory
     config.module.rules.push({
-      test: /\.(svg|png|jpe?g|gif|mp4)$/i,
+      test: /\.(svg|png|jpe?g|gif|webp|mp4)$/i,
       use: [
         {
           loader: 'file-loader',

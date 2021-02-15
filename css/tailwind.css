@@ -8,12 +8,6 @@
   }
 }
 
-.img-placeholder {
-  filter: blur(20px);
-  transform: scale(1.1);
-  margin: 0;
-}
-
 .prose .remark-code-title + pre,
 .prose-lg .remark-code-title + pre {
   @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
