@@ -1,8 +1,6 @@
 import {getPostsSortedByDate} from '@/lib/mdx'
-import Head from 'next/head'
 import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
-import {CustomImage} from '@/components/CustomImage'
 import Link from 'next/link'
 
 export default function Home({allPostsData}) {
