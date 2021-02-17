@@ -19,7 +19,9 @@ export const defaultMeta = {
   type: 'site',
   image: {
     src: 'https://jarnesjo.com/static/images/default-sharing.png',
-    alt: 'jarnesjo.com written in red on white background'
+    alt: 'jarnesjo.com written in red on white background',
+    width: '1200',
+    height: '630'
   }
 }
 
@@ -27,10 +29,7 @@ export type PageMeta = {
   title?: string
   description?: string
   type?: string
-  image?: {
-    src: string
-    alt: string
-  }
+  image?: {src: string; alt: string; width?: string; height?: string}
 }
 
 const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMeta?: PageMeta}) => {
@@ -70,8 +69,8 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         <meta property="og:type" content={meta.type} />
         <meta property="og:image" content={meta.image.src} />
         <meta property="og:image:alt" content={meta.image.alt} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:width" content={meta.image?.width || defaultMeta.image.width} />
+        <meta property="og:image:height" content={meta.image?.height || defaultMeta.image.height} />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />

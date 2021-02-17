@@ -21,7 +21,6 @@ module.exports = {
               textDecoration: 'none',
               fontWeight: '700',
               '&:hover': {
-                // color: theme('colors.red.700')
                 backgroundImage: `linear-gradient(0deg,${theme('colors.red.300')} 0,${theme(
                   'colors.red.300'
                 )})`
