@@ -1,0 +1,198 @@
+---
+title: 'Create dynamic sitemap for your Next.js blog (next-remote-mdx)'
+description:
+date: '2021-02-17'
+category: code
+tags:
+  - nextjs
+  - sitemap
+  - next-remote-mdx
+author: Nicklas Jarnesjö
+image:
+  {src: 'card.png', alt: 'Text "Create dynamic sitemap for your Next.js blog with next-remote-mdx"'}
+---
+
+When it's was time to create a sitemap for this site I started googling and found a good resource on
+[Leerob.io](https://leerob.io/blog/nextjs-sitemap-robots), which is a great resource for Next.js
+content. Mine solution is very similar, but I have a bit different approach so why not share my take
+on it too.
+
+First of all we have to install `globby` for getting files and directories which we're going to use
+to build up our sitemap.
+
+```bash
+npm install --save-dev globby
+```
+
+Then we can take a look at the magic file doing all the work for us. I will the break it down in
+more detail and explaining a bit more in this post.
+
+```js:./scripts/generate-sitemap.js
+const fs = require('fs')
+
+const globby = require('globby')
+const prettier = require('prettier')
+
+;(async () => {
+  const pagePaths = await globby(['pages/**/*.tsx', '!pages/_*.tsx', '!pages/api'])
+  const pageRoutes = pagePaths
+    .filter(pagePath => !pagePath.includes('[slug]'))
+    .map(pagePath => pagePath.replace('pages', '').replace('.tsx', '').replace('/index', ''))
+
+  const postPaths = await globby(['posts'], {onlyDirectories: true})
+  const postRoutes = postPaths.map(postPath => postPath.replace('posts', '/blog'))
+
+  const allRoutes = [...pageRoutes, ...postRoutes].sort()
+
+  const sitemap = `
+  <?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${allRoutes
+    .map(route => {
+      return `
+      <url>
+      <loc>${`https://jarnesjo.com${route}`}</loc>
+      </url>
+      `
+    })
+    .join('')}
+    </urlset>
+    `
+
+  const prettierConfig = await prettier.resolveConfig('./.prettierrc')
+  const formatted = prettier.format(sitemap, {
+    ...prettierConfig,
+    parser: 'html'
+  })
+
+  fs.writeFileSync('public/sitemap.xml', formatted)
+})()
+```
+
+Now I'm going to go through the file and explain everything in a bit more detail and why it's
+written the way it is.
+
+```js
+const pagePaths = await globby(['pages/**/*.tsx', '!pages/_*.tsx', '!pages/api'])
+const pageRoutes = pagePaths
+  .filter(pagePath => !pagePath.includes('[slug]'))
+  .map(pagePath => pagePath.replace('pages', '').replace('.tsx', '').replace('/index', ''))
+```
+
+Here we are looking through our `pages`-directory for pages to include in the sitemap. We are
+grabbing every file that ends with `.tsx`. But we are not interested in to getting Next.js specific
+files which starts with `_` in filename such as `_app.tsx` or `_document.tsx`. We are also ignoring
+the whole `api`-route because we don't getting any benefit or makes no sense to include that.  
+After that we're filtering out files including `[slug]` which also make no sense to include when
+it's a dynamic route and that itself will point nowhere. We will fix that later on when we're adding
+the blogposts to the sitemap.
+
+```js
+const postPaths = await globby(['posts'], {onlyDirectories: true})
+const postRoutes = postPaths.map(postPath => postPath.replace('posts', '/blog'))
+```
+
+After that we're getting all our posts which in my case following this structure
+
+```
+pages/
+posts/
+├── unbalance-sound-on-mace/
+│   ├── index.mdx
+│   └── unbalance-sound-on-mace.png
+└── blurred-image-placeholder-for-nextjs-image/
+    ├── index.mdx
+    ├── blurred-placeholder-animation.gif
+    └── next-image-blurred-placeholder.png
+public/
+scripts/
+```
+
+And therefor we're only interested in the directories which is the one containing the slug to the
+article and which we want to add to the sitemap. We then replace the `posts` part of the relative
+path to the directory with the part the blog are presented under in my case `/blog` and there we
+have all routes for now that will be included in `sitemap.xml`.
+
+```js
+const allRoutes = [...pageRoutes, ...postRoutes].sort()
+```
+
+Then we just merging this twos of arrays and I like order so I sort them too. Every developer loves
+order, right?
+
+```js
+const sitemap = `
+  <?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${allRoutes
+    .map(route => {
+      return `
+        <url>
+          <loc>${`https://jarnesjo.com${route}`}</loc>
+        </url>
+      `
+    })
+    .join('')}
+  </urlset>
+  `
+```
+
+Then we are looping over all our routes and stitching it together to output-string which we later
+saves to file.
+
+```js
+const prettierConfig = await prettier.resolveConfig('./.prettierrc')
+const formatted = prettier.format(sitemap, {
+  ...prettierConfig,
+  parser: 'html'
+})
+```
+
+This part are some sort of unnecessary but I like it to be clean and when I already have `prettier`
+in my project I use it to get better and nicer structure.
+
+```js
+fs.writeFileSync('public/sitemap.xml', formatted)
+```
+
+And then we saves everything to file in the public directory and which can be submit to for example
+Google Search Console.
+
+Last but not least we adds a bit of magic to our `next.config.js` file which allows the whole thing
+to be dynamic and make the whole thing get generates when we are using `next build`.
+
+```js:./next.config.js
+module.exports = {
+  webpack: (config, {isServer}) => {
+    // Done on build
+    if (isServer) {
+      require('./scripts/generate-sitemap')
+    }
+
+    return config
+  }
+}
+```
+
+And the output will look something like this
+
+```xml:./public/sitemap.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://jarnesjo.com</loc>
+  </url>
+  <url>
+    <loc>https://jarnesjo.com/about</loc>
+  </url>
+  <url>
+    <loc>https://jarnesjo.com/blog</loc>
+  </url>
+  <url>
+    <loc>https://jarnesjo.com/blog/blurred-image-placeholder-for-nextjs-image</loc>
+  </url>
+  ...
+</urlset>
+```
+
+Hope you found it useful and if you have any suggestion or question just reach out to me on Twitter.
