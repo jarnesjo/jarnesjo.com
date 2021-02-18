@@ -76,6 +76,31 @@ export default function Post({
             </div>
           )}
         </div>
+
+        <div className="text-center mt-8 md:mt-16 py-8 text-gray-500 bg-gray-100 rounded-md">
+          <div className="pb-2">Discuss this post on Twitter</div>
+          <div className="space-x-2">
+            <a
+              className="text-gray-500 hover:text-gray-700 transition-colors"
+              rel="noopener"
+              href={`http://twitter.com/share?text=Hi @jarnesjo&url=${encodeURIComponent(
+                `${defaultMeta.siteUrl}/blog/${slug}`
+              )}`}
+            >
+              With me
+            </a>
+            <span>&bull;</span>
+            <a
+              className="text-gray-500 hover:text-gray-700"
+              rel="noopener"
+              href={`https://mobile.twitter.com/search?q=${encodeURIComponent(
+                `${defaultMeta.siteUrl}/blog/${slug}`
+              )}`}
+            >
+              With others
+            </a>
+          </div>
+        </div>
       </article>
     </DefaultLayout>
   )
