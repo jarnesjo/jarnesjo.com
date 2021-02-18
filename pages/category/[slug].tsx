@@ -3,7 +3,6 @@ import {Teaser} from '@/components/Teaser'
 import {getAllCategorySlugs, getCategoryBySlug} from '@/lib/mdx'
 import {FrontMatterType} from '@/types/FrontMatterType'
 import {GetStaticPaths, GetStaticProps} from 'next'
-import Head from 'next/head'
 
 export default function CategoryPage({
   categoryData
@@ -21,7 +20,7 @@ export default function CategoryPage({
     >
       <div className="text-center py-20">
         <h1 className="text-5xl font-bold tracking-tight mb-4 uppercase">{name}</h1>
-        <p className="text-gray-500">This is a cateogry page about {name}</p>
+        <p className="text-gray-500">This is a category page about {name}</p>
       </div>
       <div className="space-y-4">
         {posts &&
