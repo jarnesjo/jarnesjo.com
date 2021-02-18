@@ -8,6 +8,27 @@
   }
 }
 
+.prose a {
+  padding: 0 1px;
+  text-decoration: none;
+}
+
+.prose a:hover::after {
+  top: 0;
+}
+
+.prose a::after {
+  @apply bg-red-300;
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 65%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1);
+}
+
 .prose .remark-code-title + pre,
 .prose-lg .remark-code-title + pre {
   @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
