@@ -211,7 +211,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
           <Link href="/uses">
             <a className="p-4">Uses</a>
           </Link>
-          <a className="p-4" href="https://twitter.com/jarnesjo">
+          <a className="p-4" rel="noopener" href="https://twitter.com/jarnesjo">
             Twitter
           </a>
         </footer>
