@@ -6,7 +6,7 @@ export default function AboutPage() {
   return (
     <DefaultLayout pageMeta={{title: 'About Nicklas Jarnesjö'}}>
       <PageHeading>Who's Jarnesjö?</PageHeading>
-      <div className="prose prose-lg md:prose-2xl mb-12">
+      <div className="prose prose-lg md:prose-2xl dark:prose-dark mb-12">
         <div className="md:grid md:grid-cols-3 md:gap-4">
           <div className="-mx-4 md:-ml-12 lg:-ml-24 md:mr-0 text-center overflow-hidden">
             <CustomImage
@@ -25,7 +25,7 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-      <div className="prose md:prose-lg">
+      <div className="prose dark:prose-dark md:prose-lg lg:prose-xl">
         <h2>Work</h2>
         <div className="md:grid md:grid-cols-4 md:gap-4">
           <div className="col-span-3">

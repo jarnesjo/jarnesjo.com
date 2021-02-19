@@ -50,34 +50,9 @@ export default function Post({
           </div>
         </header>
 
-        <div className="prose md:prose-lg mx-auto">{content}</div>
+        <div className="prose md:prose-lg lg:prose-xl dark:prose-dark mx-auto">{content}</div>
 
-        <div className="md:flex md:space-x-6 text-gray-500 uppercase text-sm mt-8 mb-4 pt-4 border-t border-gray-200">
-          <div className="flex flex-col">
-            <span className="text-xs uppercase text-gray-400 hover:text-gray-700 transition-colors">
-              Category
-            </span>
-            <Link href={`/category/${category}`}>
-              <a className="uppercase font-medium" title="Category">
-                {category}
-              </a>
-            </Link>
-          </div>
-          {tags && (
-            <div className="flex flex-col mt-3 md:mt-0">
-              <span className="text-xs uppercase text-gray-400">Tags</span>
-              <ul className="flex space-x-3">
-                {tags.map(tag => (
-                  <li className="flex-shrink-0" key={tag}>
-                    #{tag}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        <div className="text-center mt-8 md:mt-16 py-8 text-gray-500 bg-gray-100 rounded-md">
+        <div className="text-center my-10 py-8 text-gray-500 bg-gray-100 dark:bg-gray-800 transition-colors duration-200 rounded-md">
           <div className="pb-2">Discuss this post on Twitter</div>
           <div className="space-x-2">
             <a
@@ -100,6 +75,31 @@ export default function Post({
               With others
             </a>
           </div>
+        </div>
+
+        <div className="md:flex md:space-x-6 text-gray-500 uppercase text-sm mt-10 py-6 md:px-2 border-t border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
+          <div className="flex flex-col">
+            <span className="text-xs uppercase text-gray-400 hover:text-gray-700 transition-colors">
+              Category
+            </span>
+            <Link href={`/category/${category}`}>
+              <a className="uppercase font-medium" title="Category">
+                {category}
+              </a>
+            </Link>
+          </div>
+          {tags && (
+            <div className="flex flex-col mt-3 md:mt-0">
+              <span className="text-xs uppercase text-gray-400">Tags</span>
+              <ul className="flex space-x-3">
+                {tags.map(tag => (
+                  <li className="flex-shrink-0" key={tag}>
+                    #{tag}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </article>
     </DefaultLayout>

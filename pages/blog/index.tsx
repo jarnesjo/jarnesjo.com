@@ -13,7 +13,7 @@ export default function BlogIndexPage({allPostsData}) {
       }}
     >
       <PageHeading>Writings</PageHeading>
-      <div className="prose md:prose-lg">
+      <div className="prose md:prose-lg lg:prose-xl dark:prose-dark">
         <p>
           I started my first blog 2009 as my first PHP-project in WordPress. It was on my first
           local hack in Kalmar, Sweden. Worked mainly with PHP but in recent years leaning more to

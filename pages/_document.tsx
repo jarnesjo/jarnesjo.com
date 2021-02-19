@@ -6,11 +6,11 @@ const isProduction = process.env.NODE_ENV === 'production'
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <link href="/static/favicons/favicon.ico" rel="shortcut icon" />
         </Head>
-        <body>
+        <body className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
           <Main />
           <NextScript />
           {isProduction && (

@@ -10,7 +10,12 @@ export default function Home({allPostsData}) {
         <div className="uppercase tracking-wide text-lg font-semibold text-red-500">
           Hi, my name is Nicklas
         </div>
-        <h1 className="text-6xl font-extrabold tracking-tight pt-2 pb-6">I like to build things</h1>
+        <h1
+          className="text-6xl font-extrabold tracking-tight pt-2 pb-6 js-darkmode-flicker"
+          data-flicker-chars="3"
+        >
+          I like to build things
+        </h1>
         <div className="text-2xl text-gray-500">
           I'm one of the founders of Webready, a development agency in Kalmar, Sweden.
         </div>
