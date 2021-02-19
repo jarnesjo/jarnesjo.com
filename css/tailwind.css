@@ -8,46 +8,48 @@
   }
 }
 
-.prose a {
-  padding: 0 1px;
-  text-decoration: none;
+::selection {
+  @apply bg-red-500 bg-opacity-80 text-gray-100;
 }
 
-.prose a:hover::after {
-  top: 0;
+.prose {
+  a {
+    padding: 0 1px;
+    text-decoration: none;
+
+    &::after {
+      @apply bg-red-300 dark:bg-red-500;
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 65%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1), background-color 200ms;
+    }
+
+    &:hover {
+      &::after {
+        top: 0;
+      }
+    }
+  }
+
+  pre {
+    @apply rounded-none sm:rounded-md -mx-4 md:-mx-8;
+  }
+
+  .remark-code-title + pre,
+  &-lg .remark-code-title + pre {
+    @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
+  }
 }
 
-.prose a::after {
-  @apply bg-red-300;
-  content: '';
-  position: absolute;
-  z-index: -1;
-  top: 65%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1);
-}
-
-.prose .remark-code-title + pre,
-.prose-lg .remark-code-title + pre {
-  @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
-}
-
-.prose pre,
 .remark-code-title {
-  @apply -mx-4 md:-mx-8;
+  @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md -mx-4 md:-mx-8;
 }
 
-.prose pre {
-  @apply rounded-none sm:rounded-md;
-}
-
-.remark-code-title {
-  @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md;
-}
-
-/* @apply text-gray-700 dark:text-gray-300; */
 .token.comment,
 .token.prolog,
 .token.doctype,
