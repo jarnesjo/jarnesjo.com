@@ -8,7 +8,7 @@ export default function UsesPage() {
     <DefaultLayout pageMeta={{title: `Uses - ${defaultMeta.title}`}}>
       <PageHeading>What do I use?</PageHeading>
 
-      <div className="prose md:prose-lg mx-auto">
+      <div className="prose md:prose-lg lg:prose-xl dark:prose-dark mx-auto">
         <p>
           Because I'm interested in what other uses on daily basis I also want to share my things.
           Most of the things have been accumilated over years and

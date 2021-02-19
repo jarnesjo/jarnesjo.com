@@ -8,46 +8,48 @@
   }
 }
 
-.prose a {
-  padding: 0 1px;
-  text-decoration: none;
+::selection {
+  @apply bg-red-500 bg-opacity-80 text-gray-100;
 }
 
-.prose a:hover::after {
-  top: 0;
+.prose {
+  a {
+    padding: 0 1px;
+    text-decoration: none;
+
+    &::after {
+      @apply bg-red-300 dark:bg-red-500;
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 65%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1), background-color 200ms;
+    }
+
+    &:hover {
+      &::after {
+        top: 0;
+      }
+    }
+  }
+
+  pre {
+    @apply rounded-none sm:rounded-md -mx-4 md:-mx-8;
+  }
+
+  .remark-code-title + pre,
+  &-lg .remark-code-title + pre {
+    @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
+  }
 }
 
-.prose a::after {
-  @apply bg-red-300;
-  content: '';
-  position: absolute;
-  z-index: -1;
-  top: 65%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1);
-}
-
-.prose .remark-code-title + pre,
-.prose-lg .remark-code-title + pre {
-  @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
-}
-
-.prose pre,
 .remark-code-title {
-  @apply -mx-4 md:-mx-8;
+  @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md -mx-4 md:-mx-8;
 }
 
-.prose pre {
-  @apply rounded-none sm:rounded-md;
-}
-
-.remark-code-title {
-  @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md;
-}
-
-/* @apply text-gray-700 dark:text-gray-300; */
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -101,4 +103,82 @@
 .token.important,
 .token.variable {
   @apply text-yellow-500;
+}
+
+/* ============== */
+/* DARK MODE NEON */
+/* ============== */
+.dark {
+  .flicker {
+    animation: flicker 3s linear 0.6s forwards alternate infinite;
+  }
+
+  .tipping {
+    display: inline-block;
+    animation: tipping 0.5s ease-in 0.5s forwards;
+
+    &:nth-child(even) {
+      .flicker {
+        animation-delay: 0.3s;
+        animation-direction: alternate-reverse;
+      }
+    }
+  }
+
+  h1,
+  .neon:hover {
+    color: #f4f4f5;
+    text-shadow: 0 0 0.033em #f4f4f5, 0 0 0.08em #f4f4f5, 0 0 0.1em #b91c1c, 0 0 0.2em #b91c1c,
+      0 0 0.3em #b91c1c, 0 0 1em #b91c1c, 0 0 1.5em #b91c1c;
+    transition: text-shadow 200ms, color 200ms;
+  }
+
+  h1 {
+    transition: text-shadow 1s, color 200ms, rotate 200ms;
+  }
+}
+
+/* =========== */
+/* ANIMATIONS */
+/* =========== */
+@keyframes tipping {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  85% {
+    transform: translate(0, 1px) rotate(5deg);
+  }
+  100% {
+    transform: translate(2px, 5px) rotate(15deg);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  19.999%,
+  22%,
+  62.999%,
+  64%,
+  64.999%,
+  72%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  21.999%,
+  63%,
+  63.999%,
+  65%,
+  71.999% {
+    opacity: 0.33;
+  }
+}
+
+/* if the user prefers reduced motion, */
+/* disable the animation entirely. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
 }

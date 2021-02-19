@@ -2,8 +2,11 @@ import Link from 'next/link'
 import Head from 'next/head'
 import {Transition} from '@headlessui/react'
 import {useCallback, useEffect, useState} from 'react'
-import {CustomImage} from '../CustomImage'
+import {CustomImage} from '@/components/CustomImage'
 import {useRouter} from 'next/dist/client/router'
+import {useTheme} from 'next-themes'
+import {useDarkModeNeonFlicker} from '@/lib/useDarkModeNeonFlicker'
+import {useMounted} from '@/lib/useMounted'
 
 const menuItems = [
   {title: 'Home', href: '/'},
@@ -33,27 +36,35 @@ export type PageMeta = {
 }
 
 const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMeta?: PageMeta}) => {
+  const {theme, setTheme} = useTheme()
+  const mounted = useMounted()
+
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false)
   const toggleMobileMenu = () => {
     setMobileMenuIsOpen(!mobileMenuIsOpen)
   }
+  const router = useRouter()
+  const [switchSound, setSwitchSound] = useState(null)
+
+  useDarkModeNeonFlicker()
+
+  useEffect(() => {
+    setSwitchSound(new Audio('/static/sounds/switch.mp3'))
+  }, [])
+
+  const switchToggle = useCallback(() => {
+    if (switchSound) {
+      switchSound.currentTime = 0
+      switchSound.play()
+    }
+
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }, [theme, switchSound])
 
   const meta = {
     ...defaultMeta,
     ...pageMeta
   }
-
-  const router = useRouter()
-  // const [switchSound, setSwitchSound] = useState(null)
-  // useEffect(() => {
-  //   setSwitchSound(new Audio('/statics/sounds/switch.mp3'))
-  // }, [])
-
-  // const switchToggle = useCallback(() => {
-  //   if (switchSound) {
-  //     switchSound.play()
-  //   }
-  // }, [switchSound])
 
   return (
     <>
@@ -84,11 +95,11 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         <Link href="#main">
           <a className="sr-only">skip to main content</a>
         </Link>
-        <header className="flex justify-between items-center text-gray-700">
+        <header className="flex justify-between items-center text-gray-700 dark:text-gray-200 transition-colors duration-200">
           <div>
             <Link href="/">
               <a className="flex items-center">
-                <div className="rounded-full ring-1 ring-gray-300 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
+                <div className="rounded-full ring-1 ring-gray-300 dark:ring-gray-100 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
                   <CustomImage
                     src="https://pbs.twimg.com/profile_images/1057609789692395522/Zr34NB7E_400x400.jpg"
                     alt="Avatar of Nicklas Jarnesjö"
@@ -108,32 +119,47 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
               {menuItems.map(({title, href}, index) => (
                 <li key={index}>
                   <Link href={href}>
-                    <a>{title}</a>
+                    <a className="hover:text-gray-900 dark:hover:text-white neon">{title}</a>
                   </Link>
                 </li>
               ))}
             </ul>
-            {/* <button
-              className="rounded-full p-2 bg-gray-200 hover:bg-red-500 hover:text-white transition-all focus:outline-none outline-none focus:ring-1 focus:ring-red-700"
+            <button
+              className="rounded-full p-2 w-10 h-10 text-red-500 dark:text-gray-200 hover:text-red-600 bg-red-100 hover:bg-red-200 dark:bg-transparent focus:outline-none dark:hover:bg-gray-800 dark:ring-2 dark:ring-gray-800 dark:hover:ring-gray-700 transition-all duration-200"
               onClick={() => switchToggle()}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                />
-              </svg>
-            </button> */}
+              {mounted && (
+                <>
+                  {theme === 'dark' ? (
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="w-6 h-6"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+                    </svg>
+                  )}
+                </>
+              )}
+            </button>
             <button
-              className="bg-gray-200 p-2 rounded-full md:hidden ml-6 hover:bg-red-500 hover:text-white transition-all focus:outline-none outline-none focus:ring-1 focus:ring-red-700"
+              className="p-2 rounded-full md:hidden ml-6 bg-gray-200 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-800 dark:ring-2 dark:ring-gray-800 dark:hover:ring-gray-700 hover:text-white transition-all duration-200 focus:outline-none dark:focus:ring-gray-400"
               onClick={() => toggleMobileMenu()}
             >
               <svg
@@ -205,13 +231,17 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         <footer className="text-gray-500 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
           {menuItems.map(item => (
             <Link href={item.href} key={item.title}>
-              <a className="p-4">{item.title}</a>
+              <a className="p-4 dark:hover:text-gray-400">{item.title}</a>
             </Link>
           ))}
           <Link href="/uses">
-            <a className="p-4">Uses</a>
+            <a className="p-4 dark:hover:text-gray-400">Uses</a>
           </Link>
-          <a className="p-4" rel="noopener" href="https://twitter.com/jarnesjo">
+          <a
+            className="p-4 dark:hover:text-gray-400"
+            rel="noopener"
+            href="https://twitter.com/jarnesjo"
+          >
             Twitter
           </a>
         </footer>
