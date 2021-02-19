@@ -134,7 +134,7 @@
   }
 
   h1 {
-    transition: text-shadow 1s, color 200ms;
+    transition: text-shadow 1s, color 200ms, rotate 200ms;
   }
 }
 
