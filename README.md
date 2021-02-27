@@ -1,5 +1,17 @@
 # jarnesjo.com
 
+## Dev
+
+### Generate meta images
+
+```bash
+// Create meta image for single post
+node ./scripts/generate-meta-image-by-slug.mjs slug-to-your-post
+
+// Create meta images for all posts
+node ./scripts/generate-meta-images.mjs
+```
+
 ## Production
 
 ### Deploying with Docker and github workflows to Digital Ocean
