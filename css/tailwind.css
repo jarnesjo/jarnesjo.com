@@ -111,18 +111,20 @@
 .dark {
   .flicker {
     animation: flicker 3s linear 0.6s forwards alternate infinite;
+
+    &:nth-child(even) {
+      animation-delay: 0.3s;
+      animation-direction: alternate-reverse;
+    }
   }
 
   .tipping {
     display: inline-block;
     animation: tipping 0.5s ease-in 0.5s forwards;
+  }
 
-    &:nth-child(even) {
-      .flicker {
-        animation-delay: 0.3s;
-        animation-direction: alternate-reverse;
-      }
-    }
+  .word-no-wrap {
+    white-space: nowrap;
   }
 
   h1,

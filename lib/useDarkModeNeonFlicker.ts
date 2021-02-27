@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react'
 import {useMounted} from './useMounted'
 
 export const useDarkModeNeonFlicker = () => {
@@ -24,7 +23,7 @@ const generateFlicker = () => {
   // helper function to wrap random letters in <span>
   const wrapRandomChars = (str: string, iterations = 1) => {
     const chars = str.split('')
-    const excludedChars = [' ', '-', ',', ';', ':', '(', ')', `'`]
+    const excludedChars = [' ', '-', ',', ';', ':', '(', ')', `'`, '.']
     const excludedIndexes = []
     let i = 0
 
@@ -36,13 +35,22 @@ const generateFlicker = () => {
       // make sure we don't wrap a space or punctuation char
       // or hit the same letter twice
       if (!excludedIndexes.includes(randIndex) && !excludedChars.includes(c)) {
-        chars[randIndex] = `<span class="tipping"><span class="flicker">${c}</span></span>`
+        chars[randIndex] = `<span class="flicker"><span class="tipping">${c}</span></span>`
         excludedIndexes.push(randIndex)
         i++
       }
     }
 
-    return chars.join('')
+    // Fix so word don't break
+    return chars
+      .join('')
+      .split(/((?!\sclass)\s)/gm)
+      .map(word => {
+        if (word === ' ') return word
+
+        return `<span class="word-no-wrap">${word}</span>`
+      })
+      .join('')
   }
 
   // replace the plain text content in each element
