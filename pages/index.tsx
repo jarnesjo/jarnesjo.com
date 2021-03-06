@@ -78,7 +78,7 @@ export default function Home({allPostsData}) {
                 <ListTechBadge text="Docker" />
               </ul>
             </div>
-            <a className="mt-4 inline-block text-red-500" href="https://prlog.app">
+            <a className="mt-4 inline-block text-gray-500 font-bold" href="https://prlog.app">
               https://prlog.app
             </a>
           </div>
@@ -98,7 +98,7 @@ export default function Home({allPostsData}) {
                 <ListTechBadge text="Puppeteer" />
               </ul>
             </div>
-            <a className="mt-4 inline-block text-red-500" href="https://snittränta.se">
+            <a className="mt-4 inline-block text-gray-500 font-bold" href="https://snittränta.se">
               https://snittränta.se
             </a>
           </div>
@@ -128,7 +128,7 @@ export default function Home({allPostsData}) {
                 <ListTechBadge text="Tailwind CSS" />
               </ul>
             </div>
-            <a className="mt-4 inline-block text-red-500" href="https://minimalisera.se">
+            <a className="mt-4 inline-block text-gray-500 font-bold" href="https://minimalisera.se">
               https://minimalisera.se
             </a>
           </div>
