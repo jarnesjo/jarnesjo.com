@@ -2,6 +2,15 @@ import {getPostsSortedByDate} from '@/lib/mdx'
 import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
 import Link from 'next/link'
+import {CustomImage} from '@/components/CustomImage'
+
+const ListTechBadge = ({text}: {text: string}) => {
+  return (
+    <li className="inline-flex items-center px-2.5 py-0.5 mr-2 mt-2 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+      {text}
+    </li>
+  )
+}
 
 export default function Home({allPostsData}) {
   return (
@@ -35,13 +44,96 @@ export default function Home({allPostsData}) {
         </div>
       </div>
 
-      {/* <h2 className="text-3xl font-bold tracking-tight mb-4">Things I have build</h2>
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div className="relative">
-          <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
+      <h2 className="text-3xl font-bold tracking-tight mb-4 pt-4">Things I have build</h2>
+      <p className="text-gray-500 text-lg">
+        As owner of development agency I have build alot of fun and cool projects together with
+        clients. But since I find happiness to build thing for myself again this is some of them.
+      </p>
+
+      <div className="space-y-16 mt-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <CustomImage
+              src="/static/images/prlog-screenshot.png"
+              width={2870}
+              height={2990}
+              alt="Screenshot from frontpage of prlog.app"
+            />
+          </div>
+          <div className="col-span-2">
+            <h3 className="font-semibold text-xl">PR LOG</h3>
+            <p className="mt-4">
+              Everything you need to keep track of your PRs (personal records) in training.
+              Optimized and build for where to use it - your mobile.
+            </p>
+            <div className="mt-4">
+              <span className="text-sm mr-2 font-semibold">Dev</span>
+              <ul className="flex flex-wrap">
+                <ListTechBadge text="Next.js" />
+                <ListTechBadge text="NextAuth.js" />
+                <ListTechBadge text="PostgreSQL" />
+                <ListTechBadge text="Prisma" />
+                <ListTechBadge text="Typescript" />
+                <ListTechBadge text="Tailwind CSS" />
+                <ListTechBadge text="Docker" />
+              </ul>
+            </div>
+            <a className="mt-4 inline-block text-red-500" href="https://prlog.app">
+              https://prlog.app
+            </a>
+          </div>
         </div>
-        <div></div>
-      </div> */}
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="col-span-2">
+            <h3 className="font-semibold text-xl">Snittränta</h3>
+            <p className="mt-4">
+              A comparison site for average interest rates between Swedish banks.
+            </p>
+            <div className="mt-4">
+              <span className="text-sm font-semibold mr-2">Dev</span>
+              <ul className="flex">
+                <ListTechBadge text="Gatsby" />
+                <ListTechBadge text="Tailwind CSS" />
+                <ListTechBadge text="Puppeteer" />
+              </ul>
+            </div>
+            <a className="mt-4 inline-block text-red-500" href="https://snittränta.se">
+              https://snittränta.se
+            </a>
+          </div>
+          <div className="relative">
+            <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <CustomImage
+              src="/static/images/minimalisera-screenshot.png"
+              width={2870}
+              height={2990}
+              alt="Screenshot from frontpage of minimalisera.se"
+            />
+          </div>
+          <div className="col-span-2">
+            <h3 className="font-semibold text-xl">Minimalisera</h3>
+            <p className="mt-4">
+              A blog about minimalism. First project with Gatsby and Tailwind CSS.
+            </p>
+            <div className="mt-4">
+              <span className="text-sm mr-2 font-semibold">Dev</span>
+              <ul className="flex flex-wrap">
+                <ListTechBadge text="Gatsby" />
+                <ListTechBadge text="Tailwind CSS" />
+              </ul>
+            </div>
+            <a className="mt-4 inline-block text-red-500" href="https://minimalisera.se">
+              https://minimalisera.se
+            </a>
+          </div>
+        </div>
+      </div>
     </DefaultLayout>
   )
 }
