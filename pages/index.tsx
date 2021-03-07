@@ -51,7 +51,7 @@ export default function Home({allPostsData}) {
       </p>
 
       <div className="space-y-16 mt-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
               src="/static/images/prlog-screenshot.png"
@@ -78,13 +78,13 @@ export default function Home({allPostsData}) {
                 <ListTechBadge text="Docker" />
               </ul>
             </div>
-            <a className="mt-4 inline-block text-gray-500 font-bold" href="https://prlog.app">
+            <a className="mt-4 inline-block text-gray-500 font-semibold" href="https://prlog.app">
               https://prlog.app
             </a>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
           </div>
@@ -101,13 +101,16 @@ export default function Home({allPostsData}) {
                 <ListTechBadge text="Puppeteer" />
               </ul>
             </div>
-            <a className="mt-4 inline-block text-gray-500 font-bold" href="https://snittränta.se">
+            <a
+              className="mt-4 inline-block text-gray-500 font-semibold"
+              href="https://snittränta.se"
+            >
               https://snittränta.se
             </a>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
               src="/static/images/minimalisera-screenshot.png"
@@ -128,7 +131,10 @@ export default function Home({allPostsData}) {
                 <ListTechBadge text="Tailwind CSS" />
               </ul>
             </div>
-            <a className="mt-4 inline-block text-gray-500 font-bold" href="https://minimalisera.se">
+            <a
+              className="mt-4 inline-block text-gray-500 font-semibold"
+              href="https://minimalisera.se"
+            >
               https://minimalisera.se
             </a>
           </div>
