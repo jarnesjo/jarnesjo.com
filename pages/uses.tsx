@@ -37,13 +37,13 @@ export default function UsesPage() {
         <h3>Coding</h3>
         <ul>
           <li>Editor: VSCode</li>
-          <li>Theme: Night Owl (On trail)</li>
+          <li>Theme: Night Owl</li>
           <li>Terminal: iTerm2</li>
         </ul>
 
         <h3>Audio</h3>
         <ul>
-          <li>Bose NC 700</li>
+          <li>AirPods Max</li>
           <li>AirPods Pro</li>
         </ul>
 
