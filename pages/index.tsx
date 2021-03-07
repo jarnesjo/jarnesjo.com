@@ -51,16 +51,16 @@ export default function Home({allPostsData}) {
       </p>
 
       <div className="space-y-16 mt-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
           <div className="relative">
             <CustomImage
               src="/static/images/prlog-screenshot.png"
-              width={2870}
+              width={2030}
               height={2990}
               alt="Screenshot from frontpage of prlog.app"
             />
           </div>
-          <div className="col-span-2">
+          <div className="mt-6 md:mt-0 md:col-span-2">
             <h3 className="font-semibold text-xl">PR LOG</h3>
             <p className="mt-4">
               Everything you need to keep track of your PRs (personal records) in training.
@@ -84,8 +84,11 @@ export default function Home({allPostsData}) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+          <div className="relative">
+            <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
+          </div>
+          <div className="mt-6 md:mt-0 md:col-span-2">
             <h3 className="font-semibold text-xl">Snittränta</h3>
             <p className="mt-4">
               A comparison site for average interest rates between Swedish banks.
@@ -102,12 +105,9 @@ export default function Home({allPostsData}) {
               https://snittränta.se
             </a>
           </div>
-          <div className="relative">
-            <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
-          </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4">
           <div className="relative">
             <CustomImage
               src="/static/images/minimalisera-screenshot.png"
@@ -116,7 +116,7 @@ export default function Home({allPostsData}) {
               alt="Screenshot from frontpage of minimalisera.se"
             />
           </div>
-          <div className="col-span-2">
+          <div className="mt-6 md:mt-0 md:col-span-2">
             <h3 className="font-semibold text-xl">Minimalisera</h3>
             <p className="mt-4">
               A blog about minimalism. First project with Gatsby and Tailwind CSS.
