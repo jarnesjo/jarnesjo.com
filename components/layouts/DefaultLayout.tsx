@@ -101,7 +101,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
               <a className="flex items-center">
                 <div className="rounded-full ring-1 ring-gray-300 dark:ring-gray-100 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
                   <CustomImage
-                    src="https://pbs.twimg.com/profile_images/1057609789692395522/Zr34NB7E_400x400.jpg"
+                    src="https://pbs.twimg.com/profile_images/1394579053047320576/FNtexM-b_400x400.jpg"
                     alt="Avatar of Nicklas Jarnesjö"
                     width={400}
                     height={400}
