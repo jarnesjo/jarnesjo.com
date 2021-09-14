@@ -1,0 +1,74 @@
+---
+title: 'Github action config for Gatsby JS site deploy to Digital Ocean'
+description:
+date: '2021-09-14'
+category: code
+tags:
+  - github
+image:
+  {src: 'card.png', alt: 'Text "Github action config for Gatsby JS site deploy to Digital Ocean"'}
+---
+
+I just want to share my Github action config for continuous integration (CI) of a Gatsby JS site to
+Digital Ocean.
+
+And ok it mostly for my own sake because I forget everything and want a cheatsheet to go back to,
+but hope it can help anybody because I couldn't find it when Googling.
+
+```js:.github/workflows/build-and-deploy.yml
+name: Build and Deploy
+on: push
+jobs:
+  build-and-deploy:
+    name: Build deploy Gatsby site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          cache: "npm"
+
+      - name: Install project dependency
+        run: npm ci
+
+      - name: Build Gatsby
+        run: npm run build
+
+      - name: Verify
+        run: ls -la public
+
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: public/*
+          remote_path: "${{ secrets.DEPLOY_PATH }}"
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_KEY }}
+
+```
+
+If you have work with Github actions before it's kind of self explaining.
+
+You have to add your deploy secrets under `Settings -> Secrets` in your project.
+
+`DEPLOY_PATH` - Full path on Digital Ocean server example `/home/domain-to-site.com`  
+`DEPLOY_HOST` - IP address to Digital Ocean droplet  
+`DEPLOY_USER` - SSH user to login to the droplet  
+`DEPLOY_KEY` - SSH secret and the public key should be added to `.ssh/authorized_keys` on server
+
+**Important about SSH keys**  
+`DEPLOY_KEY` holds the private SSH key so best way is to create a new pair for just this actions.
+You do so in terminal with `ssh-keygen` and put it in some temporary directory and naming. **Do
+not** use the default naming and place it that case you may overwrite existing key. The private key
+you put into the Github secrets and the private key you add to your Digital Ocean droplet into
+`~/.ssh/authorized_keys`. You can do so by copy and paste by editing the file with
+`nano ~/.ssh/authorized_keys` - `CTRL+O` and the `CTRL+X`
+
+If you found this helpful and deployed a site with it please send me a tweet with the url.
+
+Happy deploying!
