@@ -47,7 +47,7 @@ module.exports = {
             a: {
               color: theme('colors.gray.100')
             },
-            'h2,h3,h4,h5': {
+            'h2,h3,h4,h5,strong': {
               color: theme('colors.gray.100')
             }
           }
