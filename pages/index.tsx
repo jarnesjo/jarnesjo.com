@@ -112,6 +112,32 @@ export default function Home({allPostsData}) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
+            <CustomImage src="/static/images/manadskollen.png" width={2506} height={2220} alt="" />
+          </div>
+          <div className="mt-6 md:mt-0 md:col-span-2">
+            <h3 className="font-semibold text-xl">Månadskollen</h3>
+            <p className="mt-4">
+              Copy and paste bank statement from Swedish banks and get a fast summary and overview
+              of your finance.
+            </p>
+            <div className="mt-4">
+              <span className="text-sm font-semibold mr-2">Dev</span>
+              <ul className="flex">
+                <ListTechBadge text="Gatsby" />
+                <ListTechBadge text="Tailwind CSS" />
+              </ul>
+            </div>
+            <a
+              className="mt-4 inline-block text-gray-500 font-semibold"
+              href="https://månadskollen.se"
+            >
+              https://månadskollen.se
+            </a>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
+          <div className="relative">
             <CustomImage
               src="/static/images/minimalisera-screenshot.png"
               width={2870}
