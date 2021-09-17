@@ -64,7 +64,7 @@ export default function Home({allPostsData}) {
             <h3 className="font-semibold text-xl">PR LOG</h3>
             <p className="mt-4">
               Everything you need to keep track of your PRs (personal records) in training.
-              Optimized and build for where to use it - your mobile.
+              Optimized and build for where to use it - your mobile
             </p>
             <div className="mt-4">
               <span className="text-sm mr-2 font-semibold">Dev</span>
