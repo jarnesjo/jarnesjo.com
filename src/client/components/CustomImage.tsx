@@ -5,7 +5,7 @@ export type CustomImageType = ImageProps & {
 }
 
 const CustomImage = ({src, noPlaceholder, ...props}: CustomImageType) => {
-  const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`)
+  const image = src.startsWith('http') ? {src} : require(`../../../public${src}?lqip`)
 
   return (
     <div className="relative overflow-hidden flex rounded-none sm:rounded-md">

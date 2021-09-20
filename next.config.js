@@ -39,7 +39,7 @@ module.exports = {
 
     // Done on build
     if (isServer) {
-      require('./scripts/generate-sitemap')
+      require('./src/scripts/generate-sitemap')
     }
 
     return config

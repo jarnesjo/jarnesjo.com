@@ -18,7 +18,7 @@ const CustomLink = props => {
 
 const MdxComponents = (slug: string) => ({
   Image: ({src, ...props}: ImageProps) => {
-    const image = require(`../posts/${slug}/${src}?lqip`)
+    const image = require(`../../posts/${slug}/${src}?lqip`)
 
     return (
       <div className="-mx-4 md:-mx-8 text-center relative overflow-hidden flex sm:rounded-md">
@@ -36,7 +36,7 @@ const MdxComponents = (slug: string) => ({
     )
   },
   Video: ({src, type = 'video/mp4', width}: {src: string; type?: string; width?: number}) => {
-    const video = require(`../posts/${slug}/${src}`)
+    const video = require(`../../posts/${slug}/${src}`)
 
     return (
       <video className="w-full" width={width ?? ''}>

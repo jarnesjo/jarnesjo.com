@@ -5,7 +5,7 @@ import renderToString from 'next-mdx-remote/render-to-string'
 import {MdxComponents} from '@/components/MdxComponents'
 import FastGlob from 'fast-glob'
 
-export const BLOG_POST_PATH = path.join(process.cwd(), 'posts')
+export const BLOG_POST_PATH = path.join(process.cwd(), 'src/posts')
 const postFilePaths = FastGlob.sync(`${BLOG_POST_PATH}/**/*.mdx`)
 
 const getSlugFromFilePath = filePath => {

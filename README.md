@@ -6,10 +6,10 @@
 
 ```bash
 // Create meta image for single post
-node ./scripts/generate-meta-image-by-slug.mjs slug-to-your-post
+node ./src/scripts/generate-meta-image-by-slug.mjs slug-to-your-post
 
 // Create meta images for all posts
-node ./scripts/generate-meta-images.mjs
+node ./src/scripts/generate-meta-images.mjs
 ```
 
 ## Production

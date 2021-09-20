@@ -3,7 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import FastGlob from 'fast-glob'
 
-const BLOG_POST_PATH = path.join(process.cwd(), 'posts')
+const BLOG_POST_PATH = path.join(process.cwd(), 'src/posts')
 const postFilePaths = FastGlob.sync(`${BLOG_POST_PATH}/**/*.mdx`)
 
 const getSlugFromFilePath = filePath => {
