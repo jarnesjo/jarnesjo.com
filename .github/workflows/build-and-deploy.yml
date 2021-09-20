@@ -25,15 +25,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      # - name: Run a one-line script
-      #   run: npm ci
-      #   env:
-      #     CI: true
-
-      - name: Publish to Github Packages Registry
+      - name: Build and Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.APP_NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
@@ -45,6 +39,7 @@ jobs:
           dockerfile: Dockerfile
           buildargs: NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
           tags: latest
+
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
         env:
