@@ -63,10 +63,11 @@ export default function AboutPage() {
               fortune enough to have a small family with two children which I like to spend time and
               laugh together with. Also loves the woods and nature.
             </p>
-            <p>
+            <p className="line-through">
               One of my biggest dreams are to move to a small farm and getting back to roots with
               animals and farming.
             </p>
+            <p>Also owning a small farm where we have chickens and doing farming.</p>
           </div>
           <div className="-mx-4 md:-ml-12 lg:-ml-24 md:mr-0 text-center overflow-hidden flex items-center md:mt-10 md:order-1">
             <CustomImage
