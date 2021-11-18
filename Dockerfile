@@ -1,34 +1,37 @@
 # Source: https://github.com/vercel/next.js/discussions/16995#discussioncomment-132339
 
 # Install dependencies only when needed
-FROM node:lts-alpine AS deps
+FROM node:alpine AS deps
 
-WORKDIR /opt/app
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
-FROM node:lts-alpine AS builder
+FROM node:alpine AS builder
 
 # Add Google Analytics to client code 
 ARG NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
 ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=$NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
 
 ENV NODE_ENV=production
-WORKDIR /opt/app
+WORKDIR /app
 COPY . .
-COPY --from=deps /opt/app/node_modules ./node_modules
-RUN npm run build
+COPY --from=deps /app/node_modules ./node_modules
+RUN npm run build && npm ci --ignore-scripts
 
 # Production image, copy all the files and run next
 FROM node:lts-alpine AS runner
 
-WORKDIR /opt/app
+WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /opt/app/next.config.js ./
-COPY --from=builder /opt/app/public ./public
-COPY --from=builder /opt/app/.next ./.next
-COPY --from=builder /opt/app/node_modules ./node_modules
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./package.json
+# COPY --from=builder /app/node_modules ./node_modules
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
