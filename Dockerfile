@@ -27,11 +27,17 @@ FROM node:14-alpine AS runner
 
 WORKDIR /opt/app
 ENV NODE_ENV=production
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
 COPY --from=builder /opt/app/next.config.js ./
 COPY --from=builder /opt/app/public ./public
-COPY --from=builder /opt/app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /opt/app/.next ./.next
 COPY --from=builder /opt/app/package.json ./package.json
 COPY --from=builder /opt/app/node_modules ./node_modules
+
+USER nextjs
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
