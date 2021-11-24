@@ -40,6 +40,9 @@ module.exports = {
               backgroundColor: theme('colors.gray.700'),
               border: `1px solid ${theme('colors.gray.600')}`
             },
+            blockquote: {
+              color: theme('colors.gray.200')
+            },
             'pre code': {
               backgroundColor: 'transparent',
               border: 'none'
