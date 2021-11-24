@@ -36,11 +36,16 @@ export default function Post({
     }
   }
 
+  console.log(title.length)
+
   return (
     <DefaultLayout pageMeta={meta}>
       <article id="single-article">
         <header className="py-12 md:py-16 text-center">
-          <h1 className="text-5xl tracking-tight font-bold mb-4 leading-snug lg:-mx-20 js-darkmode-flicker">
+          <h1
+            className="text-5xl tracking-tight font-bold mb-4 leading-snug lg:-mx-20 js-darkmode-flicker"
+            data-flicker-chars={title.length > 35 ? 2 : 1}
+          >
             {title}
           </h1>
           <div className="text-gray-500 flex justify-center space-x-2 uppercase">
