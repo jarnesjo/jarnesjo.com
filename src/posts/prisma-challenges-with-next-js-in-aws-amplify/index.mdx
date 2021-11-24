@@ -1,0 +1,123 @@
+---
+title: 'Prisma challenges with Next JS in AWS Amplify'
+description:
+date: '2021-11-24'
+category: code
+tags:
+  - aws
+  - amplify
+  - nextjs
+  - prisma
+author: Nicklas Jarnesjö
+image: {src: 'card.png', alt: 'Text "Prisma challenges with Next JS in AWS Amplify"'}
+---
+
+Started new project together with some friends and we decided to against AWS Amplify together with
+Next JS and Prisma. I have worked with Next JS and Prisma in many of my projects before and felt
+confident about that setup. But boy this AWS Amplify thing was something totally new for me. AWS is
+totally new for me but the others have been working and deploying things there before and would be a
+great project to start learning about it.
+
+But everything didn't went as smooth as I/we hoped. Where should I start?
+
+## Static generation
+
+Our first plan where to generate everything statically but we had to much data for that so the build
+process took to long time and in some cases it timed out or got weird memory leak
+`0xa1855c node::OnFatalError(char const*, char const*) [node]` which we didn't managed to solve. So
+we went with ISG together with Next JS instead and rest of this post will be about that.
+
+## Prisma together with AWS Lambda
+
+Oh boy this one was a tough one for me. First of all we seemed to got a versioned that didn't work
+but after Prisma release `3.5.0` we got rid of some of the first build errors. Then with also got
+build errors about `_http_common` and the solutions I found were to add following to
+`next.config.js`
+
+```json:next.config.js
+(module.exports = {
+  "webpack": (config, {defaultLoaders, isServer}) => {
+    if (isServer) {
+      config.externals.push("_http_common")
+    }
+
+    return config
+  }
+})
+```
+
+Oh and of course you have to specified what binary to target so it can run in a Lambda so you have
+to add `binaryTargets` to your
+
+```json:prisma/schema.prisma
+binaryTargets = ['native', 'rhel-openssl-1.0.x']
+```
+
+After that everything build correctly but we didn't got **503 Reponses** on every Lambda request and
+looking into the logs we could see
+
+```json
+{
+  "errorType": "Error",
+  "errorMessage": "ENOENT: no such file or directory, open '/var/task/chunks/schema.prisma'",
+  "code": "ENOENT",
+  "errno": -2,
+  "syscall": "open",
+  "path": "/var/task/chunks/schema.prisma",
+  "clientVersion": "3.5.0",
+  "stack": [
+    "Error: ENOENT: no such file or directory, open '/var/task/chunks/schema.prisma'",
+    "    at Object.openSync (fs.js:497:3)",
+    "    at Object.readFileSync (fs.js:393:35)",
+    "    at new LibraryEngine (/var/task/chunks/836.js:36276:40)",
+    "    at PrismaClient.getEngine (/var/task/chunks/836.js:39478:16)",
+    "    at new PrismaClient (/var/task/chunks/836.js:39449:29)",
+    "    at Object.21010 (/var/task/chunks/449.js:15:33)",
+    "    at __webpack_require__ (/var/task/pages/[county]/[municipality]/[area].js:551:43)",
+    "    at Module.98288 (/var/task/pages/[county]/[municipality]/[area].js:20:69)",
+    "    at __webpack_require__ (/var/task/pages/[county]/[municipality]/[area].js:551:43)",
+    "    at Module.55135 (/var/task/pages/[county]/[municipality]/[area].js:278:23)"
+  ]
+}
+```
+
+and what conclusion can make about that? That Prisma didn't got packed into the Lambda artifact and
+didn't exist when it executing. For that we found a solutions what Vercel themself are using and
+what platforms such Netlify are using for getting Next JS to work in theirs environments.
+
+```json:next.config.js
+(module.exports = {
+  "target": "experimental-serverless-trace",
+})
+```
+
+Everything good now? Nahh! Now we faced that Prisma executed as expected but couldn't connect to the
+database because it couldn't find the `DATABASE_URL`-variable from the `.env`. Ok why not? I some
+weird way the Lambda do not gets the Environments Variables set in Amplify GUI. So how to solve it?
+
+```yml:amplify.yml
+...
+  build:
+    commands:
+      - echo "DATABASE_URL=$DATABASE_URL" >> .env
+...
+```
+
+In other words you have to create a `.env` in build time to get the Lambda to pick it up. And this
+is the official solution to the problem as you can read about in the
+[Amplify docs](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html#access-env-vars)
+
+Now everything is working as attended but next problem is to fix `Too Many Connections` problem we
+are facing with Prisma and the Lambda right now where it's don't letting the connections go.
+
+Prisma is a lovely framework I have been pleased with but in this context it's have been such a
+pain. We are actually looking into to user
+[serverless/mysl](https://github.com/jeremydaly/serverless-mysql) right now to see if we can get a
+better handling of our connections. And that's a shame we maybe can't get all the benefits from
+Prisma.
+
+### Why writing this post if you going elsewhere?
+
+Because you maybe have the same use cases where you have to have many SSG rendering stuff and
+therefor it won't be a problem for you. And this made a headache for me so hope it can help you in
+someway.
