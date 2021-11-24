@@ -1,0 +1,79 @@
+---
+title: 'No .next directory after Docker build in GitHub Actions'
+description:
+date: '2021-11-20'
+published: false
+category: code
+tags:
+  - github-actions
+  - docker
+  - node-alpine
+author: Nicklas Jarnesjö
+# image: {src: 'card.png', alt: 'Text "Please use inputmode in forms"'}
+---
+
+### TLDR; Version
+
+Could be your node version if you using a `alpine` version.
+
+<hr />
+
+When I posted my latest post here I got some super weird behavior. Everything seems to work and
+build as normal. But couldn't reach the site.
+
+When I did a `docker logs jarnesjo.com` on the container I saw the following error message.
+
+```
+Error: Could not find a production build in the '/opt/app/.next' directory. Try building your app with 'next build' before starting the production server.
+```
+
+Ok so I did restart of the container and check whats init before it got killed and did saw the
+`.next` directory in there. Super weird!
+
+The build works and could be started locally but something is going wrong in GitHub Actions. So it
+kind a hard to debug if you have to deploy and wait for the build steps to go through and don't see
+any obvious errors.
+
+After hours of debugging I took a look into the `.next` directory in the deployed and failed
+container and found following
+
+```json
+➜  ~ docker exec jarnesjo.com ls -lart ./.next
+
+total 16
+-rw-r--r--    1 nextjs   nodejs         662 Nov 19 13:03 routes-manifest.json
+drwxr-xr-x    3 nextjs   nodejs        4096 Nov 19 13:03 cache
+drwxr-xr-x    3 nextjs   nodejs        4096 Nov 19 13:03 .
+drwxr-xr-x    1 root     root          4096 Nov 19 13:03 ..
+```
+
+Took a look into my local build to see how it should look like
+
+```json
+➜  ~ docker exec jarnesjo.com ls -lart ./.next
+
+total 60
+drwxr-xr-x 4 root root 4096 Nov 19 13:56 server
+drwxr-xr-x 6 root root 4096 Nov 19 13:57 static
+-rw-r--r-- 1 root root    2 Nov 19 13:57 react-loadable-manifest.json
+-rw-r--r-- 1 root root 4008 Nov 19 13:57 build-manifest.json
+-rw-r--r-- 1 root root 1278 Nov 19 13:57 routes-manifest.json
+-rw-r--r-- 1 root root 1358 Nov 19 13:57 required-server-files.json
+-rw-r--r-- 1 root root   21 Nov 19 13:57 BUILD_ID
+-rw-r--r-- 1 root root 3499 Nov 19 13:57 prerender-manifest.json
+-rw-r--r-- 1 root root  262 Nov 19 13:57 images-manifest.json
+-rw-r--r-- 1 root root   93 Nov 19 13:57 export-marker.json
+drwxr-xr-x 1 root root 4096 Nov 19 13:57 .
+drwxr-xr-x 1 root root 4096 Nov 19 13:57 ..
+drwxr-xr-x 1 root root 4096 Nov 19 14:00 cache
+```
+
+Something going very wrong here. Ok how to tackle it?  
+I started with notice I use `node:lts-alpine`. Ok so no hard version dependency so changed it to
+`node:14-alpine` instead but with the same result.
+
+After many turns I finally stop worrying about a small build so changed to `node:14` and after that
+everything worked as expected.
+
+Super annoying debug that just popped up from nowhere but hope this can helps if you getting same
+error.
