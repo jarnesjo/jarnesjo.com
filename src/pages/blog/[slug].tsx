@@ -36,8 +36,6 @@ export default function Post({
     }
   }
 
-  console.log(title.length)
-
   return (
     <DefaultLayout pageMeta={meta}>
       <article id="single-article">
