@@ -18,7 +18,7 @@
     text-decoration: none;
 
     &::after {
-      @apply bg-red-300 dark:bg-red-500;
+      @apply bg-red-300 dark:bg-red-800;
       content: '';
       position: absolute;
       z-index: -1;
