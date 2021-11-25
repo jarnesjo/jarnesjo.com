@@ -8,8 +8,12 @@
 // Create meta image for single post
 node ./src/scripts/generate-meta-image-by-slug.mjs slug-to-your-post
 
-// Create meta images for all posts
+// Create meta images for all posts missing meta card
 node ./src/scripts/generate-meta-images.mjs
+
+// Create meta images for all posts
+node ./src/scripts/generate-meta-images.mjs --all
+
 ```
 
 ## Production
