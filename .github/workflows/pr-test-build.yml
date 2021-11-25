@@ -1,0 +1,21 @@
+name: "Test build Docker"
+on: 
+  push: 
+  pull_request:
+    branches: [main]
+
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    
+    if: github.ref != 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check node version
+        run: node -v
+
+      - name: Build docker images
+        run: docker build -t jarnesjo.com-dev .
+        
