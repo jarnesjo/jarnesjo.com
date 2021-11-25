@@ -5,13 +5,13 @@ const prettier = require('prettier')
 
 ;(async () => {
   // Ignore Next.js specific files (e.g., _app.js) and API routes.
-  const pagePaths = await globby(['pages/**/*.tsx', '!pages/_*.tsx', '!pages/api'])
+  const pagePaths = await globby(['src/pages/**/*.tsx', '!src/pages/_*.tsx', '!src/pages/api'])
   const pageRoutes = pagePaths
     .filter(pagePath => !pagePath.includes('[slug]'))
-    .map(pagePath => pagePath.replace('pages', '').replace('.tsx', '').replace('/index', ''))
+    .map(pagePath => pagePath.replace('src/pages', '').replace('.tsx', '').replace('/index', ''))
 
-  const postPaths = await globby(['posts'], {onlyDirectories: true})
-  const postRoutes = postPaths.map(postPath => postPath.replace('posts', '/blog'))
+  const postPaths = await globby(['src/posts'], {onlyDirectories: true})
+  const postRoutes = postPaths.map(postPath => postPath.replace('src/posts', '/blog'))
 
   const allRoutes = [...pageRoutes, ...postRoutes].sort()
 
