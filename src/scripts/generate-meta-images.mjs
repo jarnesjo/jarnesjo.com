@@ -5,8 +5,6 @@ import {getAllPostsData} from './_lib/posts.mjs'
   const allPostsData = getAllPostsData()
   const generateAll = process.argv.includes('--all')
 
-  console.log(process.argv.includes('--all'))
-
   for (let index = 0; index < allPostsData.length; index++) {
     const {title, slug, filePath} = allPostsData[index]
 

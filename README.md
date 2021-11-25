@@ -1,6 +1,21 @@
 # jarnesjo.com
 
+- Framework: Next.js
+- Content: MDX
+- Styling: Tailwind CSS
+- Deployment: Digital Ocean
+- Production build: Docker
+
 ## Dev
+
+```bash
+git clone https://github.com/jarnesjo/jarnesjo.com.git
+cd jarnesjo.com
+npm ci
+npm run dev
+```
+
+Enjoy content on [localhost:300](http://localhost:3000)
 
 ### Generate meta images
 
