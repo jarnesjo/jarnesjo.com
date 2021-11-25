@@ -1,5 +1,5 @@
 ---
-title: 'Prisma challenges with Next JS in AWS Amplify'
+title: 'Prisma challenges with Next.js in AWS Amplify'
 description:
 date: '2021-11-24'
 category: code
@@ -9,11 +9,11 @@ tags:
   - nextjs
   - prisma
 author: Nicklas Jarnesjö
-image: {src: 'card.png', alt: 'Text "Prisma challenges with Next JS in AWS Amplify"'}
+image: {src: 'card.png', alt: 'Text "Prisma challenges with Next.js in AWS Amplify"'}
 ---
 
 Started new project together with some friends and we decided to against AWS Amplify together with
-Next JS and Prisma. I have worked with Next JS and Prisma in many of my projects before and felt
+Next.js and Prisma. I have worked with Next.js and Prisma in many of my projects before and felt
 confident about that setup. But boy this AWS Amplify thing was something totally new for me. AWS is
 totally new for me but the others have been working and deploying things there before and would be a
 great project to start learning about it.
@@ -25,7 +25,7 @@ But everything didn't went as smooth as I/we hoped. Where should I start?
 Our first plan where to generate everything statically but we had to much data for that so the build
 process took to long time and in some cases it timed out or got weird memory leak
 `0xa1855c node::OnFatalError(char const*, char const*) [node]` which we didn't managed to solve. So
-we went with ISG together with Next JS instead and rest of this post will be about that.
+we went with ISG together with Next.js instead and rest of this post will be about that.
 
 ## Prisma together with AWS Lambda
 
@@ -83,7 +83,7 @@ looking into the logs we could see
 
 and what conclusion can make about that? That Prisma didn't got packed into the Lambda artifact and
 didn't exist when it executing. For that we found a solutions what Vercel themself are using and
-what platforms such Netlify are using for getting Next JS to work in theirs environments.
+what platforms such Netlify are using for getting Next.js to work in theirs environments.
 
 ```json:next.config.js
 (module.exports = {
