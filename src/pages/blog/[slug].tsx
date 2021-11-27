@@ -20,10 +20,11 @@ export default function Post({
 }) {
   const content = hydrate(postData.mdxSource, {components: MdxComponents(slug)})
 
-  const {title, date, category, image, tags} = postData.frontMatter
+  const {title, description, date, category, image, tags} = postData.frontMatter
 
   const meta = {
     title,
+    description,
     type: 'article'
   }
 
