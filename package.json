@@ -6,7 +6,7 @@
     "dev": "next-remote-watch ./src/posts",
     "dev:next": "next dev",
     "build": "next build",
-    "postbuild": "node ./src/scripts/generate-rss-feed.mjs",
+    "postbuild": "node ./src/scripts/generate-rss-feed.mjs && node ./src/scripts/generate-sitemap.mjs",
     "start": "next start"
   },
   "dependencies": {
