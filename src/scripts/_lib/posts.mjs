@@ -12,15 +12,21 @@ const getSlugFromFilePath = filePath => {
 }
 
 export function getAllPostsData() {
-  return postFilePaths.map(filePath => {
+  const postData = postFilePaths.map(filePath => {
     const slug = getSlugFromFilePath(filePath)
 
     const source = fs.readFileSync(filePath, 'utf8')
-    const {
-      data: {title}
-    } = matter(source)
+    const {data} = matter(source)
 
-    return {slug, title, filePath: path.join(BLOG_POST_PATH, `/${slug}`)}
+    return {slug, filePath: path.join(BLOG_POST_PATH, `/${slug}`), ...data}
+  })
+
+  return [...postData].sort((a, b) => {
+    if (a.date < b.date) {
+      return 1
+    } else {
+      return -1
+    }
   })
 }
 
