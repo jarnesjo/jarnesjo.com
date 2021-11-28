@@ -37,11 +37,6 @@ module.exports = {
       }
     })
 
-    // Done on build
-    if (isServer) {
-      require('./src/scripts/generate-sitemap')
-    }
-
     return config
   }
 }

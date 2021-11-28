@@ -90,6 +90,14 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         <meta name="twitter:description" content={meta.description} />
         <meta name="twitter:image" content={meta.image.src} />
         <meta name="twitter:creator" content={meta.twitterHandle} />
+
+        {/* RSS */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Nicklas Jarnesjö"
+          href={`${meta.siteUrl}/feed.xml`}
+        />
       </Head>
       <div className="max-w-4xl mx-auto pt-8 px-4 sm:px-8">
         <Link href="#main">
@@ -244,6 +252,9 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
           >
             Twitter
           </a>
+          <Link href="/feed.xml">
+            <a className="p-4 dark:hover:text-gray-400">RSS</a>
+          </Link>
         </footer>
       </div>
     </>

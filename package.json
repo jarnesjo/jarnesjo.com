@@ -6,6 +6,7 @@
     "dev": "next-remote-watch ./src/posts",
     "dev:next": "next dev",
     "build": "next build",
+    "postbuild": "node ./src/scripts/generate-rss-feed.mjs && node ./src/scripts/generate-sitemap.mjs",
     "start": "next start"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "prettier": "^2.2.1",
     "puppeteer-core": "^8.0.0",
     "rehype": "^11.0.0",
+    "rss": "^1.2.2",
     "typescript": "^4.1.3"
   }
 }

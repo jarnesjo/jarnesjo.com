@@ -13,7 +13,7 @@ const getSlugFromFilePath = filePath => {
   return split[split.length - 2]
 }
 
-const dateSortDesc = (a, b) => {
+const dateSortDesc = (a: Date, b: Date) => {
   if (a < b) {
     return 1
   } else {
@@ -34,7 +34,7 @@ export function getPostsSortedByDate(limit?: number) {
   })
 
   // Sort posts by date
-  return allPostsData
+  return [...allPostsData]
     .sort((a, b) => dateSortDesc(a.date, b.date))
     .slice(0, limit ?? allPostsData.length)
 }

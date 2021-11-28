@@ -1,8 +1,6 @@
-const fs = require('fs')
-
-const globby = require('globby')
-const prettier = require('prettier')
-
+import globby from 'globby'
+import prettier from 'prettier'
+import {writeFileSync} from 'fs'
 ;(async () => {
   // Ignore Next.js specific files (e.g., _app.js) and API routes.
   const pagePaths = await globby(['src/pages/**/*.tsx', '!src/pages/_*.tsx', '!src/pages/api'])
@@ -36,5 +34,5 @@ const prettier = require('prettier')
     parser: 'html'
   })
 
-  fs.writeFileSync('public/sitemap.xml', formatted)
+  writeFileSync('public/sitemap.xml', formatted)
 })()
