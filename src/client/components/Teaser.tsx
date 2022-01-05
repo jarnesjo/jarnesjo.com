@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Date from './date'
+import {PostDate} from './date'
 
 const Teaser = ({
   slug,
@@ -22,7 +22,7 @@ const Teaser = ({
         </a>
       </Link>
       <span className="uppercase text-xs text-gray-500 font-medium tracking-widest">
-        <Date dateString={date} /> {category && <>&bull; {category}</>}
+        <PostDate dateString={date} /> {category && <>&bull; {category}</>}
       </span>
     </article>
   )

@@ -1,5 +1,5 @@
 import {getAllPostSlugs, getPostBySlug} from '@/lib/mdx'
-import Date from '@/components/date'
+import {PostDate} from '@/components/date'
 import {GetStaticPaths, GetStaticProps} from 'next'
 import {DefaultLayout, defaultMeta} from '@/components/layouts/DefaultLayout'
 import hydrate from 'next-mdx-remote/hydrate'
@@ -48,7 +48,7 @@ export default function Post({
             {title}
           </h1>
           <div className="text-gray-500 flex justify-center space-x-2 uppercase">
-            <Date dateString={date} />
+            <PostDate dateString={date} />
             <span>&bull;</span>
             <Link href={`/category/${category}`}>
               <a className="uppercase">{category}</a>
