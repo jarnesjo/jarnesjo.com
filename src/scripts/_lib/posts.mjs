@@ -40,3 +40,33 @@ export function getPostBySlug(slug) {
 
   return {slug, title, filePath: path.join(BLOG_POST_PATH, `/${slug}`)}
 }
+
+export function getAllTagSlugs() {
+  const allPostsData = postFilePaths
+    .map(filePath => {
+      const source = fs.readFileSync(filePath, 'utf8')
+      const {data} = matter(source)
+
+      return data?.tags
+    })
+    .flat()
+
+  return allPostsData
+    .filter(tag => tag !== undefined)
+    .filter((value, index, self) => self.indexOf(value) === index) // Distinct
+    .map(tag => `/tag/${tag}`)
+}
+
+export function getAllCategorySlugs() {
+  const allPostsData = postFilePaths.map(filePath => {
+    const source = fs.readFileSync(filePath, 'utf8')
+    const {data} = matter(source)
+
+    return data?.category
+  })
+
+  return allPostsData
+    .filter(category => category !== undefined)
+    .filter((value, index, self) => self.indexOf(value) === index) // Distinct
+    .map(category => `/category/${category}`)
+}
