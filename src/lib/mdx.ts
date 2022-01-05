@@ -70,6 +70,28 @@ export function getAllCategorySlugs() {
     })
 }
 
+export function getAllTagSlugs() {
+  const allPostsData = postFilePaths
+    .map(filePath => {
+      const source = fs.readFileSync(filePath, 'utf8')
+      const {data} = matter(source)
+
+      return data?.tags
+    })
+    .flat()
+
+  return allPostsData
+    .filter(tag => tag !== undefined)
+    .filter((value, index, self) => self.indexOf(value) === index) // Distinct
+    .map(tag => {
+      return {
+        params: {
+          slug: tag
+        }
+      }
+    })
+}
+
 export async function getPostBySlug(slug: string) {
   const fullPath = path.join(BLOG_POST_PATH, `/${slug}/index.mdx`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
@@ -118,5 +140,29 @@ export async function getCategoryBySlug(slug: string | string[]) {
     name: slug,
     slug,
     posts: postsForCategory
+  }
+}
+
+export async function getTagBySlug(slug: string | string[]) {
+  const allPostsData = postFilePaths.map(filePath => {
+    const source = fs.readFileSync(filePath, 'utf8')
+    const {data} = matter(source)
+
+    return {
+      slug: getSlugFromFilePath(filePath),
+      frontMatter: {...data}
+    }
+  })
+
+  const postsForTag = allPostsData
+    .filter(({frontMatter: {tags}}) => {
+      return tags.map((tag: string) => tag === slug).includes(true)
+    })
+    .sort((a, b) => dateSortDesc(a.frontMatter.date, b.frontMatter.date))
+
+  return {
+    name: slug,
+    slug,
+    posts: postsForTag
   }
 }

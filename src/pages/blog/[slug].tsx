@@ -89,7 +89,10 @@ export default function Post({
               Category
             </span>
             <Link href={`/category/${category}`}>
-              <a className="uppercase font-medium" title="Category">
+              <a
+                className="uppercase font-medium transition-colors hover:text-red-600"
+                title="Category"
+              >
                 {category}
               </a>
             </Link>
@@ -100,7 +103,9 @@ export default function Post({
               <ul className="flex space-x-3">
                 {tags.map(tag => (
                   <li className="flex-shrink-0" key={tag}>
-                    #{tag}
+                    <Link href={`/tag/${tag}`}>
+                      <a className="uppercase transition-colors hover:text-red-600">#{tag}</a>
+                    </Link>
                   </li>
                 ))}
               </ul>
