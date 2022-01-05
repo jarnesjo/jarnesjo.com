@@ -14,11 +14,14 @@ import {getAllPostsData} from './_lib/posts.mjs'
   const allPosts = getAllPostsData()
 
   allPosts.map(post => {
+    const postUrl = `${siteUrl}/${post.slug}`
+    const description = `<p>${post.description}</p><p><a href="${postUrl}">Read full article →</a></p>`
+
     feed.item({
       title: post.title,
-      url: `${siteUrl}/${post.slug}`,
+      url: postUrl,
       date: post.date,
-      description: post.description,
+      description: description,
       categories: [post.category, ...post.tags],
       author: post.author
     })
