@@ -4,6 +4,20 @@ module.exports = {
       'pbs.twimg.com' // Twitter Profile Picture
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/rss',
+        destination: '/feed.xml',
+        permanent: true
+      },
+      {
+        source: '/feed',
+        destination: '/feed.xml',
+        permanent: true
+      }
+    ]
+  },
   webpack: (config, {isServer}) => {
     config.module.rules.push({
       test: /\.(gif|png|webp|jpe?g)$/i,
