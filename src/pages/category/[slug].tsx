@@ -14,7 +14,7 @@ export default function CategoryPage({
   return (
     <DefaultLayout
       pageMeta={{
-        title: `${name} posts`,
+        title: `All posts in category ${name.toUpperCase()}`,
         description: `Here you found every posts and writing about ${name}`
       }}
     >
