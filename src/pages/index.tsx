@@ -84,6 +84,40 @@ export default function Home({allPostsData}) {
             </a>
           </div>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
+          <div className="relative">
+            <CustomImage
+              src="/static/images/feedbackpack-screenshot.png"
+              width={2368}
+              height={2206}
+              alt="Screenshot from frontpage of feedbackpack.app"
+            />
+          </div>
+          <div className="mt-6 md:mt-0 md:col-span-2">
+            <h3 className="font-semibold text-xl">FeedBackPack</h3>
+            <p className="mt-4">
+              SaaS-app for collecting feedback with screenshot from your customers. Specially good
+              when you have static-sites with no backend such as JAMStack.
+            </p>
+            <div className="mt-4">
+              <span className="text-sm mr-2 font-semibold">Dev</span>
+              <ul className="flex flex-wrap">
+                <ListTechBadge text="Next.js" />
+                <ListTechBadge text="Docker" />
+                <ListTechBadge text="Typescript" />
+                <ListTechBadge text="Tailwind CSS" />
+              </ul>
+            </div>
+            <a
+              className="mt-4 inline-block text-gray-500 font-semibold"
+              href="https://feedbackpack.app"
+            >
+              https://feedbackpack.app
+            </a>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
