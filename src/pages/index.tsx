@@ -54,6 +54,39 @@ export default function Home({allPostsData}) {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
+              src="/static/images/hotadskog-screenshot.png"
+              width={2528}
+              height={2790}
+              alt="Screenshot from frontpage of hotadskog.se"
+            />
+          </div>
+          <div className="mt-6 md:mt-0 md:col-span-2">
+            <h3 className="font-semibold text-xl">Hotadskog</h3>
+            <p className="mt-4">
+              Cross-referencing data sources to be able to easily view and visualize felling
+              applications and their impact on nature and cultural values
+            </p>
+            <div className="mt-4">
+              <span className="text-sm mr-2 font-semibold">Dev</span>
+              <ul className="flex flex-wrap">
+                <ListTechBadge text="Next.js" />
+                <ListTechBadge text="AWS Amplify" />
+                <ListTechBadge text="Leaflet" />
+                <ListTechBadge text="Typescript" />
+                <ListTechBadge text="Tailwind CSS" />
+              </ul>
+            </div>
+            <a
+              className="mt-4 inline-block text-gray-500 font-semibold"
+              href="https://hotadskog.se"
+            >
+              https://hotadskog.se
+            </a>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
+          <div className="relative">
+            <CustomImage
               src="/static/images/prlog-screenshot.png"
               width={2030}
               height={2990}
