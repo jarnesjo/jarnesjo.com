@@ -19,7 +19,6 @@ export default function UsesPage() {
             alt="My computer desk at home"
             width="4032"
             height="3024"
-            className="rotate-180"
           />
         </div>
 
