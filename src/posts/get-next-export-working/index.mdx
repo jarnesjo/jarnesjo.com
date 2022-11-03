@@ -1,0 +1,81 @@
+---
+title: 'Get `next export` working'
+description:
+  'It seems that Next.js just added export with no intention to work at all, but you can make it
+  work'
+date: '2022-11-03'
+published: true
+category: code
+tags:
+  - nextjs
+author: Nicklas Jarnesjö
+image: {src: 'card.png', alt: 'Text "Get next export working"'}
+---
+
+It seems that Next.js just added `next export` because other have it but havn't give it any love or
+made it easy to use. If you compare it to Gatsby.js it's lack a lot of features especially if you
+look into image optimization.  
+Ok it's not fair compare them exactly but if Next.js would the shit in this space you have to treat
+it better. They should have image optimization if the user choose to use `next export` something
+they don't really have to care about when it's deployed as "normally" but they have thing for it in
+place for that and some small tweaks to make it work when uses the framework as static would be nice
+and something you can expect.
+
+Ok now to have to make things work if you choose use `next export` any way. Which I did for a
+customer.
+
+### Images
+
+To even get the app to get exported you have to add `unomptimized: true` in `next.config.js`
+
+```js:next.config.js
+module.exports = {
+  images: {
+    unoptimized: true,
+  },
+  ...
+}
+```
+
+You have to handle optimizing of images yourself and how its presented to user. One easy way is to
+do it with `optipng` and `jpegoptim` for example which you can get with `brew` if you using unix.
+
+Here example of terminal commands I used. (Stand in directory of images)
+
+```bash
+// PNG optimizing
+find . -name "*.png" -exec optipng -o7 {} \;
+
+// JPG optimizing
+find . -name "*.jpg"|"*.jpeg" -exec jpegoptim -m80 -o -p --strip-all {} \;
+```
+
+### Routing
+
+Then everything seems to work as expect until you reload any page which is not the frontpage and the
+application can't pickup the routing.
+
+To fix this you have to add `trailingSlash: true` to `next.config.js`
+
+```js:next.config.js
+module.exports = {
+  trailingSlash: true
+  ...
+}
+```
+
+### Final config
+
+```js:next.config.js
+const isProd = process.env.NODE_ENV === 'production'
+
+module.exports = {
+  trailingSlash: isProd,
+  images: {
+    unoptimized: isProd,
+  },
+  ...
+}
+```
+
+It could be obvisoly for many but hope it can help someone.
