@@ -38,10 +38,6 @@ export default function AboutPage() {
               we have shift focus and working more with the JS-stack both with clients and as
               consultants.
             </p>
-            <p>
-              I'm also working part time at Naviga Content Lab as senior front-end web developer.
-              We're developing software for the media and publishing industry.
-            </p>
           </div>
           <div className="md:-mr-12 lg:-mr-24 flex justify-center items-center">
             <div className="h-40 w-40">
@@ -67,7 +63,11 @@ export default function AboutPage() {
               One of my biggest dreams are to move to a small farm and getting back to roots with
               animals and farming.
             </p>
-            <p>Also owning a small farm where we have chickens and doing farming.</p>
+            <p>
+              Also owning a small farm where we have chickens, rabbits, cats and doing farming.
+              Since the move the country a intreset for wood working has begin and love spending
+              time with restoring old windows.
+            </p>
           </div>
           <div className="-mx-4 md:-ml-12 lg:-ml-24 md:mr-0 text-center overflow-hidden flex items-center md:mt-10 md:order-1">
             <CustomImage
