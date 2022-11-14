@@ -2,7 +2,7 @@
 /posts-ignore
 /public/sitemap.xml
 /public/feed.xml
-.vscode
+.vscode/settings*
 
 # dependencies
 /node_modules
