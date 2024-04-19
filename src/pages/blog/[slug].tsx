@@ -29,11 +29,9 @@ export default function Post({
   }
 
   if (image) {
-    const sharingCard = require(`../../posts/${slug}/${image.src}`)
-
     meta['image'] = {
       ...image,
-      src: `${defaultMeta.siteUrl}${sharingCard.default}`
+      src: `${defaultMeta.siteUrl}${image.src}`
     }
   }
 
@@ -130,6 +128,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   slug = Array.isArray(slug) ? slug[slug.length - 1] : slug
 
   const postData = await getPostBySlug(slug)
+
   return {
     props: {
       slug: params.slug,
