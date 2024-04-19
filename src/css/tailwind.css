@@ -40,13 +40,13 @@
     @apply rounded-none sm:rounded-md -mx-4 md:-mx-8;
   }
 
-  .remark-code-title + pre,
-  &-lg .remark-code-title + pre {
+  .rehype-code-title + pre,
+  &-lg .rehype-code-title + pre {
     @apply mt-0 rounded-none sm:rounded-b-md sm:rounded-t-none;
   }
 }
 
-.remark-code-title {
+.rehype-code-title {
   @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md -mx-4 md:-mx-8;
 }
 

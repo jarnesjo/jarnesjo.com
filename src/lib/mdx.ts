@@ -1,9 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import renderToString from 'next-mdx-remote/render-to-string'
-import {MdxComponents} from '@/components/MdxComponents'
+import {serialize} from 'next-mdx-remote/serialize'
+// import {MdxComponents} from '@/components/MdxComponents'
 import FastGlob from 'fast-glob'
+import rehypePrism from 'rehype-prism-plus'
+import rehypeCodeTitles from 'rehype-code-titles'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 export const BLOG_POST_PATH = path.join(process.cwd(), 'src/posts')
 const postFilePaths = FastGlob.sync(`${BLOG_POST_PATH}/**/*.mdx`)
@@ -99,16 +102,10 @@ export async function getPostBySlug(slug: string) {
   // Use gray-matter to parse the post metadata section
   const {data, content} = matter(fileContents)
 
-  const mdxSource = await renderToString(content, {
-    components: MdxComponents(slug),
-    scope: data,
+  const mdxSource = await serialize(content, {
     mdxOptions: {
-      remarkPlugins: [
-        // require('remark-autolink-headings'),
-        // require('remark-slug'),
-        require('remark-code-titles')
-      ],
-      rehypePlugins: [require('@mapbox/rehype-prism')]
+      // @ts-ignore
+      rehypePlugins: [rehypeCodeTitles, rehypePrism, rehypeAutolinkHeadings]
     }
   })
 
