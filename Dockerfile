@@ -1,14 +1,14 @@
 # Source: https://github.com/vercel/next.js/discussions/16995#discussioncomment-132339
 
 # Install dependencies only when needed
-FROM node:14 AS deps
+FROM node:20 AS deps
 
 WORKDIR /opt/app
 COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
-FROM node:14 AS builder
+FROM node:20 AS builder
 
 # Add Google Analytics to client code 
 ARG NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
@@ -21,11 +21,11 @@ COPY --from=deps /opt/app/node_modules ./node_modules
 RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:14 AS runner
+FROM node:20 AS runner
 
 WORKDIR /opt/app
 ENV NODE_ENV=production
-COPY --from=builder /opt/app/next.config.js ./
+COPY --from=builder /opt/app/next.config.mjs ./
 COPY --from=builder /opt/app/public ./public
 COPY --from=builder /opt/app/.next ./.next
 COPY --from=builder /opt/app/node_modules ./node_modules
