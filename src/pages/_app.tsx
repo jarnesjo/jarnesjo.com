@@ -7,6 +7,7 @@ export default function App({Component, pageProps}: AppProps) {
   useGoogleAnalytics()
 
   return (
+    // @ts-ignore
     <ThemeProvider attribute="class">
       <Component {...pageProps} />
     </ThemeProvider>
