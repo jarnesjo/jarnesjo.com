@@ -2,8 +2,8 @@ import {getAllPostSlugs, getPostBySlug} from '@/lib/mdx'
 import {PostDate} from '@/components/date'
 import {GetStaticPaths, GetStaticProps} from 'next'
 import {DefaultLayout, defaultMeta} from '@/components/layouts/DefaultLayout'
-import hydrate from 'next-mdx-remote/hydrate'
-import {MdxRemote} from 'next-mdx-remote/types'
+import {MDXRemote} from 'next-mdx-remote'
+import {MDXRemoteSerializeResult} from 'next-mdx-remote/dist/types'
 import {MdxComponents} from '@/components/MdxComponents'
 import Link from 'next/link'
 import {FrontMatterType} from '@/types/FrontMatterType'
@@ -15,10 +15,11 @@ export default function Post({
   slug: string
   postData: {
     frontMatter: FrontMatterType
-    mdxSource: MdxRemote.Source
+    mdxSource: MDXRemoteSerializeResult
   }
 }) {
-  const content = hydrate(postData.mdxSource, {components: MdxComponents(slug)})
+  const components = MdxComponents(slug)
+  const content = <MDXRemote {...postData.mdxSource} components={components} />
 
   const {title, description, date, category, image, tags} = postData.frontMatter
 
