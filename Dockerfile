@@ -1,38 +1,55 @@
-# Source: https://github.com/vercel/next.js/discussions/16995#discussioncomment-132339
+FROM node:18-alpine3.17 AS deps
 
-# Install dependencies only when needed
-FROM node:20 AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 
-WORKDIR /opt/app
-COPY package.json package-lock.json ./
-RUN npm ci
+WORKDIR /opt/deps
+COPY package.json package-lock.json /opt/deps/
 
-# Rebuild the source code only when needed
-FROM node:20 AS builder
+RUN npm ci --quiet --no-progress
+
+# Build application
+FROM node:18-alpine3.17 as builder
+
+# RUN apk add --no-cache openssl1.1-compat
+
+WORKDIR /opt/build
+
+COPY --from=deps /opt/deps/node_modules ./node_modules
+
+COPY . .
 
 # Add Google Analytics to client code 
 ARG NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
 ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=$NEXT_PUBLIC_GOOGLE_ANALYTICS_ID
 
-ENV NODE_ENV=production
-WORKDIR /opt/app
-COPY . .
-COPY --from=deps /opt/app/node_modules ./node_modules
+RUN ls -lart
+
 RUN npm run build
 
-# Production image, copy all the files and run next
-FROM node:20 AS runner
+# Copy built code into smaller image
+FROM node:18-alpine3.17
 
-WORKDIR /opt/app
-ENV NODE_ENV=production
-COPY --from=builder /opt/app/next.config.mjs ./
-COPY --from=builder /opt/app/public ./public
-COPY --from=builder /opt/app/.next ./.next
-COPY --from=builder /opt/app/node_modules ./node_modules
+# RUN apk add --no-cache openssl1.1-compat
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ARG NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED 1
 
-CMD ["node_modules/.bin/next", "start"]
+RUN mkdir /home/node/app
+
+WORKDIR /home/node/app
+
+COPY --from=builder /opt/build/public ./public
+COPY --from=builder /opt/build/package.json ./package.json
+COPY --from=builder /opt/build/next.config.mjs ./
+
+COPY --chown=node:node --from=builder /opt/build/.next/standalone ./
+COPY --chown=node:node --from=builder /opt/build/.next/static ./.next/static
+
+USER node
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]
