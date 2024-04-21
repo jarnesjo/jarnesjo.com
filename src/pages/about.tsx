@@ -1,6 +1,9 @@
 import {CustomImage} from '@/components/CustomImage'
 import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
+import profileImage from '@/public/static/images/jarnesjo-beach.jpg'
+import webreadyLogo from '@/public/static/images/webready.png'
+import climbingImage from '@/public/static/images/climbing.jpg'
 
 export default function AboutPage() {
   return (
@@ -10,10 +13,11 @@ export default function AboutPage() {
         <div className="md:grid md:grid-cols-3 md:gap-4">
           <div className="-mx-4 md:-ml-12 lg:-ml-24 md:mr-0 text-center overflow-hidden">
             <CustomImage
-              src="/static/images/jarnesjo-beach.jpg"
+              src={profileImage}
               alt="Nicklas Jarnesjö posing"
               width="3024"
               height="3185"
+              placeholder="blur"
             />
           </div>
           <div className="col-span-2 font-medium">
@@ -41,12 +45,7 @@ export default function AboutPage() {
           </div>
           <div className="md:-mr-12 lg:-mr-24 flex justify-center items-center">
             <div className="h-40 w-40">
-              <CustomImage
-                src="/static/images/webready.png"
-                width={500}
-                height={500}
-                noPlaceholder
-              />
+              <CustomImage src={webreadyLogo} width={500} height={500} placeholder="blur" />
             </div>
           </div>
         </div>
@@ -71,7 +70,7 @@ export default function AboutPage() {
           </div>
           <div className="-mx-4 md:-ml-12 lg:-ml-24 md:mr-0 text-center overflow-hidden flex items-center md:mt-10 md:order-1">
             <CustomImage
-              src="/static/images/climbing.jpg"
+              src={climbingImage}
               alt="Nicklas doing rope climbs"
               width="1000"
               height="1000"

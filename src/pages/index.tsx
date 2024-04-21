@@ -3,6 +3,13 @@ import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
 import Link from 'next/link'
 import {CustomImage} from '@/components/CustomImage'
+import mittEvenemangScreenshot from '@/public/static/images/mitt-evenemang-screenshot.png'
+import hotadSkogScreenshot from '@/public/static/images/hotadskog-screenshot.png'
+import feedbackpackScreenshot from '@/public/static/images/feedbackpack-screenshot.png'
+import prlogScreenshot from '@/public/static/images/prlog-screenshot.png'
+import snittrantaScreenshot from '@/public/static/images/snittranta-screenshot.png'
+import manadskollenScreenshot from '@/public/static/images/manadskollen-screenshot.png'
+import minimaliseraScreenshot from '@/public/static/images/minimalisera-screenshot.png'
 
 const ListTechBadge = ({text}: {text: string}) => {
   return (
@@ -54,10 +61,11 @@ export default function Home({allPostsData}) {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
-              src="/static/images/mitt-evenemang-screenshot.png"
+              src={mittEvenemangScreenshot}
               width={2988}
               height={2984}
               alt="Screenshot from frontpage of mitt.evenemang.se"
+              placeholder="blur"
             />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
@@ -91,10 +99,11 @@ export default function Home({allPostsData}) {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
-              src="/static/images/hotadskog-screenshot.png"
+              src={hotadSkogScreenshot}
               width={2528}
               height={2790}
               alt="Screenshot from frontpage of hotadskog.se"
+              placeholder="blur"
             />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
@@ -107,7 +116,7 @@ export default function Home({allPostsData}) {
               <span className="text-sm mr-2 font-semibold">Dev</span>
               <ul className="flex flex-wrap">
                 <ListTechBadge text="Next.js" />
-                <ListTechBadge text="AWS Amplify" />
+                <ListTechBadge text="Docker" />
                 <ListTechBadge text="Leaflet" />
                 <ListTechBadge text="Typescript" />
                 <ListTechBadge text="Tailwind CSS" />
@@ -125,10 +134,11 @@ export default function Home({allPostsData}) {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
-              src="/static/images/feedbackpack-screenshot.png"
+              src={feedbackpackScreenshot}
               width={2368}
               height={2206}
               alt="Screenshot from frontpage of feedbackpack.app"
+              placeholder="blur"
             />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
@@ -158,10 +168,11 @@ export default function Home({allPostsData}) {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
-              src="/static/images/prlog-screenshot.png"
+              src={prlogScreenshot}
               width={2030}
               height={2990}
               alt="Screenshot from frontpage of prlog.app"
+              placeholder="blur"
             />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
@@ -190,7 +201,13 @@ export default function Home({allPostsData}) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
-            <CustomImage src="/static/images/snittranta.png" width={1338} height={1188} alt="" />
+            <CustomImage
+              src={snittrantaScreenshot}
+              width={1338}
+              height={1188}
+              alt="Screenshot of frontpage of snittränta.se"
+              placeholder="blur"
+            />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
             <h3 className="font-semibold text-xl">Snittränta</h3>
@@ -216,7 +233,13 @@ export default function Home({allPostsData}) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
-            <CustomImage src="/static/images/manadskollen.png" width={2506} height={2220} alt="" />
+            <CustomImage
+              src={manadskollenScreenshot}
+              width={2506}
+              height={2220}
+              alt="Screenshot of frontpage of månadskollen.se"
+              placeholder="blur"
+            />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
             <h3 className="font-semibold text-xl">Månadskollen</h3>
@@ -243,10 +266,11 @@ export default function Home({allPostsData}) {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
             <CustomImage
-              src="/static/images/minimalisera-screenshot.png"
+              src={minimaliseraScreenshot}
               width={2870}
               height={2990}
               alt="Screenshot from frontpage of minimalisera.se"
+              placeholder="blur"
             />
           </div>
           <div className="mt-6 md:mt-0 md:col-span-2">
