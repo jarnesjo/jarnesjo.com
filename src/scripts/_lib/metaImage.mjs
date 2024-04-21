@@ -54,18 +54,20 @@ function getHtml(text) {
   </html>`
 }
 
-export async function generateMetaImage(title, slug, pathToSave = null) {
+export async function generateMetaImage({title, slug, pathToSave = null, fileName = null}) {
   const html = getHtml(title)
 
   const file = await getScreenshot(html)
   const defaultFolder = 'public/static/images/meta'
 
-  const fileName = pathToSave || `${defaultFolder}/${slug}.png`
+  const fileNameToSave = fileName || `${defaultFolder}/${slug}.png`
 
   // Create default folder in not exist
   if (!pathToSave && !fs.existsSync(defaultFolder)) {
     fs.mkdirSync(defaultFolder)
+  } else if (!fs.existsSync(pathToSave)) {
+    fs.mkdirSync(pathToSave)
   }
 
-  fs.writeFileSync(fileName, file)
+  fs.writeFileSync(fileNameToSave, file)
 }
