@@ -1,0 +1,29 @@
+---
+title: 'Convert images through unix terminal'
+description: 'A small script to convert images from for example jpg to webp through unix terminal'
+date: '2024-04-21'
+category: code
+tags:
+  - terminal
+  - note-to-myself
+author: Nicklas Jarnesjö
+image:
+  {
+    src: '/static/post-content/convert-images-through-unix-terminal/card.png',
+    alt: 'Text "Convert images through unix terminal"'
+  }
+---
+
+This is a small script I use to convert images from example avif to webp through unix terminal. In
+this case because Microsoft Edge does not support avif images yet. I learned the hard way.
+
+```bash
+`for image in ./*/*.avif ;  do convert "$image" "${image%.*}.webp" ; done`
+```
+
+For this to work you need to have `imagemagick` installed on your system.
+[imagemagick on Homebrew](https://formulae.brew.sh/formula/imagemagick)
+
+```bash
+brew install imagemagick
+```
