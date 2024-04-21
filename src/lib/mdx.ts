@@ -104,6 +104,7 @@ export async function getPostBySlug(slug: string) {
 
   const mdxSource = await serialize(content, {
     mdxOptions: {
+      development: process.env.NODE_ENV === 'development',
       // @ts-ignore
       rehypePlugins: [rehypeCodeTitles, rehypePrism, rehypeAutolinkHeadings]
     }
