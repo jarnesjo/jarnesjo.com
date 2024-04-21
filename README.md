@@ -15,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-Enjoy content on [localhost:300](http://localhost:3000)
+Enjoy content on [localhost:3000](http://localhost:3000)
 
 ### Generate meta images
 
