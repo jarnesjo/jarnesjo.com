@@ -14,7 +14,7 @@ export default function AboutPage() {
           <div className="-mx-4 md:-ml-12 lg:-ml-24 md:mr-0 text-center overflow-hidden">
             <CustomImage
               src={profileImage}
-              alt="Nicklas Jarnesjö posing"
+              alt="Image of Nicklas Jarnesjö"
               width="3024"
               height="3185"
               placeholder="blur"
@@ -45,7 +45,13 @@ export default function AboutPage() {
           </div>
           <div className="md:-mr-12 lg:-mr-24 flex justify-center items-center">
             <div className="h-40 w-40">
-              <CustomImage src={webreadyLogo} width={500} height={500} placeholder="blur" />
+              <CustomImage
+                src={webreadyLogo}
+                width={500}
+                height={500}
+                placeholder="blur"
+                alt="Webready Sweden AB logo"
+              />
             </div>
           </div>
         </div>
