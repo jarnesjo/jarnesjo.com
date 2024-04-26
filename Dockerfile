@@ -1,4 +1,4 @@
-FROM node:18-alpine3.17 AS deps
+FROM node:20-alpine3.17 AS deps
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
@@ -9,7 +9,7 @@ COPY package.json package-lock.json /opt/deps/
 RUN npm ci --quiet --no-progress
 
 # Build application
-FROM node:18-alpine3.17 as builder
+FROM node:20-alpine3.17 as builder
 
 # RUN apk add --no-cache openssl1.1-compat
 
@@ -28,7 +28,7 @@ RUN ls -lart
 RUN npm run build
 
 # Copy built code into smaller image
-FROM node:18-alpine3.17
+FROM node:20-alpine3.17
 
 # RUN apk add --no-cache openssl1.1-compat
 
