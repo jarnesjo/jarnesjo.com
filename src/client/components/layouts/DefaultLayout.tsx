@@ -113,7 +113,6 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
                   width={400}
                   height={400}
                   quality={100}
-                  priority
                 />
               </div>
               <div className="ml-4 font-semibold">Nicklas Jarnesjö</div>

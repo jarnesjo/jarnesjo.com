@@ -1,6 +1,7 @@
 import {CustomImage} from '@/components/CustomImage'
 import {DefaultLayout, defaultMeta} from '@/components/layouts/DefaultLayout'
 import {PageHeading} from '@/components/PageHeading'
+import desktopImage from '@/public/static/images/home-office.jpg'
 
 export default function UsesPage() {
   return (
@@ -15,10 +16,11 @@ export default function UsesPage() {
 
         <div className="-mx-4 md:-mx-8 text-center overflow-hidden">
           <CustomImage
-            src="/static/images/home-office.jpg"
+            src={desktopImage}
             alt="My computer desk at home"
             width="4032"
             height="3024"
+            placeholder="blur"
           />
         </div>
 
