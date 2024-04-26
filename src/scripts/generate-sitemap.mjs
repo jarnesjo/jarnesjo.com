@@ -1,7 +1,8 @@
-import globby from 'globby'
+import {globby} from 'globby'
 import prettier from 'prettier'
 import {writeFileSync} from 'fs'
 import {getAllCategorySlugs, getAllTagSlugs} from './_lib/posts.mjs'
+
 ;(async () => {
   // Ignore Next.js specific files (e.g., _app.js) and API routes.
   const pagePaths = await globby(['src/pages/**/*.tsx', '!src/pages/_*.tsx', '!src/pages/api'])
@@ -32,11 +33,11 @@ import {getAllCategorySlugs, getAllTagSlugs} from './_lib/posts.mjs'
     </urlset>
     `
 
-  const prettierConfig = await prettier.resolveConfig('./.prettierrc')
-  const formatted = prettier.format(sitemap, {
+  const prettierConfig = await prettier.resolveConfig('./.prettierrc')  
+  const formatted = await prettier.format(sitemap, {
     ...prettierConfig,
     parser: 'html'
   })
-
+  
   writeFileSync('public/sitemap.xml', formatted)
 })()
