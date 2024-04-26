@@ -44,9 +44,7 @@ export default function Home({allPostsData}) {
             <Teaser title={title} slug={slug} date={date} key={slug} />
           ))}
           <div className="font-semibold text-red-500 hover:text-red-700">
-            <Link href="/blog">
-              <a>See all posts →</a>
-            </Link>
+            <Link href="/blog">See all posts →</Link>
           </div>
         </div>
       </div>

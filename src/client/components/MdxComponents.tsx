@@ -6,11 +6,7 @@ const CustomLink = props => {
   const isInternalLink = href && (href.startsWith('/') || href.startsWith('#'))
 
   if (isInternalLink) {
-    return (
-      <Link href={href}>
-        <a {...props} />
-      </Link>
-    )
+    return <Link href={href} {...props}></Link>
   }
 
   return <a rel="noopener" {...props} />

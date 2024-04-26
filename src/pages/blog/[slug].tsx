@@ -1,5 +1,5 @@
 import {getAllPostSlugs, getPostBySlug} from '@/lib/mdx'
-import {PostDate} from '@/components/date'
+import {PostDate} from '@/components/PostDate'
 import {GetStaticPaths, GetStaticProps} from 'next'
 import {DefaultLayout, defaultMeta} from '@/components/layouts/DefaultLayout'
 import {MDXRemote} from 'next-mdx-remote'
@@ -49,8 +49,8 @@ export default function Post({
           <div className="text-gray-500 flex justify-center space-x-2 uppercase">
             <PostDate dateString={date} />
             <span>&bull;</span>
-            <Link href={`/category/${category}`}>
-              <a className="uppercase">{category}</a>
+            <Link href={`/category/${category}`} className="uppercase">
+              {category}
             </Link>
           </div>
         </header>
@@ -87,13 +87,12 @@ export default function Post({
             <span className="text-xs uppercase text-gray-400 hover:text-gray-700 transition-colors">
               Category
             </span>
-            <Link href={`/category/${category}`}>
-              <a
-                className="uppercase font-medium transition-colors hover:text-red-600"
-                title="Category"
-              >
-                {category}
-              </a>
+            <Link
+              href={`/category/${category}`}
+              className="uppercase font-medium transition-colors hover:text-red-600"
+              title="Category"
+            >
+              {category}
             </Link>
           </div>
           {tags && (
@@ -102,8 +101,11 @@ export default function Post({
               <ul className="flex space-x-3">
                 {tags.map(tag => (
                   <li className="flex-shrink-0" key={tag}>
-                    <Link href={`/tag/${tag}`}>
-                      <a className="uppercase transition-colors hover:text-red-600">#{tag}</a>
+                    <Link
+                      href={`/tag/${tag}`}
+                      className="uppercase transition-colors hover:text-red-600"
+                    >
+                      #{tag}
                     </Link>
                   </li>
                 ))}

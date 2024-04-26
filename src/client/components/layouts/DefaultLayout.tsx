@@ -100,25 +100,23 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         />
       </Head>
       <div className="max-w-4xl mx-auto pt-8 px-4 sm:px-8">
-        <Link href="#main">
-          <a className="sr-only">skip to main content</a>
+        <Link href="#main" className="sr-only">
+          skip to main content
         </Link>
         <header className="flex justify-between items-center text-gray-700 dark:text-gray-200 transition-colors duration-200">
           <div>
-            <Link href="/">
-              <a className="flex items-center">
-                <div className="rounded-full ring-1 ring-gray-300 dark:ring-gray-100 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
-                  <CustomImage
-                    src="https://pbs.twimg.com/profile_images/1394579053047320576/FNtexM-b_400x400.jpg"
-                    alt="Avatar of Nicklas Jarnesjö"
-                    width={400}
-                    height={400}
-                    quality={100}
-                    priority
-                  />
-                </div>
-                <div className="ml-4 font-semibold">Nicklas Jarnesjö</div>
-              </a>
+            <Link href="/" className="flex items-center">
+              <div className="rounded-full ring-1 ring-gray-300 dark:ring-gray-100 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
+                <CustomImage
+                  src="https://pbs.twimg.com/profile_images/1394579053047320576/FNtexM-b_400x400.jpg"
+                  alt="Avatar of Nicklas Jarnesjö"
+                  width={400}
+                  height={400}
+                  quality={100}
+                  priority
+                />
+              </div>
+              <div className="ml-4 font-semibold">Nicklas Jarnesjö</div>
             </Link>
           </div>
 
@@ -126,8 +124,8 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
             <ul className="space-x-10 font-semibold items-center hidden md:flex">
               {menuItems.map(({title, href}, index) => (
                 <li key={index}>
-                  <Link href={href}>
-                    <a className="hover:text-gray-900 dark:hover:text-white neon">{title}</a>
+                  <Link href={href} className="hover:text-gray-900 dark:hover:text-white neon">
+                    {title}
                   </Link>
                 </li>
               ))}
@@ -224,9 +222,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
               >
                 {menuItems.map(({title, href}, index) => (
                   <li key={index}>
-                    <Link href={href}>
-                      <a>{title}</a>
-                    </Link>
+                    <Link href={href}>{title}</Link>
                   </li>
                 ))}
               </Transition.Child>
@@ -238,12 +234,12 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         </main>
         <footer className="text-gray-500 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
           {menuItems.map(item => (
-            <Link href={item.href} key={item.title}>
-              <a className="p-4 dark:hover:text-gray-400">{item.title}</a>
+            <Link href={item.href} key={item.title} className="p-4 dark:hover:text-gray-400">
+              {item.title}
             </Link>
           ))}
-          <Link href="/uses">
-            <a className="p-4 dark:hover:text-gray-400">Uses</a>
+          <Link href="/uses" className="p-4 dark:hover:text-gray-400">
+            Uses
           </Link>
           <a
             className="p-4 dark:hover:text-gray-400"
@@ -252,8 +248,8 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
           >
             Twitter
           </a>
-          <Link href="/feed.xml">
-            <a className="p-4 dark:hover:text-gray-400">RSS</a>
+          <Link href="/feed.xml" className="p-4 dark:hover:text-gray-400">
+            RSS
           </Link>
         </footer>
       </div>
