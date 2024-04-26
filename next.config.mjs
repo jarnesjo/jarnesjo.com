@@ -1,9 +1,17 @@
+import {hostname} from 'os'
+
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
   images: {
-    domains: [
-      'pbs.twimg.com' // Twitter Profile Picture
+    remotePatterns: [
+      // Twitter Profile Picture
+      {
+        protocol: 'https',
+        hostname: 'pbs.twimg.com',
+        port: ''
+      }
+      // 'pbs.twimg.com'
     ]
   },
   async redirects() {
