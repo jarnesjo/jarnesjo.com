@@ -26,7 +26,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1), background-color 200ms;
+      transition:
+        top 200ms cubic-bezier(0, 0.8, 0.13, 1),
+        background-color 200ms;
     }
 
     &:hover {
@@ -96,7 +98,7 @@
 
 .token.function,
 .token.class-name {
-  @apply text-pink-500;
+  @apply text-pink-400;
 }
 
 .token.regex,
@@ -130,13 +132,24 @@
   h1,
   .neon:hover {
     color: #f4f4f5;
-    text-shadow: 0 0 0.033em #f4f4f5, 0 0 0.08em #f4f4f5, 0 0 0.1em #b91c1c, 0 0 0.2em #b91c1c,
-      0 0 0.3em #b91c1c, 0 0 1em #b91c1c, 0 0 1.5em #b91c1c;
-    transition: text-shadow 200ms, color 200ms;
+    text-shadow:
+      0 0 0.033em #f4f4f5,
+      0 0 0.08em #f4f4f5,
+      0 0 0.1em #b91c1c,
+      0 0 0.2em #b91c1c,
+      0 0 0.3em #b91c1c,
+      0 0 1em #b91c1c,
+      0 0 1.5em #b91c1c;
+    transition:
+      text-shadow 200ms,
+      color 200ms;
   }
 
   h1 {
-    transition: text-shadow 1s, color 200ms, rotate 200ms;
+    transition:
+      text-shadow 1s,
+      color 200ms,
+      rotate 200ms;
   }
 }
 

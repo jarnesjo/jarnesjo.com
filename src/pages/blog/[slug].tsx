@@ -57,11 +57,11 @@ export default function Post({
 
         <div className="prose md:prose-lg lg:prose-xl dark:prose-dark mx-auto">{content}</div>
 
-        <div className="text-center my-10 py-8 text-gray-500 bg-gray-100 dark:bg-gray-800 transition-colors duration-200 rounded-md">
+        <div className="text-center my-10 py-8 text-gray-600 bg-gray-200 dark:bg-gray-800 transition-colors duration-200 rounded-md">
           <div className="pb-2">Discuss this post on Twitter</div>
           <div className="space-x-2">
             <a
-              className="text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-gray-600 hover:text-gray-700 transition-colors"
               rel="noopener"
               href={`http://twitter.com/share?text=Hi @jarnesjo&url=${encodeURIComponent(
                 `${defaultMeta.siteUrl}/blog/${slug}`
@@ -71,7 +71,7 @@ export default function Post({
             </a>
             <span>&bull;</span>
             <a
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-600 hover:text-gray-700"
               rel="noopener"
               href={`https://mobile.twitter.com/search?q=${encodeURIComponent(
                 `${defaultMeta.siteUrl}/blog/${slug}`
@@ -84,7 +84,7 @@ export default function Post({
 
         <div className="md:flex md:space-x-6 text-gray-500 uppercase text-sm mt-10 py-6 md:px-2 border-t border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <div className="flex flex-col">
-            <span className="text-xs uppercase text-gray-400 hover:text-gray-700 transition-colors">
+            <span className="text-xs uppercase text-gray-500 hover:text-gray-700 transition-colors">
               Category
             </span>
             <Link
@@ -97,7 +97,7 @@ export default function Post({
           </div>
           {tags && (
             <div className="flex flex-col mt-3 md:mt-0">
-              <span className="text-xs uppercase text-gray-400">Tags</span>
+              <span className="text-xs uppercase text-gray-500">Tags</span>
               <ul className="flex space-x-3">
                 {tags.map(tag => (
                   <li className="flex-shrink-0" key={tag}>

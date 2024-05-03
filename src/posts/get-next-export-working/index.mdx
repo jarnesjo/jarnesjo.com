@@ -28,7 +28,7 @@ and something you can expect.
 Ok now to have to make things work if you choose use `next export` any way. Which I did for a
 customer.
 
-### Images
+## Images
 
 To even get the app to get exported you have to add `unomptimized: true` in `next.config.js`
 
@@ -54,7 +54,7 @@ find . -name "*.png" -exec optipng -o7 {} \;
 find . -name "*.jpg"|"*.jpeg" -exec jpegoptim -m80 -o -p --strip-all {} \;
 ```
 
-### Routing
+## Routing
 
 Then everything seems to work as expect until you reload any page which is not the frontpage and the
 application can't pickup the routing.
@@ -68,7 +68,7 @@ module.exports = {
 }
 ```
 
-### Final config
+## Final config
 
 ```js:next.config.js
 const isProd = process.env.NODE_ENV === 'production'
