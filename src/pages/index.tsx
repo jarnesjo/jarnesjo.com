@@ -23,7 +23,7 @@ export default function Home({allPostsData}) {
   return (
     <DefaultLayout pageMeta={{title: 'Nicklas Jarnesjö - web, dev and business'}}>
       <div className="py-12 md:py-20">
-        <div className="uppercase tracking-wide text-lg font-semibold text-red-500">
+        <div className="uppercase tracking-wide text-lg font-semibold text-red-600">
           Hi, my name is Nicklas
         </div>
         <h1
@@ -43,7 +43,7 @@ export default function Home({allPostsData}) {
           {allPostsData.map(({slug, date, title}) => (
             <Teaser title={title} slug={slug} date={date} key={slug} />
           ))}
-          <div className="font-semibold text-red-500 hover:text-red-700">
+          <div className="font-semibold text-red-600 hover:text-red-700">
             <Link href="/blog">See all posts →</Link>
           </div>
         </div>

@@ -130,8 +130,9 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
               ))}
             </ul>
             <button
-              className="rounded-full p-2 w-10 h-10 text-red-500 dark:text-gray-200 hover:text-red-600 bg-red-100 hover:bg-red-200 dark:bg-transparent focus:outline-none dark:hover:bg-gray-800 dark:ring-2 dark:ring-gray-800 dark:hover:ring-gray-700 transition-all duration-200"
+              className="rounded-full p-2 w-10 h-10 text-red-600 dark:text-gray-200 hover:text-red-700 bg-red-100 hover:bg-red-200 dark:bg-transparent focus:outline-none dark:hover:bg-gray-800 dark:ring-2 dark:ring-gray-800 dark:hover:ring-gray-700 transition-all duration-200"
               onClick={() => switchToggle()}
+              aria-label="Toggle dark mode"
             >
               {mounted && (
                 <>
@@ -166,6 +167,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
             <button
               className="p-2 rounded-full md:hidden ml-6 bg-gray-200 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-800 dark:ring-2 dark:ring-gray-800 dark:hover:ring-gray-700 hover:text-white transition-all duration-200 focus:outline-none dark:focus:ring-gray-400"
               onClick={() => toggleMobileMenu()}
+              aria-label="Open mobile menu"
             >
               <svg
                 className="w-6 h-6"
