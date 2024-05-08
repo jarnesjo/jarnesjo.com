@@ -52,6 +52,10 @@
   @apply bg-gray-700 px-6 py-3 text-gray-200 text-base font-mono font-medium sm:rounded-t-md -mx-4 md:-mx-8;
 }
 
+.highlight-line {
+  @apply bg-slate-600/50 border-l-4 border-gray-500 -mx-1 py-1;
+}
+
 .token.comment,
 .token.prolog,
 .token.doctype,

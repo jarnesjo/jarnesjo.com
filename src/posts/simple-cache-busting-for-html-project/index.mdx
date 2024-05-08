@@ -1,0 +1,59 @@
+---
+title: 'Simple cache busting for HTML project'
+description: 'Simple solution to cache busting HTML projects.'
+date: '2024-05-08'
+category: code
+tags:
+  - html
+  - cache
+  - tailwindcss
+  - note-to-myself
+author: Nicklas Jarnesjö
+image:
+  {
+    src: '/static/post-content/simple-cache-busting-for-html-project/card.png',
+    alt: 'Text "Simple cache busting for HTML project"'
+  }
+---
+
+I did a small project where I didn't needed a big framework just for simple landing page as
+version 1. But then I was reminded about the caching problems and how every framework takes care of
+it for you. But I still wanted to keep it simple and not add a lot of dependencies.
+
+So I did a small script that I run after I have built the project that adds a version number to the
+CSS file and then replace the link in the HTML files. It's not perfect but it works.
+
+I'm using Tailwind CSS in the project and this is the cache-busting file to cache bust the two
+HTML-files the project contains.
+
+```js:cache-busting.js
+const fs = require("fs")
+
+const cssFile = "./src/style.css"
+
+const version = fs.statSync(cssFile).mtimeMs
+const replacement = `href="./style.css?v=${version}" rel="stylesheet"`
+
+const searchRegex = /href=\".\/style\.css\?v=.*\"/g
+
+fs.readdirSync("./src").forEach((file) => {
+  if (file.endsWith(".html")) {
+    const htmlTemplate = fs.readFileSync(`./src/${file}`, "utf-8").replace(searchRegex, replacement)
+    fs.writeFileSync(`./src/${file}`, htmlTemplate, {
+      encoding: "utf-8",
+    })
+  }
+})
+```
+
+I then added the script to the `package.json` file that minified the TailwindCSS and also cache
+bust. Simple but effective.
+
+```json:package.json {4}
+{
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/css/tailwind.css -o ./src/style.css --watch",
+    "build": "npx tailwindcss -o ./src/style.css --minify && node ./cache-bust.js"
+  },
+}
+```
