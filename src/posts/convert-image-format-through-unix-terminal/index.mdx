@@ -5,6 +5,7 @@ date: '2024-04-21'
 category: code
 tags:
   - terminal
+  - images
   - note-to-myself
 author: Nicklas Jarnesjö
 image:
@@ -18,7 +19,7 @@ This is a small script I use to convert images from example avif to webp through
 this case because Microsoft Edge does not support avif images yet. I learned the hard way.
 
 ```bash
-`for image in ./*/*.avif ;  do convert "$image" "${image%.*}.webp" ; done`
+for image in ./*/*.avif ;  do convert "$image" "${image%.*}.webp" ; done
 ```
 
 For this to work you need to have `imagemagick` installed on your system.
