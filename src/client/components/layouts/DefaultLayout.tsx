@@ -233,7 +233,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         <main id="main" className="pb-10 max-w-2xl mx-auto">
           {children}
         </main>
-        <footer className="text-gray-500 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
+        <footer className="text-gray-500 dark:text-gray-300 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
           {menuItems.map(item => (
             <Link href={item.href} key={item.title} className="p-4 dark:hover:text-gray-400">
               {item.title}
