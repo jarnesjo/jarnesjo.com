@@ -69,7 +69,7 @@ export default function AboutPage() {
               animals and farming.
             </p>
             <p>
-              Also owning a small farm where we have chickens, rabbits, cats and doing farming.
+              Also owning a small farm where we have chickens, cats and doing farming.
               Since the move the country a intreset for wood working has begin and love spending
               time with restoring old windows.
             </p>
