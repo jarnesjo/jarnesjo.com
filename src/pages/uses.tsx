@@ -10,8 +10,8 @@ export default function UsesPage() {
 
       <div className="prose md:prose-lg lg:prose-xl dark:prose-dark mx-auto">
         <p>
-          Because I'm interested in what other uses on daily basis I also want to share my things.
-          Most of the things have been accumilated over years and
+          Because I'm interested in what other uses on daily basis I also want to share my things. Most of the things
+          have been accumilated over years and
         </p>
 
         <div className="-mx-4 md:-mx-8 text-center overflow-hidden">
@@ -26,7 +26,7 @@ export default function UsesPage() {
 
         <h3>Computer / Office</h3>
         <ul>
-          <li>15" MacBook Pro (2018)</li>
+          <li>16" MacBook Pro M3 Max (2023)</li>
           <li>37.5" Curved UltraWide LG 38WK95C-W</li>
           <li>Magic Mouse 2</li>
           <li>Magic Keyboard with numeric</li>
@@ -50,7 +50,7 @@ export default function UsesPage() {
 
         <h3>Other tech</h3>
         <ul>
-          <li>iPhone X</li>
+          <li>iPhone 14 Pro</li>
           <li>Kobo Libra H20</li>
         </ul>
       </div>
