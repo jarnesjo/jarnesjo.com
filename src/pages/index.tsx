@@ -3,7 +3,6 @@ import {DefaultLayout} from '@/components/layouts/DefaultLayout'
 import {Teaser} from '@/components/Teaser'
 import Link from 'next/link'
 import {CustomImage} from '@/components/CustomImage'
-import mittEvenemangScreenshot from '@/public/static/images/mitt-evenemang-screenshot.png'
 import hotadSkogScreenshot from '@/public/static/images/hotadskog-screenshot.png'
 import feedbackpackScreenshot from '@/public/static/images/feedbackpack-screenshot.png'
 import prlogScreenshot from '@/public/static/images/prlog-screenshot.png'
@@ -56,43 +55,6 @@ export default function Home({allPostsData}) {
       </p>
 
       <div className="space-y-16 mt-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
-          <div className="relative">
-            <CustomImage
-              src={mittEvenemangScreenshot}
-              width={2988}
-              height={2984}
-              alt="Screenshot from frontpage of mitt.evenemang.se"
-              placeholder="blur"
-            />
-          </div>
-          <div className="mt-6 md:mt-0 md:col-span-2">
-            <h3 className="font-semibold text-xl">Mitt Evenemang</h3>
-            <p className="mt-4">
-              In collaboration with evenemang.se, we have built a service where customers can create
-              and administer their events, which are then marketed and spread on evenemang.se.
-            </p>
-            <div className="mt-4">
-              <span className="text-sm mr-2 font-semibold">Dev</span>
-              <ul className="flex flex-wrap">
-                <ListTechBadge text="Next.js" />
-                <ListTechBadge text="AWS Amplify" />
-                <ListTechBadge text="NextAuth.js" />
-                <ListTechBadge text="Prisma" />
-                <ListTechBadge text="Leaflet" />
-                <ListTechBadge text="Payson payment" />
-                <ListTechBadge text="Typescript" />
-                <ListTechBadge text="Tailwind CSS" />
-              </ul>
-            </div>
-            <a
-              className="mt-4 inline-block text-gray-500 font-semibold"
-              href="https://mitt.evenemang.se"
-            >
-              https://mitt.evenemang.se
-            </a>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
           <div className="relative">
