@@ -18,17 +18,28 @@ image:
 This is a small script I use to resize and shrink size of images through unix terminal.
 
 ```bash
-for file in *.jpg; do convert $file -strip -resize 2660x\> -quality 80 "`basename $file .jpg`-resized.jpg"; done
+setopt nullglob; for file in *.{JPG,jpg,jpeg}; do convert $file -strip -resize 2660x\> -quality 80 "`basename $file .jpg`-resized.jpg"; done
 ```
 
-The script will resize all jpg images in the folder to a max-width of 2660px and a quality of 80 and
-also remove all metadata from the image. Simple to modify to your needs. This will also keep the
-original images.
+The script will resize all jpg images in the folder to a max-width of 2660px and a quality of 80 and also remove all
+metadata from the image. Simple to modify to your needs. This will also keep the original images.
+
+The `setopt nullglob` is for `zsh` to prevent the script from stop if on the first error it encounters.
 
 If you want to override the original images you can use the following script.
 
 ```bash
-for file in *.jpg; do convert $file -strip -resize 2660x\> -quality 80 "$file"; done
+setopt nullglob; for file in *.{JPG,jpg,jpeg}; do convert $file -strip -resize 2660x\> -quality 80 "$file"; done
+```
+
+Another way to write this is to use `find` instead of a for loop. In this example your do not need to use
+`setopt nullglob` and it will also work in `bash`.
+
+```bash
+find . -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) | while read file; do
+    echo "Converting $file"
+    convert "$file" -strip -resize 2660x\> -quality 80 "$file"
+done
 ```
 
 For this to work you need to have `imagemagick` installed on your system.
