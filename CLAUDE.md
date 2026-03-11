@@ -16,6 +16,17 @@ Personal blog/portfolio site for Nicklas Jarnesjö (jarnesjo.com). Built with Ne
 - `npm run dev:next` — Standard Next.js dev server
 - `npm run build` — Production build (+ postbuild: RSS feed + sitemap generation)
 - `npm start` — Production server
+- `npm test` — Run test suite (Vitest)
+
+## CI/CD (GitHub Actions)
+- **PR Test build** (`.github/workflows/pr-test-build.yml`) — Runs on PRs: `npm test` then Docker build
+- **Build and Deploy** (`.github/workflows/build-and-deploy.yml`) — Push to main: builds Docker image, publishes to GitHub Packages, deploys to DigitalOcean via SSH
+- **CodeQL** (`.github/workflows/codeql-analysis.yml`) — Security analysis on push/PR to main + weekly schedule
+
+## Deployment
+- Docker multi-stage build (`Dockerfile`) → standalone Next.js output
+- Hosted on DigitalOcean, deployed via `docker pull` + `docker run` on port 3000
+- Google Analytics ID passed as build arg (`NEXT_PUBLIC_GOOGLE_ANALYTICS_ID`)
 
 ## Project Structure
 ```
