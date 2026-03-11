@@ -24,6 +24,7 @@
 
 # misc
 .DS_Store
+.claude/
 .env*
 !.env.example
 
