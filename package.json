@@ -7,7 +7,8 @@
     "dev:next": "next dev",
     "build": "next build",
     "postbuild": "node ./src/scripts/generate-rss-feed.mjs && node ./src/scripts/generate-sitemap.mjs",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest run"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
@@ -39,6 +40,7 @@
     "prettier": "^3.2.5",
     "puppeteer-core": "^8.0.0",
     "rss": "^1.2.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^4.0.18"
   }
 }
