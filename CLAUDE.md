@@ -21,7 +21,6 @@ Personal blog/portfolio site for Nicklas Jarnesjö (jarnesjo.com). Built with Ne
 ## CI/CD (GitHub Actions)
 - **PR Test build** (`.github/workflows/pr-test-build.yml`) — Runs on PRs: `npm test` then Docker build
 - **Build and Deploy** (`.github/workflows/build-and-deploy.yml`) — Push to main: builds Docker image, publishes to GitHub Packages, deploys to DigitalOcean via SSH
-- **CodeQL** (`.github/workflows/codeql-analysis.yml`) — Security analysis on push/PR to main + weekly schedule
 
 ## Deployment
 - Docker multi-stage build (`Dockerfile`) → standalone Next.js output
