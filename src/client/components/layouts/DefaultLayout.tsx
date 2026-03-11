@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Head from 'next/head'
-import {Transition} from '@headlessui/react'
+import {Transition, TransitionChild} from '@headlessui/react'
 import {useCallback, useEffect, useState} from 'react'
 import {CustomImage} from '@/components/CustomImage'
 import {useRouter} from 'next/dist/client/router'
@@ -214,7 +214,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
                   />
                 </svg>
               </button>
-              <Transition.Child
+              <TransitionChild
                 enter="transition-all duration-500"
                 enterFrom="opacity-0 transform translate-y-20"
                 enterTo="opacity-100 transform translate-y-0"
@@ -226,7 +226,7 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
                     <Link href={href}>{title}</Link>
                   </li>
                 ))}
-              </Transition.Child>
+              </TransitionChild>
             </Transition>
           </nav>
         </header>
