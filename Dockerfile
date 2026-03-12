@@ -9,7 +9,7 @@ COPY package.json package-lock.json /opt/deps/
 RUN npm ci --quiet --no-progress
 
 # Build application
-FROM node:24-alpine as builder
+FROM node:24-alpine AS builder
 
 # RUN apk add --no-cache openssl1.1-compat
 
@@ -33,7 +33,7 @@ FROM node:24-alpine
 # RUN apk add --no-cache openssl1.1-compat
 
 ARG NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN mkdir /home/node/app
 
@@ -50,6 +50,6 @@ USER node
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 CMD ["node", "server.js"]
