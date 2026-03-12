@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "node ./src/scripts/generate-rss-feed.mjs && node ./src/scripts/generate-sitemap.mjs",
+    "postbuild": "tsx ./src/scripts/generate-rss-feed.ts && tsx ./src/scripts/generate-sitemap.ts",
     "start": "next start",
     "test": "vitest run"
   },
@@ -37,6 +37,7 @@
     "prettier": "^3.2.5",
     "puppeteer-core": "^8.0.0",
     "rss": "^1.2.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.4.5",
     "vitest": "^4.0.18"
   }

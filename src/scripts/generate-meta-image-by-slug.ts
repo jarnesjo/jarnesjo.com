@@ -1,5 +1,6 @@
+// @ts-ignore
 import {generateMetaImage} from './_lib/metaImage.mjs'
-import {BLOG_POST_PATH_STATIC, getPostBySlug} from './_lib/posts.mjs'
+import {BLOG_POST_PATH_STATIC, getPostDataBySlug} from '../lib/posts'
 ;(async () => {
   const slug = process.argv[2]
 
@@ -8,7 +9,7 @@ import {BLOG_POST_PATH_STATIC, getPostBySlug} from './_lib/posts.mjs'
     return
   }
 
-  const {title, filePath} = getPostBySlug(slug)
+  const {title} = getPostDataBySlug(slug)
 
   const pathToSave = `${BLOG_POST_PATH_STATIC}/${slug}`
   const fileName = `${BLOG_POST_PATH_STATIC}/${slug}/card.png`
