@@ -1,6 +1,6 @@
 import {writeFileSync} from 'fs'
 import RSS from 'rss'
-import {getAllPostsData} from './_lib/posts.mjs'
+import {getAllPostsData} from '../lib/posts'
 ;(async () => {
   const siteUrl = 'https://jarnesjo.com'
 

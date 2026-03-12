@@ -1,105 +1,60 @@
 import fs from 'fs'
-import path from 'path'
 import matter from 'gray-matter'
 import {serialize} from 'next-mdx-remote/serialize'
-// import {MdxComponents} from '@/components/MdxComponents'
-import FastGlob from 'fast-glob'
 import rehypePrism from 'rehype-prism-plus'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import {
+  BLOG_POST_PATH,
+  getAllPostsWithFrontMatter,
+  getAllPostsData,
+  dateSortDesc
+} from './posts'
 
-export const BLOG_POST_PATH = path.join(process.cwd(), 'src/posts')
-const postFilePaths = FastGlob.sync(`${BLOG_POST_PATH}/**/*.mdx`)
-
-const getSlugFromFilePath = filePath => {
-  const split = filePath.split('/')
-  return split[split.length - 2]
-}
-
-const dateSortDesc = (a: Date, b: Date) => {
-  if (a < b) {
-    return 1
-  } else {
-    return -1
-  }
-}
+// Re-export for backwards compatibility
+export {BLOG_POST_PATH, BLOG_POST_PATH_STATIC, getAllPostsData, getPostDataBySlug} from './posts'
 
 export function getPostsSortedByDate(limit?: number) {
-  const allPostsData = postFilePaths.map(filePath => {
-    const slug = getSlugFromFilePath(filePath)
+  const allPostsData = getAllPostsData()
 
-    const source = fs.readFileSync(filePath, 'utf8')
-    const {
-      data: {date, title, category}
-    } = matter(source)
-
-    return {slug, date, title, category}
-  })
-
-  // Sort posts by date
-  return [...allPostsData]
-    .sort((a, b) => dateSortDesc(a.date, b.date))
+  return allPostsData
+    .map(({slug, date, title, category}) => ({slug, date, title, category}))
     .slice(0, limit ?? allPostsData.length)
 }
 
-// =================
-// Get posts by slug
-// =================
 export function getAllPostSlugs() {
-  return postFilePaths.map(filePath => {
-    return {
-      params: {slug: getSlugFromFilePath(filePath)}
-    }
-  })
+  return getAllPostsWithFrontMatter().map(({slug}) => ({
+    params: {slug}
+  }))
 }
 
 export function getAllCategorySlugs() {
-  const allPostsData = postFilePaths.map(filePath => {
-    const source = fs.readFileSync(filePath, 'utf8')
-    const {data} = matter(source)
-
-    return data?.category
-  })
-
-  return allPostsData
+  const categories = getAllPostsWithFrontMatter()
+    .map(post => post.category)
     .filter(category => category !== undefined)
-    .filter((value, index, self) => self.indexOf(value) === index) // Distinct
-    .map(category => {
-      return {
-        params: {
-          slug: category
-        }
-      }
-    })
+    .filter((value, index, self) => self.indexOf(value) === index)
+
+  return categories.map(category => ({
+    params: {slug: category}
+  }))
 }
 
 export function getAllTagSlugs() {
-  const allPostsData = postFilePaths
-    .map(filePath => {
-      const source = fs.readFileSync(filePath, 'utf8')
-      const {data} = matter(source)
-
-      return data?.tags
-    })
+  const tags = getAllPostsWithFrontMatter()
+    .map(post => post.tags)
     .flat()
-
-  return allPostsData
     .filter(tag => tag !== undefined)
-    .filter((value, index, self) => self.indexOf(value) === index) // Distinct
-    .map(tag => {
-      return {
-        params: {
-          slug: tag
-        }
-      }
-    })
+    .filter((value, index, self) => self.indexOf(value) === index)
+
+  return tags.map(tag => ({
+    params: {slug: tag}
+  }))
 }
 
 export async function getPostBySlug(slug: string) {
-  const fullPath = path.join(BLOG_POST_PATH, `/${slug}/index.mdx`)
+  const fullPath = `${BLOG_POST_PATH}/${slug}/index.mdx`
   const fileContents = fs.readFileSync(fullPath, 'utf8')
 
-  // Use gray-matter to parse the post metadata section
   const {data, content} = matter(fileContents)
 
   const mdxSource = await serialize(content, {
@@ -120,15 +75,10 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getCategoryBySlug(slug: string | string[]) {
-  const allPostsData = postFilePaths.map(filePath => {
-    const source = fs.readFileSync(filePath, 'utf8')
-    const {data} = matter(source)
-
-    return {
-      slug: getSlugFromFilePath(filePath),
-      frontMatter: {...data}
-    }
-  })
+  const allPostsData = getAllPostsWithFrontMatter().map(({slug, ...rest}) => ({
+    slug,
+    frontMatter: {...rest}
+  }))
 
   const postsForCategory = allPostsData
     .filter(({frontMatter: {category}}) => category === slug)
@@ -142,15 +92,10 @@ export async function getCategoryBySlug(slug: string | string[]) {
 }
 
 export async function getTagBySlug(slug: string | string[]) {
-  const allPostsData = postFilePaths.map(filePath => {
-    const source = fs.readFileSync(filePath, 'utf8')
-    const {data} = matter(source)
-
-    return {
-      slug: getSlugFromFilePath(filePath),
-      frontMatter: {...data}
-    }
-  })
+  const allPostsData = getAllPostsWithFrontMatter().map(({slug, ...rest}) => ({
+    slug,
+    frontMatter: {...rest}
+  }))
 
   const postsForTag = allPostsData
     .filter(({frontMatter: {tags}}) => {

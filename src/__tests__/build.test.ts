@@ -99,9 +99,9 @@ describe('Project structure integrity', () => {
 
   describe('Build scripts exist', () => {
     const scripts = [
-      'src/scripts/generate-rss-feed.mjs',
-      'src/scripts/generate-sitemap.mjs',
-      'src/scripts/_lib/posts.mjs',
+      'src/scripts/generate-rss-feed.ts',
+      'src/scripts/generate-sitemap.ts',
+      'src/lib/posts.ts',
     ]
 
     scripts.forEach(script => {

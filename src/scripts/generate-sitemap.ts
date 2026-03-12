@@ -1,10 +1,9 @@
 import FastGlob from 'fast-glob'
 import prettier from 'prettier'
 import {writeFileSync} from 'fs'
-import {getAllCategorySlugs, getAllTagSlugs, getAllPostsData} from './_lib/posts.mjs'
+import {getAllCategoryPaths, getAllTagPaths, getAllPostsData} from '../lib/posts'
 
 ;(async () => {
-  // Ignore Next.js specific files (e.g., _app.js) and API routes.
   const pagePaths = FastGlob.sync(['src/pages/**/*.tsx', '!src/pages/_*.tsx', '!src/pages/api'])
   const pageRoutes = pagePaths
     .filter(pagePath => !pagePath.includes('[slug]'))
@@ -16,10 +15,10 @@ import {getAllCategorySlugs, getAllTagSlugs, getAllPostsData} from './_lib/posts
     lastmod: new Date(post.date).toISOString().split('T')[0]
   }))
 
-  const tagRoutes = getAllTagSlugs()
-  const categoryRoutes = getAllCategorySlugs()
+  const tagRoutes = getAllTagPaths()
+  const categoryRoutes = getAllCategoryPaths()
 
-  const staticEntries = [...pageRoutes, ...tagRoutes, ...categoryRoutes]
+  const staticEntries: {route: string; lastmod?: string}[] = [...pageRoutes, ...tagRoutes, ...categoryRoutes]
     .sort()
     .map(route => ({route}))
 
