@@ -33,6 +33,10 @@ export type PageMeta = {
   description?: string
   type?: string
   image?: {src: string; alt: string; width?: string; height?: string}
+  date?: string
+  author?: string
+  category?: string
+  tags?: string[]
 }
 
 const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMeta?: PageMeta}) => {
@@ -73,15 +77,29 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
         <meta name="description" content={meta.description} />
         <meta name="image" content={meta.image.src} />
 
-        {/* Facebook */}
+        {/* Open Graph */}
+        <meta property="og:locale" content="en_US" />
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
         <meta property="og:url" content={`${meta.siteUrl}${router.asPath}`} />
-        <meta property="og:type" content={meta.type} />
+        <meta property="og:type" content={meta.type === 'article' ? 'article' : 'website'} />
         <meta property="og:image" content={meta.image.src} />
         <meta property="og:image:alt" content={meta.image.alt} />
         <meta property="og:image:width" content={meta.image?.width || defaultMeta.image.width} />
         <meta property="og:image:height" content={meta.image?.height || defaultMeta.image.height} />
+
+        {/* Article-specific OG tags */}
+        {meta.type === 'article' && meta.date && (
+          <meta property="article:published_time" content={new Date(meta.date).toISOString()} />
+        )}
+        {meta.type === 'article' && (
+          <meta property="article:author" content={meta.author || 'Nicklas Jarnesjö'} />
+        )}
+        {meta.type === 'article' && meta.category && (
+          <meta property="article:section" content={meta.category} />
+        )}
+        {meta.type === 'article' &&
+          meta.tags?.map(tag => <meta key={tag} property="article:tag" content={tag} />)}
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -98,6 +116,41 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
           title="Nicklas Jarnesjö"
           href={`${meta.siteUrl}/feed.xml`}
         />
+
+        {/* JSON-LD Structured Data */}
+        {meta.type === 'article' && meta.date && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'BlogPosting',
+                headline: meta.title,
+                description: meta.description,
+                datePublished: new Date(meta.date).toISOString(),
+                author: {
+                  '@type': 'Person',
+                  name: meta.author || 'Nicklas Jarnesjö',
+                  url: meta.siteUrl
+                },
+                publisher: {
+                  '@type': 'Person',
+                  name: 'Nicklas Jarnesjö',
+                  url: meta.siteUrl
+                },
+                url: `${meta.siteUrl}${router.asPath}`,
+                ...(meta.image && {
+                  image: {
+                    '@type': 'ImageObject',
+                    url: meta.image.src
+                  }
+                }),
+                ...(meta.category && {articleSection: meta.category}),
+                ...(meta.tags && {keywords: meta.tags.join(', ')})
+              })
+            }}
+          />
+        )}
       </Head>
       <div className="max-w-4xl mx-auto pt-8 px-4 sm:px-8">
         <Link href="#main" className="sr-only">
