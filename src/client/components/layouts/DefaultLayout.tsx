@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Head from 'next/head'
 import {Transition, TransitionChild} from '@headlessui/react'
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useRef, useState} from 'react'
 import {CustomImage} from '@/components/CustomImage'
 import {useRouter} from 'next/dist/client/router'
 import {useTheme} from 'next-themes'
@@ -48,22 +48,19 @@ const DefaultLayout = ({pageMeta, children}: {children: React.ReactNode; pageMet
     setMobileMenuIsOpen(!mobileMenuIsOpen)
   }
   const router = useRouter()
-  const [switchSound, setSwitchSound] = useState(null)
+  const switchSoundRef = useRef<HTMLAudioElement | null>(null)
 
   useDarkModeNeonFlicker()
 
-  useEffect(() => {
-    setSwitchSound(new Audio('/static/sounds/switch.mp3'))
-  }, [])
-
   const switchToggle = useCallback(() => {
-    if (switchSound) {
-      switchSound.currentTime = 0
-      switchSound.play()
+    if (!switchSoundRef.current) {
+      switchSoundRef.current = new Audio('/static/sounds/switch.mp3')
     }
+    switchSoundRef.current.currentTime = 0
+    switchSoundRef.current.play()
 
     setTheme(theme === 'dark' ? 'light' : 'dark')
-  }, [theme, switchSound])
+  }, [theme])
 
   const meta = {
     ...defaultMeta,
