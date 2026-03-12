@@ -3,9 +3,11 @@ interface Props {
   title: string
   slug: string
   date: Date
+  category?: string
+  size?: 'normal' | 'large'
 }
 
-const {title, slug, date} = Astro.props
+const {title, slug, date, category, size = 'normal'} = Astro.props
 
 const formatted = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -14,13 +16,12 @@ const formatted = new Intl.DateTimeFormat('en-US', {
 }).format(date)
 ---
 
-<div>
-  <a href={`/blog/${slug}`} class="group">
-    <h3 class="text-xl font-semibold group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors">
-      {title}
-    </h3>
-    <time datetime={date.toISOString()} class="text-gray-500 dark:text-gray-400 text-sm uppercase">
-      {formatted}
-    </time>
+<article>
+  <a href={`/blog/${slug}`} class={`${size === 'large' ? 'text-2xl mb-1' : 'text-xl'} font-semibold block group`}>
+    <h2 class="group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors">{title}</h2>
   </a>
-</div>
+  <span class="uppercase text-xs text-gray-500 dark:text-gray-400 font-medium tracking-widest">
+    <time datetime={date.toISOString()}>{formatted}</time>
+    {category && <>&bull; {category}</>}
+  </span>
+</article>
