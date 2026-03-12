@@ -1,11 +1,11 @@
-import {globby} from 'globby'
+import FastGlob from 'fast-glob'
 import prettier from 'prettier'
 import {writeFileSync} from 'fs'
 import {getAllCategorySlugs, getAllTagSlugs, getAllPostsData} from './_lib/posts.mjs'
 
 ;(async () => {
   // Ignore Next.js specific files (e.g., _app.js) and API routes.
-  const pagePaths = await globby(['src/pages/**/*.tsx', '!src/pages/_*.tsx', '!src/pages/api'])
+  const pagePaths = FastGlob.sync(['src/pages/**/*.tsx', '!src/pages/_*.tsx', '!src/pages/api'])
   const pageRoutes = pagePaths
     .filter(pagePath => !pagePath.includes('[slug]'))
     .map(pagePath => pagePath.replace('src/pages', '').replace('.tsx', '').replace('/index', ''))
