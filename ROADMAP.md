@@ -1,47 +1,40 @@
 # Roadmap
 
-## Epic: Clean up unused dependencies
+## Completed (Next.js era)
 
-- [ ] Remove `next-remote-watch` — Next.js 16 handles MDX hot reload natively
-- [ ] Remove `file-loader` — no longer needed with `next/image`
-- [ ] Replace `globby` with `fast-glob` in sitemap script (already a dependency)
+- [x] Clean up unused dependencies (next-remote-watch, file-loader, globby)
+- [x] Consolidate MDX processing into shared `posts.ts`
+- [x] Update CI/CD pipeline (ghcr.io, action versions, Dockerfile lint fixes)
+- [x] SEO best practices (JSON-LD, article OG tags, og:locale, sitemap lastmod)
+- [x] Small improvements (lazy-load sound, prettierrc)
+
+## Epic: Migrate to Astro
+
+Decision: Next.js Pages Router is in maintenance mode and overkill for a static content site.
+Astro is purpose-built for this, ships zero JS by default, and removes the need for Docker hosting.
+
+- [ ] Scaffold Astro project in `astro/` subdirectory
+- [ ] Set up Tailwind CSS with existing config
+- [ ] Create base layout (navigation, footer, dark mode toggle)
+- [ ] Set up Content Collections for blog posts (move MDX files)
+- [ ] Migrate pages: home, blog index, about, uses
+- [ ] Migrate dynamic routes: blog/[slug], category/[slug], tag/[slug]
+- [ ] Portfolio/projects section on home page
+- [ ] SEO: meta tags, JSON-LD, sitemap, RSS feed
+- [ ] OG image generation (replace Puppeteer with satori/vercel-og)
+- [ ] Set up hosting (Cloudflare Pages / Vercel) with auto-deploy
+- [ ] Verify visual parity with current site
+- [ ] Remove Next.js files and Docker setup
+- [ ] Update CI/CD workflows
 
 ## Epic: Restructure blog posts
 
-- [ ] Rename post directories with date prefix (`2024-03-12_short-name/`)
 - [ ] Add `slug` to frontmatter — slug becomes the source of truth instead of directory name
-- [ ] Update `src/lib/mdx.ts` to read slug from frontmatter and sort by directory date prefix
-- [ ] Update `src/scripts/_lib/posts.mjs` to match new structure
+- [ ] Rename post directories with date prefix (`2024-03-12_short-name/`)
+- [ ] Update Content Collection config to use frontmatter slug
 
-## Epic: Consolidate MDX processing
+## Epic: Update site content
 
-- [ ] Merge duplicate logic between `src/lib/mdx.ts` and `src/scripts/_lib/posts.mjs`
-- [ ] Consider lazy file reading instead of sync reads at module level
-
-## Epic: Modernize OG image generation
-
-- [ ] Replace Puppeteer-based OG image scripts with Next.js `next/og` (ImageResponse)
-- [ ] Remove `puppeteer-core` dependency
-
-## Epic: Harden TypeScript
-
-- [ ] Enable `strict: true` in tsconfig incrementally
-- [ ] Fix type errors that surface
-
-## Epic: Update CI/CD pipeline
-
-- [ ] Migrate from `docker.pkg.github.com` to `ghcr.io` (GitHub Packages v1 is deprecated)
-- [x] Remove CodeQL workflow (unnecessary for static blog)
-- [ ] Update `build-and-deploy.yml` action versions
-
-## Epic: SEO best practices
-
-- [ ] Add JSON-LD structured data (`BlogPosting`, `Person`) to blog posts
-- [ ] Add article-specific OG tags (`article:published_time`, `article:author`, `article:section`)
-- [ ] Add `og:locale` meta tag
-- [ ] Add `<lastmod>` timestamps to sitemap based on post dates
-
-## Epic: Small improvements
-
-- [ ] Lazy-load dark mode sound effect (`switch.mp3`)
-- [ ] Add `.prettierrc` config (Prettier is used in sitemap script but config is missing)
+- [ ] Remove "Hotad skog" from projects
+- [ ] Update screenshot for "Snittränta"
+- [ ] Add "Odlingsguiden" as a new project

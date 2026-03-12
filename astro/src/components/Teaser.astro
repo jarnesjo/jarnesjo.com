@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string
+  slug: string
+  date: Date
+}
+
+const {title, slug, date} = Astro.props
+
+const formatted = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}).format(date)
+---
+
+<div>
+  <a href={`/blog/${slug}`} class="group">
+    <h3 class="text-xl font-semibold group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors">
+      {title}
+    </h3>
+    <time datetime={date.toISOString()} class="text-gray-500 dark:text-gray-400 text-sm uppercase">
+      {formatted}
+    </time>
+  </a>
+</div>
