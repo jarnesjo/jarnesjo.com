@@ -26,7 +26,11 @@ export default function Post({
   const meta = {
     title,
     description,
-    type: 'article'
+    type: 'article',
+    date,
+    category,
+    tags,
+    author: postData.frontMatter.author
   }
 
   if (image) {
