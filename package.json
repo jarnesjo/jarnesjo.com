@@ -9,7 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "clean": "rm -rf dist .astro",
+    "astro": "astro",
+    "preversion": "npm run clean && npm run build",
+    "version": "git add -f dist",
+    "release:major": "npm version major",
+    "release:minor": "npm version minor",
+    "release:patch": "npm version patch"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.0",

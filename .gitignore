@@ -1,4 +1,5 @@
-# build cache
+# build output
+dist/
 .astro/
 
 # dependencies
