@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Default.astro'
 import Image from '../../components/mdx/Image.astro'
-import Video from '../../components/mdx/Video.astro'
 import {getCollection, render} from 'astro:content'
 
 export async function getStaticPaths() {
@@ -55,16 +54,16 @@ const metaImage = image
     </header>
 
     <div class="prose md:prose-lg lg:prose-xl dark:prose-dark mx-auto">
-      <Content components={{Image, Video}} />
+      <Content components={{Image}} />
     </div>
 
     <div class="text-center my-10 py-8 text-gray-600 bg-gray-200 dark:bg-gray-800 dark:text-gray-400 transition-colors duration-200 rounded-md">
-      <div class="pb-2">Discuss this post on Twitter</div>
+      <div class="pb-2">Discuss this post on X</div>
       <div class="space-x-2">
         <a
           class="text-gray-600 dark:text-gray-300 hover:text-gray-700 transition-colors"
           rel="noopener"
-          href={`http://twitter.com/share?text=Hi @jarnesjo&url=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
+          href={`https://x.com/intent/tweet?text=Hi @jarnesjo&url=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
         >
           With me
         </a>
@@ -72,7 +71,7 @@ const metaImage = image
         <a
           class="text-gray-600 dark:text-gray-300 hover:text-gray-700"
           rel="noopener"
-          href={`https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
+          href={`https://x.com/search?q=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
         >
           With others
         </a>
