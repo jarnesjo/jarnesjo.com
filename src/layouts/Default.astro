@@ -46,6 +46,8 @@ const menuItems = [
     <meta name="viewport" content="width=device-width" />
     <link href="/static/favicons/favicon.ico" rel="shortcut icon" />
 
+    <link rel="canonical" href={url} />
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="image" content={image.src} />
@@ -118,7 +120,7 @@ const menuItems = [
           <a class="flex items-center" href="/">
             <div class="rounded-full ring-1 ring-gray-300 dark:ring-gray-100 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
               <img
-                src="https://pbs.twimg.com/profile_images/1394579053047320576/FNtexM-b_400x400.jpg"
+                src="/static/images/avatar.jpg"
                 alt="Avatar of Nicklas Jarnesjö"
                 width="400"
                 height="400"
@@ -189,7 +191,7 @@ const menuItems = [
           <a href={item.href} class="p-4 dark:hover:text-gray-400">{item.title}</a>
         ))}
         <a href="/uses" class="p-4 dark:hover:text-gray-400">Uses</a>
-        <a class="p-4 dark:hover:text-gray-400" rel="noopener" href="https://twitter.com/jarnesjo">Twitter</a>
+        <a class="p-4 dark:hover:text-gray-400" rel="noopener" href="https://x.com/jarnesjo">X</a>
         <a href="/feed.xml" class="p-4 dark:hover:text-gray-400">RSS</a>
       </footer>
     </div>
