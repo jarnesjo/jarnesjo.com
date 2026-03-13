@@ -11,7 +11,9 @@
     "preview": "astro preview",
     "clean": "rm -rf dist .astro",
     "astro": "astro",
-    "preversion": "npm run clean && npm run build",
+    "test": "vitest run",
+    "test:routes": "vitest run tests/routes.test.js",
+    "preversion": "npm run clean && npm run build && npm run test:routes",
     "version": "git add -f dist",
     "release:major": "npm version major",
     "release:minor": "npm version minor",
@@ -30,5 +32,8 @@
     "rehype-prism-plus": "^2.0.2",
     "satori": "^0.25.0",
     "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
   }
 }

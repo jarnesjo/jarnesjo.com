@@ -1,7 +1,8 @@
 ---
-const props = Astro.props
+const {src, ...rest} = Astro.props
+const imgSrc = typeof src === 'object' && src !== null ? src.src : src
 ---
 
 <div class="-mx-4 md:-mx-8 text-center relative overflow-hidden flex sm:rounded-md">
-  <img {...props} loading="lazy" decoding="async" />
+  <img src={imgSrc} {...rest} loading="lazy" decoding="async" />
 </div>
