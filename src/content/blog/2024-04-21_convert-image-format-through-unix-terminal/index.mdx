@@ -11,8 +11,8 @@ tags:
 author: Nicklas Jarnesjö
 ---
 
-This is a small script I use to convert images from example avif to webp through unix terminal. In
-this case because Microsoft Edge does not support avif images yet. I learned the hard way.
+This is a small script I use to convert images from example avif to webp through unix terminal. In this case because
+Microsoft Edge does not support avif images yet. I learned the hard way.
 
 ```bash
 for image in ./*/*.avif ;  do convert "$image" "${image%.*}.webp" ; done

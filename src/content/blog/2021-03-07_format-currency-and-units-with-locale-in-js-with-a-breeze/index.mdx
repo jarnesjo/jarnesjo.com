@@ -10,15 +10,14 @@ tags:
 author: Nicklas Jarnesjö
 ---
 
-Working with numbers, currency and other units can be a real pain itself. Then add locale to it the
-headache gets real.
+Working with numbers, currency and other units can be a real pain itself. Then add locale to it the headache gets real.
 
 There for when I found `Int.Numberformat()` I totally fell in love ❤️
 
 ## Currency
 
-Say for example you have have a number, price, you want to present in locale specific way you have
-to know specific formatting where to put space ,`,`, `.` or the currency symbol and so on.
+Say for example you have have a number, price, you want to present in locale specific way you have to know specific
+formatting where to put space ,`,`, `.` or the currency symbol and so on.
 
 Lets take a look at a price in EURO and we want to present if to our Swedish audience first
 
@@ -38,8 +37,8 @@ Amazing isn't it! It's just works.
 
 ## Units
 
-It's alls work with units too. For example `liter`, `kilometer-per-hours` and combine it with
-`unitDisplay: 'long'` and you will get in correct singular and plural.
+It's alls work with units too. For example `liter`, `kilometer-per-hours` and combine it with `unitDisplay: 'long'` and
+you will get in correct singular and plural.
 
 ```js
 console.log(
@@ -54,7 +53,6 @@ console.log(
 
 ### Caveat
 
-Safari don't have fully support for other units then `currency`, `decimal` and `percent` both
-desktop and iOS right now.
+Safari don't have fully support for other units then `currency`, `decimal` and `percent` both desktop and iOS right now.
 
 Is Safari starting to be the new IE?

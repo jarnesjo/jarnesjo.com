@@ -12,15 +12,15 @@ tags:
 author: Nicklas Jarnesjö
 ---
 
-I did a small project where I didn't needed a big framework just for simple landing page as
-version 1. But then I was reminded about the caching problems and how every framework takes care of
-it for you. But I still wanted to keep it simple and not add a lot of dependencies.
+I did a small project where I didn't needed a big framework just for simple landing page as version 1. But then I was
+reminded about the caching problems and how every framework takes care of it for you. But I still wanted to keep it
+simple and not add a lot of dependencies.
 
-So I did a small script that I run after I have built the project that adds a version number to the
-CSS file and then replace the link in the HTML files. It's not perfect but it works.
+So I did a small script that I run after I have built the project that adds a version number to the CSS file and then
+replace the link in the HTML files. It's not perfect but it works.
 
-I'm using Tailwind CSS in the project and this is the cache-busting file to cache bust the two
-HTML-files the project contains.
+I'm using Tailwind CSS in the project and this is the cache-busting file to cache bust the two HTML-files the project
+contains.
 
 ```js:cache-busting.js
 const fs = require("fs")
@@ -41,8 +41,8 @@ fs.readdirSync("./src").forEach((file) => {
 })
 ```
 
-I then added the script to the `package.json` file that minified the TailwindCSS and also cache
-bust. Simple and effective.
+I then added the script to the `package.json` file that minified the TailwindCSS and also cache bust. Simple and
+effective.
 
 ```json:package.json {4}
 {

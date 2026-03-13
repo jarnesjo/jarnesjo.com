@@ -1,8 +1,8 @@
 ---
 title: 'Deploying Next.js with Docker and Github actions to Digital Ocean'
 description:
-  'Take another take to deploy Next.js outside Vercel-universe and deploying this blog with Docker
-  through GitHub Actions to Digital Ocean'
+  'Take another take to deploy Next.js outside Vercel-universe and deploying this blog with Docker through GitHub
+  Actions to Digital Ocean'
 date: '2021-09-20'
 slug: 'deploying-next-js-with-docker-and-github-actions-to-digital-ocean'
 category: code
@@ -14,8 +14,8 @@ tags:
   - docker
 ---
 
-Here comes another post about Github actions and deployment to Digital Ocean. This is from this site
-which is deployed with exactly this manner.
+Here comes another post about Github actions and deployment to Digital Ocean. This is from this site which is deployed
+with exactly this manner.
 
 ## Why don't just go with Vercel?
 
@@ -72,8 +72,8 @@ CMD ["node_modules/.bin/next", "start"]
 
 ## Github action
 
-Here we are using Github package registry to distribute the package and the login to Digital Ocean
-and deploy it. All the **secrets** in this file are described below.
+Here we are using Github package registry to distribute the package and the login to Digital Ocean and deploy it. All
+the **secrets** in this file are described below.
 
 ```yml:.github/workflows/build-and-deploy.yml
 name: Build and Deploy
@@ -146,5 +146,4 @@ DEPLOY_USER  - User on droplet (for Forge: `forge`)
 USERNAME - Your Github username
 ```
 
-Hope it can give you inspiration to your setup up and if you don't want to go with standard Vercel
-setup.
+Hope it can give you inspiration to your setup up and if you don't want to go with standard Vercel setup.

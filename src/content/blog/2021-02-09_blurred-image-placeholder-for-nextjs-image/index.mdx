@@ -1,8 +1,8 @@
 ---
 title: 'Blurred image placeholder for Next.js image (next/image)'
 description:
-  'There is no native support for blurred image presentation in next/image, but many other benefits.
-  So I explored and build blurred image presentation together with next/image'
+  'There is no native support for blurred image presentation in next/image, but many other benefits. So I explored and
+  build blurred image presentation together with next/image'
 date: '2021-02-09'
 slug: 'blurred-image-placeholder-for-nextjs-image'
 category: code
@@ -19,9 +19,9 @@ author: Nicklas Jarnesjö
   alt="Blurred image as placeholder beside real image"
 />
 
-As seen in gif above (a bit distorted) is what I have accomplished described in the post below. And
-on this image below you can see the blurred image which is a base64-encoded image loaded first and
-it's created from the image to the right with a webpack-loader.
+As seen in gif above (a bit distorted) is what I have accomplished described in the post below. And on this image below
+you can see the blurred image which is a base64-encoded image loaded first and it's created from the image to the right
+with a webpack-loader.
 
 <Image
   src="/static/post-content/blurred-image-placeholder-for-nextjs-image/next-image-blurred-placeholder.png"
@@ -33,36 +33,34 @@ it's created from the image to the right with a webpack-loader.
 <hr />
 
 **UPDATE**  
-It was initial written about `lqip-loader` but after some npm vulnerabilities and lack of support
-and decided to rewrite it and luckily found `lqip-modern-loader`. So updated content follows
+It was initial written about `lqip-loader` but after some npm vulnerabilities and lack of support and decided to rewrite
+it and luckily found `lqip-modern-loader`. So updated content follows
 
 <hr />
 
-When I started using Next.js for the first time for real were just in break between version 9
-and 10. So when I heard they should include a new optimized image component I were excited.
+When I started using Next.js for the first time for real were just in break between version 9 and 10. So when I heard
+they should include a new optimized image component I were excited.
 
-It's nice when the framework adds things like this which is build together with framework and
-optimized for it. But as in many cases it could missing features you thought would be nice to have.
-One of those things are some sort of placeholder for the image before it's loads because of the lazy
-loading.
+It's nice when the framework adds things like this which is build together with framework and optimized for it. But as
+in many cases it could missing features you thought would be nice to have. One of those things are some sort of
+placeholder for the image before it's loads because of the lazy loading.
 
-I have experiment with a lot of other npm packages such as `next-optimized-images` and got to know
-lqip for the first time. So why didn't I went that way? It have it's pros and cons as `next/image`
-and I want to stick to it and see how it evolves and in my opinion feels a bit more future-proof.
+I have experiment with a lot of other npm packages such as `next-optimized-images` and got to know lqip for the first
+time. So why didn't I went that way? It have it's pros and cons as `next/image` and I want to stick to it and see how it
+evolves and in my opinion feels a bit more future-proof.
 
 ## The solution
 
-So the solution were that it implemented a webpack loader which gives me a base64 string of the
-image I can add into a wrapper together with `next/image` which is absolute positioned and when the
-image loads it will appear above the placeholder and you will get the illusion they are stitched
-together.
+So the solution were that it implemented a webpack loader which gives me a base64 string of the image I can add into a
+wrapper together with `next/image` which is absolute positioned and when the image loads it will appear above the
+placeholder and you will get the illusion they are stitched together.
 
 ```bash
 npm install lqip-modern-loader --save-dev
 ```
 
-Add the `lqip-modern-loader` into the _next.config.js_ and it will provided you with the base64
-image which we uses in our custom image component.
+Add the `lqip-modern-loader` into the _next.config.js_ and it will provided you with the base64 image which we uses in
+our custom image component.
 
 ```js:next.config.js
 module.exports = {
@@ -79,8 +77,8 @@ module.exports = {
 }
 ```
 
-We still using the Next.js pattern to store our images into the `public`-directory and when we're
-doing the required we are loading it through our newly added webpack loader.
+We still using the Next.js pattern to store our images into the `public`-directory and when we're doing the required we
+are loading it through our newly added webpack loader.
 
 ```tsx:CustomImage.tsx
 import Image, {ImageProps} from 'next/image'
@@ -107,7 +105,7 @@ export {CustomImage}
 ```
 
 Here you can see an example of what you will get back from
-`` const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`) ``
+``const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`)``
 
 ```json
 // const image = src.startsWith('http') ? {src} : require(`../public${src}?lqip`)
@@ -120,22 +118,16 @@ Here you can see an example of what you will get back from
 }
 ```
 
-And an example of the CustomImage component in use. Still needing every necessary properties as
-`next/image`
+And an example of the CustomImage component in use. Still needing every necessary properties as `next/image`
 
 ```jsx
-<CustomImage
-  src="/static/images/home-office.jpeg"
-  alt="My computer desk at home"
-  width="4032"
-  height="3024"
-/>
+<CustomImage src="/static/images/home-office.jpeg" alt="My computer desk at home" width="4032" height="3024" />
 ```
 
 ## Caveats
 
-One problem with this solution are that it's **only supports jpg and png** at the moment. And to
-have fallback solutions is to add another webpack loader `file-loader`.
+One problem with this solution are that it's **only supports jpg and png** at the moment. And to have fallback solutions
+is to add another webpack loader `file-loader`.
 
 ```bash
 npm install file-loader
@@ -203,9 +195,9 @@ const CustomImage = ({src, noPlaceholder, ...props}: CustomImageType) => {
 export {CustomImage}
 ```
 
-As you seen above I have added support for external images and also added the property
-`noPlaceholder` if you have transparent images and it be a bit weird when you get a blurred image
-behind it. So with new prop you have opt-out the placeholder.
+As you seen above I have added support for external images and also added the property `noPlaceholder` if you have
+transparent images and it be a bit weird when you get a blurred image behind it. So with new prop you have opt-out the
+placeholder.
 
-Hope you find this useful and if you have any questions or improvements suggestion just reach out to
-me on Twitter [@jarnesjo](https://twitter.com/jarnesjo)
+Hope you find this useful and if you have any questions or improvements suggestion just reach out to me on Twitter
+[@jarnesjo](https://twitter.com/jarnesjo)

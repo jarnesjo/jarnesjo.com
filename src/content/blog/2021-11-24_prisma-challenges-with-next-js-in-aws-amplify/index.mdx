@@ -1,8 +1,8 @@
 ---
 title: 'Prisma challenges with Next.js in AWS Amplify'
 description:
-  "Trying to learn AWS and used AWS Amplify to deploy Next.js with Prisma. Wasn't a straight forward
-  experience and here some of the findings and errors we stumble upon and how we fixed it."
+  "Trying to learn AWS and used AWS Amplify to deploy Next.js with Prisma. Wasn't a straight forward experience and here
+  some of the findings and errors we stumble upon and how we fixed it."
 date: '2021-11-24'
 slug: 'prisma-challenges-with-next-js-in-aws-amplify'
 category: code
@@ -14,27 +14,25 @@ tags:
 author: Nicklas Jarnesjö
 ---
 
-Started new project together with some friends and we decided to against AWS Amplify together with
-Next.js and Prisma. I have worked with Next.js and Prisma in many of my projects before and felt
-confident about that setup. But boy this AWS Amplify thing was something totally new for me. AWS is
-totally new for me but the others have been working and deploying things there before and would be a
-great project to start learning about it.
+Started new project together with some friends and we decided to against AWS Amplify together with Next.js and Prisma. I
+have worked with Next.js and Prisma in many of my projects before and felt confident about that setup. But boy this AWS
+Amplify thing was something totally new for me. AWS is totally new for me but the others have been working and deploying
+things there before and would be a great project to start learning about it.
 
 But everything didn't went as smooth as I/we hoped. Where should I start?
 
 ## Static generation
 
-Our first plan where to generate everything statically but we had to much data for that so the build
-process took to long time and in some cases it timed out or got weird memory leak
-`0xa1855c node::OnFatalError(char const*, char const*) [node]` which we didn't managed to solve. So
-we went with ISG together with Next.js instead and rest of this post will be about that.
+Our first plan where to generate everything statically but we had to much data for that so the build process took to
+long time and in some cases it timed out or got weird memory leak
+`0xa1855c node::OnFatalError(char const*, char const*) [node]` which we didn't managed to solve. So we went with ISG
+together with Next.js instead and rest of this post will be about that.
 
 ## Prisma together with AWS Lambda
 
-Oh boy this one was a tough one for me. First of all we seemed to got a versioned that didn't work
-but after Prisma release `3.5.0` we got rid of some of the first build errors. Then with also got
-build errors about `_http_common` and the solutions I found were to add following to
-`next.config.js`
+Oh boy this one was a tough one for me. First of all we seemed to got a versioned that didn't work but after Prisma
+release `3.5.0` we got rid of some of the first build errors. Then with also got build errors about `_http_common` and
+the solutions I found were to add following to `next.config.js`
 
 ```json:next.config.js
 (module.exports = {
@@ -47,15 +45,15 @@ build errors about `_http_common` and the solutions I found were to add followin
 })
 ```
 
-Oh and of course you have to specified what binary to target so it can run in a Lambda so you have
-to add `binaryTargets` to your
+Oh and of course you have to specified what binary to target so it can run in a Lambda so you have to add
+`binaryTargets` to your
 
 ```json:prisma/schema.prisma
 binaryTargets = ['native', 'rhel-openssl-1.0.x']
 ```
 
-After that everything build correctly but we didn't got **503 Reponses** on every Lambda request and
-looking into the logs we could see
+After that everything build correctly but we didn't got **503 Reponses** on every Lambda request and looking into the
+logs we could see
 
 ```json
 {
@@ -82,9 +80,9 @@ looking into the logs we could see
 }
 ```
 
-and what conclusion can make about that? That Prisma didn't got packed into the Lambda artifact and
-didn't exist when it executing. For that we found a solutions what Vercel themself are using and
-what platforms such Netlify are using for getting Next.js to work in theirs environments.
+and what conclusion can make about that? That Prisma didn't got packed into the Lambda artifact and didn't exist when it
+executing. For that we found a solutions what Vercel themself are using and what platforms such Netlify are using for
+getting Next.js to work in theirs environments.
 
 ```json:next.config.js
 (module.exports = {
@@ -92,9 +90,9 @@ what platforms such Netlify are using for getting Next.js to work in theirs envi
 })
 ```
 
-Everything good now? Nahh! Now we faced that Prisma executed as expected but couldn't connect to the
-database because it couldn't find the `DATABASE_URL`-variable from the `.env`. Ok why not? I some
-weird way the Lambda do not gets the Environments Variables set in Amplify GUI. So how to solve it?
+Everything good now? Nahh! Now we faced that Prisma executed as expected but couldn't connect to the database because it
+couldn't find the `DATABASE_URL`-variable from the `.env`. Ok why not? I some weird way the Lambda do not gets the
+Environments Variables set in Amplify GUI. So how to solve it?
 
 ```yml:amplify.yml
 ...
@@ -104,21 +102,18 @@ weird way the Lambda do not gets the Environments Variables set in Amplify GUI. 
 ...
 ```
 
-In other words you have to create a `.env` in build time to get the Lambda to pick it up. And this
-is the official solution to the problem as you can read about in the
+In other words you have to create a `.env` in build time to get the Lambda to pick it up. And this is the official
+solution to the problem as you can read about in the
 [Amplify docs](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html#access-env-vars)
 
-Now everything is working as attended but next problem is to fix `Too Many Connections` problem we
-are facing with Prisma and the Lambda right now where it's don't letting the connections go.
+Now everything is working as attended but next problem is to fix `Too Many Connections` problem we are facing with
+Prisma and the Lambda right now where it's don't letting the connections go.
 
-Prisma is a lovely framework I have been pleased with but in this context it's have been such a
-pain. We are actually looking into to user
-[serverless/mysl](https://github.com/jeremydaly/serverless-mysql) right now to see if we can get a
-better handling of our connections. And that's a shame we maybe can't get all the benefits from
-Prisma.
+Prisma is a lovely framework I have been pleased with but in this context it's have been such a pain. We are actually
+looking into to user [serverless/mysl](https://github.com/jeremydaly/serverless-mysql) right now to see if we can get a
+better handling of our connections. And that's a shame we maybe can't get all the benefits from Prisma.
 
 ### Why writing this post if you going elsewhere?
 
-Because you maybe have the same use cases where you have to have many SSG rendering stuff and
-therefor it won't be a problem for you. And this made a headache for me so hope it can help you in
-someway.
+Because you maybe have the same use cases where you have to have many SSG rendering stuff and therefor it won't be a
+problem for you. And this made a headache for me so hope it can help you in someway.

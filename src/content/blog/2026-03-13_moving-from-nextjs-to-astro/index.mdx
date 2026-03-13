@@ -1,8 +1,6 @@
 ---
 title: 'Moving from Next.js to Astro'
-description:
-  'After years with Next.js I decided to move this site to Astro. Here is why and what I learned
-  from it'
+description: 'Ditched Next.js and Docker for Astro. Static files, no fuss and no more headaches.'
 date: '2026-03-13'
 slug: 'moving-from-nextjs-to-astro'
 category: code
@@ -13,79 +11,73 @@ tags:
 author: Nicklas Jarnesjö
 ---
 
-This site has been through some frameworks. WordPress back in 2009, then Gatsby, then Next.js and
-now Astro. I like to learn new things and I like the right tool for the job.
+This site has been through some frameworks. WordPress back in 2009, then Gatsby, then Next.js and now Astro. I like to
+learn new things and I like the right tool for the job.
 
 ## Why leave Next.js?
 
-Don't get me wrong Next.js is a great framework. I have used it a lot for both personal and client
-projects. But for this site it's overkill.
+Don't get me wrong Next.js is a great framework. I have used it a lot for both personal and client projects. But for
+this site it's overkill.
 
-This is a blog. MDX posts, no API routes, no server-side rendering. Everything is `getStaticProps`
-and `getStaticPaths`. Yet I'm shipping a full React runtime and running a Node.js server in Docker
-on Digital Ocean. For static HTML. Come on.
+This is a blog. MDX posts, no API routes, no server-side rendering. Everything is `getStaticProps` and `getStaticPaths`.
+Yet I'm shipping a full React runtime and running a Node.js server in Docker on Digital Ocean. For static HTML. Come on.
 
-I have been on the Pages Router which is now maintenance mode. The App Router is the future but
-migrating to that would be a big effort and for what? Same overkill for a blog.
+I have been on the Pages Router which is now maintenance mode. The App Router is the future but migrating to that would
+be a big effort and for what? Same overkill for a blog.
 
-And honestly this is a pattern with Next.js that frustrates me. They build something, ship it half
-finished and then run to the next shiny thing. Pages Router never felt complete before they went all
-in on App Router. `next export` was barely functional. And don't get me started on the Image
-component — constant pain if you're not on Vercel. It always felt like they pushed you into the
-Vercel ecosystem to get things working. Things got better over time sure but it was never painless.
+And honestly this is a pattern with Next.js that frustrates me. They build something, ship it half finished and then run
+to the next shiny thing. Pages Router never felt complete before they went all in on App Router. `next export` was
+barely functional. And don't get me started on the Image component -- constant pain if you're not on Vercel. It always
+felt like they pushed you into the Vercel ecosystem to get things working. Things got better over time sure but it was
+never painless.
 
-Hard to invest in a framework when the thing you build on might be left behind for the next big
-idea.
+Hard to invest in a framework when the thing you build on might be left behind for the next big idea.
 
 ## Why not stick with React?
 
-React is fine I have nothing against it. But I have moved away from it. I mostly work with Laravel
-and Statamic CMS now and I enjoy it. When you don't have a client or employer pushing you to keep up
-with the React ecosystem it's nice to just use what you're comfortable with and explore other things.
+React is fine I have nothing against it. But I have moved away from it. I mostly work with Laravel and Statamic CMS now
+and I enjoy it. When you don't have a client or employer pushing you to keep up with the React ecosystem it's nice to
+just use what you're comfortable with and explore other things.
 
-I could have built this in Statamic since I run it for other projects but that's overkill too. A full CMS with a control panel for 17 blog posts? Nah.
+I could have built this in Statamic since I run it for other projects but that's overkill too. A full CMS with a control
+panel for 17 blog posts? Nah.
 
 ## So why Astro?
 
-Astro is built for content sites. Ships **zero JavaScript** by default. You only add JS when you
-actually need interactivity which for a blog is pretty much never.
+Astro is built for content sites. Ships **zero JavaScript** by default. You only add JS when you actually need
+interactivity which for a blog is pretty much never.
 
-Content Collections is great — built-in support for blog posts with typed frontmatter. No more
-messing around with `gray-matter` and `next-mdx-remote`. MDX works out of the box. And `.astro`
-files feel like a mix of JSX and HTML so if you know React you pick it up fast.
+Content Collections is great -- built-in support for blog posts with typed frontmatter. No more messing around with
+`gray-matter` and `next-mdx-remote`. MDX works out of the box. And `.astro` files feel like a mix of JSX and HTML so if
+you know React you pick it up fast.
 
-But the biggest thing — the output is just static files. No Node.js server. No Docker. Just HTML
-and CSS.
+But the biggest thing -- the output is just static files. No Node.js server. No Docker. Just HTML and CSS.
 
 ## Bye bye Docker
 
 I have written a couple posts about my
-[Docker and GitHub Actions setup](/blog/deploying-next-js-with-docker-and-github-actions-to-digital-ocean)
-and even debugged a
-[weird .next directory issue](/blog/no-next-directory-after-docker-build-in-github-actions) in that
-pipeline. I learned a lot from it and it served me well.
+[Docker and GitHub Actions setup](/blog/deploying-next-js-with-docker-and-github-actions-to-digital-ocean) and even
+debugged a [weird .next directory issue](/blog/no-next-directory-after-docker-build-in-github-actions) in that pipeline.
+I learned a lot from it and it served me well.
 
-But maintaining a Dockerfile, a Node.js server and deploy scripts for a blog is just too much. With
-Astro I get plain HTML files that I deploy through Laravel Forge like all my other sites. No special
-treatment.
+But maintaining a Dockerfile, a Node.js server and deploy scripts for a blog is just too much. With Astro I get plain
+HTML files that I deploy through Laravel Forge like all my other sites. No special treatment.
 
-I'm starting to get old. Things should just work. It's like when you were younger and bought
-components to build your own computer — now I just buy a MacBook because I know it works and syncs
-with all my other stuff. Same thing here.
+I'm starting to get old. Things should just work. It's like when you were younger and bought components to build your
+own computer -- now I just buy a MacBook because I know it works and syncs with all my other stuff. Same thing here.
 
 ## The migration
 
 Pretty smooth actually.
 
-Rewrote the layout to an Astro layout — same HTML just without React. Moved the MDX files into
-Content Collections, frontmatter stayed the same. Tailwind works the same way. Dark mode went from
-`next-themes` to a small inline script which is simpler and doesn't need React.
+Rewrote the layout to an Astro layout -- same HTML just without React. Moved the MDX files into Content Collections,
+frontmatter stayed the same. Tailwind works the same way. Dark mode went from `next-themes` to a small inline script
+which is simpler and doesn't need React.
 
-Things I don't miss: `next-remote-watch`, `next-mdx-remote`, Docker multi-stage builds and the
-general heaviness of it all.
+Things I don't miss: `next-remote-watch`, `next-mdx-remote`, Docker multi-stage builds and the general heaviness of it
+all.
 
-If you have a content site on Next.js and you don't really need React on the client — check out
-Astro. It's been a breath of fresh air.
+If you have a content site on Next.js and you don't really need React on the client -- check out Astro. It's been a
+breath of fresh air.
 
-Source code as always on
-[github.com/jarnesjo/jarnesjo.com](https://github.com/jarnesjo/jarnesjo.com).
+Source code as always on [github.com/jarnesjo/jarnesjo.com](https://github.com/jarnesjo/jarnesjo.com).
