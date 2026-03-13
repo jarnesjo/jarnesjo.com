@@ -1,0 +1,108 @@
+---
+title: 'Rewriting Snittränta.se after Netlify killed Gatsby'
+description:
+  'Gatsby got abandoned by Netlify. Had to move a data-heavy site with 175 pages and years of mortgage data to Astro.'
+date: '2026-03-20'
+slug: 'moving-snittranta-from-gatsby-to-astro'
+category: code
+tags:
+  - astro
+  - gatsby
+  - react
+published: false
+author: Nicklas Jarnesjö
+---
+
+I have a side project called [Snittränta.se](https://snittranta.se) that tracks average mortgage interest rates from
+Swedish banks. It started because we were negotiating our mortgage and I felt like we were at a disadvantage as
+customers. Then I found out that banks in Sweden are required by law to publish their average interest rates. The data
+is out there but it's not exactly easy to find. So I built a site to collect it all in one place and make it easier for
+people going into negotiations with their bank.
+
+That was 2020. It started as a Gatsby site and it's been one of my favorite things to build. 18 banks, monthly data
+going back years, trend charts, sortable tables, search. All generated as static HTML from JSON files.
+
+No database. Just JSON. That was the thing that blew my mind when I first got into Gatsby. Coming from WordPress and
+Laravel where everything lives in a database -- the idea that you could build a data-heavy site from flat files and get
+static HTML out the other end was kind of beautiful. Great SEO, fast as hell, no server to worry about.
+
+And there's something really comforting about a project that lives entirely in git. All the data, all the templates,
+everything. No database to back up, no risk of losing data when a hosting provider has a bad day. Just `git clone` and
+you have the whole thing. That peace of mind is underrated.
+
+I genuinely liked Gatsby. It worked well for what I needed.
+
+## Then Netlify happened
+
+Beginning of this month I sat down to bump dependencies and make sure everything was up to date. That's when I
+discovered that Gatsby is basically dead. Netlify acquired it and then just... stopped maintaining it. No active
+development, no updates, nothing.
+
+I was honestly gutted. When you've used a framework for years and you're comfortable with it, finding out it's abandoned
+is not a fun surprise. It's not like switching a CSS library. This is the foundation of the entire site. All the page
+generation, data loading, build pipeline -- everything.
+
+And it's a big deal because you know you have to rewrite. Not because you want to, not because you're chasing something
+shiny. Because the thing you trusted stopped existing.
+
+## What I actually liked about Gatsby
+
+I know people love to hate on Gatsby but it worked for me. The plugin ecosystem was great for getting started. Static
+site generation was first class. And for a site like Snittränta where the content is structured JSON data -- it was a
+really good fit.
+
+Even GraphQL. I know. Everyone has opinions about GraphQL. And honestly if I had to write a full schema from scratch
+with all those type definitions and resolver files -- yeah that's painful and way overcomplicated for most things. But
+Gatsby handled most of that for you. You just wrote queries against your data and it worked. I didn't love it but I
+didn't fight it either.
+
+The thing that was annoying was how you had to define dynamic pages. You had to wire everything up in `gatsby-node.js`
+with `createPages` and template files. It worked but it was a lot of ceremony for something that should be simpler.
+
+## Why Astro
+
+I had just [moved this blog from Next.js to Astro](/blog/moving-from-nextjs-to-astro) so I already knew the framework.
+And honestly it felt like a natural fit for Snittränta too.
+
+The biggest win is how dynamic pages work. In Astro you just export a `getStaticPaths` function right in the page file.
+One catch-all route generates all 175 pages -- bank pages, monthly archives, yearly overviews. No separate config file,
+no template mapping. The page and its data loading live together. So much cleaner.
+
+Content Collections handle the JSON data beautifully. Instead of GraphQL queries I wrote plain TypeScript functions in a
+`banks.ts` file. `getBanksMinimal(date)`, `getBankHistoryFlat(bankName)`, `getTrendData()`. Just functions that return
+data. No query language, no schema files.
+
+And the HTML-first approach is great. Astro ships zero JavaScript by default. For a site that's mostly tables and text
+that's exactly what you want. But when you need interactivity -- sortable columns, trend charts with hover, a search
+dialog -- you just drop in React components as islands. Best of both worlds. The interactive parts get React, everything
+else is just HTML.
+
+## Watch your payloads
+
+One thing that bit us during the migration -- the archive page ended up at 362 MB. Yeah. Turns out in Astro when you
+pass data as props to React islands it gets serialized into the HTML for hydration. In Gatsby everything was
+server-rendered so you didn't really think about it. Here you have to be more careful about what you actually send to
+each component.
+
+Once we filtered the data down to only what each component needs it dropped to 235 KB. Not really an Astro problem, more
+of a "you need to think differently" thing.
+
+## I think Claude saved the project
+
+I used _Claude Code_ for this migration and I think this is exactly how we should use AI.
+
+When you're young and have nothing but time you can spend weekends rewriting a side project from scratch. That's not my
+life anymore. I have kids, a farm, two companies to run. Finding out your framework is dead and facing a full rewrite --
+that's the kind of thing that kills side projects. You look at the scope and you just... when and how?
+
+I think it saved the project. I could focus on learning Astro, understanding the
+architecture, and making decisions about how the site should work while it handled the grunt work. The project got to
+live on instead of slowly dying on an abandoned framework.
+
+## If your framework dies
+
+It sucks. There's no way around it. But if you're sitting on a Gatsby site wondering what to do -- Astro is a solid
+landing spot. Especially if your site is content or data driven. The static generation is great, Content Collections
+replace GraphQL nicely, and you keep React where you need it.
+
+The site is at [snittränta.se](https://snittränta.se) if you want to see the end result.

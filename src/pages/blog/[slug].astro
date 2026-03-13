@@ -4,7 +4,8 @@ import Image from '../../components/mdx/Image.astro'
 import {getCollection, render} from 'astro:content'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({data}) => data.published !== false)
+  const isDev = import.meta.env.DEV
+  const posts = await getCollection('blog', ({data}) => isDev || data.published !== false)
   return posts.map(post => ({
     params: {slug: post.data.slug},
     props: {post}
