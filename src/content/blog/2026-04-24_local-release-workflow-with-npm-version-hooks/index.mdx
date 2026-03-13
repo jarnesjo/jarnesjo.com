@@ -1,0 +1,75 @@
+---
+title: 'Local release workflow with npm version hooks'
+description:
+  'No CI/CD needed. Use npm preversion and version hooks to test, build and release a static site with one command.'
+date: '2026-04-24'
+slug: 'local-release-workflow-with-npm-version-hooks'
+category: code
+tags:
+  - node
+  - tips
+published: false
+author: Nicklas Jarnesjö
+---
+
+I don't have a CI/CD pipeline for this site. It's a static Astro site deployed through Laravel Forge. Forge pulls from
+git and serves the `dist/` folder directly. No build step on the server.
+
+That means `dist/` needs to be in git. But I don't want it showing up in every commit cluttering the history. So I
+gitignore it and only include it in release commits.
+
+## The setup
+
+Three scripts in `package.json` do the work:
+
+```json
+{
+  "scripts": {
+    "test:routes": "vitest run tests/routes.test.js",
+    "preversion": "npm run build && npm run test:routes",
+    "version": "git add -f dist",
+    "release:major": "npm version major",
+    "release:minor": "npm version minor",
+    "release:patch": "npm version patch"
+  }
+}
+```
+
+`npm version` is a built-in npm command that bumps the version in `package.json`, creates a commit and tags it. The
+hooks run automatically:
+
+1. **preversion** -- build and run tests. If anything fails the release stops. No need to clean first since Astro writes
+   the entire `dist/` from scratch on every build.
+2. **version** -- force-add `dist/` to the commit. The `-f` flag overrides `.gitignore`.
+
+## How I release
+
+```bash
+npm run release:patch    # 3.0.1 → 3.0.2
+git push origin main --tags
+```
+
+That's it. Forge picks up the push and the site is live. The git history stays clean -- `dist/` only appears in tagged
+release commits, not in every little change so you can commit and push without worrying about it's going to production
+before I really want it to. No need to have a develop branch which can feel a bit overkill for a simple static site as
+this.
+
+## The gitignore trick
+
+`.gitignore` has `dist/` listed. This means:
+
+- Day to day work: `git status` doesn't show dist changes
+- Release time: `git add -f dist` forces it in for that one commit
+- After release: dist is tracked in that commit but gitignore still hides future changes
+
+You get the best of both worlds. Clean working directory during development, built files included when you actually
+release.
+
+## Why not build on the server?
+
+I could add `npm install && npm run build` as a deploy script in Forge. But that means Node.js on the server,
+dependencies to install, builds that can fail in production or get messed up. For a static site that feels like
+unnecessary complexity.
+
+Building locally means I see exactly what goes out. If the build breaks or a test fails I catch it before pushing. The
+server just serves files. Simple.

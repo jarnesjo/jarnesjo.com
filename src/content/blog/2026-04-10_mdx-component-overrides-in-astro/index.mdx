@@ -1,0 +1,48 @@
+---
+title: 'MDX component overrides in Astro -- img vs Image'
+description: 'Quick note on why your custom Image component does not work for markdown images in Astro MDX files.'
+date: '2026-04-10'
+slug: 'mdx-component-overrides-in-astro'
+category: code
+tags:
+  - astro
+  - mdx
+  - note-to-myself
+published: false
+author: Nicklas Jarnesjö
+---
+
+This one bit me and I couldn't figure out why for a while so writing it down.
+
+I have a custom Image component that wraps images with some extra styling -- negative margins so the image bleeds wider than the text, rounded corners, lazy loading. In my blog post template I pass it to the MDX renderer:
+
+```ts
+<Content components={{Image}} />
+```
+
+Looks right. But markdown images like `![alt](./photo.png)` still rendered as plain `<img>` tags without my wrapper.
+
+## The fix
+
+Markdown images render as `<img>` (lowercase). The `components` prop maps HTML element names, not component names. So you need:
+
+```ts
+<Content components={{img: Image}} />
+```
+
+Lowercase `img` maps to the HTML element that markdown produces. Uppercase `Image` would only work if you explicitly write `<Image />` in your MDX file.
+
+## One more thing
+
+If you use local images in MDX with relative paths like `![alt](./photo.png)`, Astro passes the `src` prop as an object with `{src, width, height}` instead of a plain string. Your component needs to handle that:
+
+```ts
+---
+const {src, ...rest} = Astro.props
+const imgSrc = typeof src === 'object' && src !== null ? src.src : src
+---
+
+<img src={imgSrc} {...rest} loading="lazy" decoding="async" />
+```
+
+Small thing but it will hopefully save you some debugging and headscratching.

@@ -1,0 +1,104 @@
+---
+title: 'Three-way dark mode toggle in Astro without React'
+description: 'System, light and dark mode toggle with vanilla JS. No React, no dependencies, respects OS preference.'
+date: '2026-04-03'
+slug: 'three-way-dark-mode-toggle-in-astro'
+category: code
+tags:
+  - astro
+  - js
+  - tips
+published: false
+author: Nicklas Jarnesjö
+---
+
+Most dark mode tutorials give you a simple on/off toggle. That works but it ignores what the user already set in their OS. I've been annoyed by this on other sites where you try dark mode and then can't reset it back to follow the system. Then I realized my own site had the exact same problem. Time to fix that.
+
+I wanted three states -- system, light and dark -- where system follows whatever the OS says.
+
+No React, no `next-themes`, just vanilla JS in an Astro layout.
+
+## Prevent the flash
+
+The first thing you need is an inline script in `<head>` that runs before the page renders. Without this you get a white flash on dark mode page loads because the browser renders the HTML before your JS runs.
+
+```html
+<script is:inline>
+  const theme = localStorage.getItem('theme') || 'system'
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  if (isDark) document.documentElement.classList.add('dark')
+</script>
+```
+
+`is:inline` in Astro means the script stays in the HTML as-is. No bundling, no defer. It runs immediately.
+
+## The toggle button
+
+Three SVG icons -- sun, moon and monitor. Only the active one is visible. The button cycles through system, light, dark on each click.
+
+```html
+<button id="theme-toggle" aria-label="Toggle theme">
+  <svg id="icon-light" class="w-6 h-6 hidden"><!-- sun --></svg>
+  <svg id="icon-dark" class="w-6 h-6 hidden"><!-- moon --></svg>
+  <svg id="icon-system" class="w-6 h-6 hidden"><!-- monitor --></svg>
+</button>
+```
+
+All three start with `hidden`. The script below shows the right one.
+
+## The logic
+
+```ts
+const themes = ['system', 'light', 'dark'] as const
+let currentTheme = localStorage.getItem('theme') || 'system'
+
+function applyTheme(theme: string) {
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  document.documentElement.classList.toggle('dark', isDark)
+
+  document.getElementById('icon-light')!.classList.toggle('hidden', theme !== 'light')
+  document.getElementById('icon-dark')!.classList.toggle('hidden', theme !== 'dark')
+  document.getElementById('icon-system')!.classList.toggle('hidden', theme !== 'system')
+}
+
+applyTheme(currentTheme)
+
+document.getElementById('theme-toggle')?.addEventListener('click', () => {
+  const idx = themes.indexOf(currentTheme as typeof themes[number])
+  currentTheme = themes[(idx + 1) % themes.length]
+  localStorage.setItem('theme', currentTheme)
+  applyTheme(currentTheme)
+})
+```
+
+`applyTheme` does two things -- toggles the `dark` class on `<html>` and shows the correct icon. The click handler just cycles to the next theme in the array.
+
+## Listen for OS changes
+
+If the user is on system mode and changes their OS theme, the page should update. One event listener handles that:
+
+```ts
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if ((localStorage.getItem('theme') || 'system') === 'system') {
+    applyTheme('system')
+  }
+})
+```
+
+Only fires when in system mode so it doesn't override a manual choice.
+
+## Tailwind
+
+I use Tailwind v4 with class-based dark mode. The CSS setup is just:
+
+```css
+@variant dark (&:where(.dark, .dark *));
+```
+
+Then you use `dark:bg-gray-900`, `dark:text-white` and so on like normal.
+
+## That's it
+
+No npm packages. No React context. No hydration. Just a script tag, three SVG icons and localStorage. Works on first paint, respects the OS, and the user can override it.
+
+You can see it in action on this site -- the button is in the top right corner. Hope it gives you a nudge if you've been thinking about this.

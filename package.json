@@ -13,7 +13,7 @@
     "astro": "astro",
     "test": "vitest run",
     "test:routes": "vitest run tests/routes.test.js",
-    "preversion": "npm run clean && npm run build && npm run test:routes",
+    "preversion": "npm run build && npm run test:routes",
     "version": "git add -f dist",
     "release:major": "npm version major",
     "release:minor": "npm version minor",

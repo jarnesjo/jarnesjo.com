@@ -1,0 +1,64 @@
+---
+title: 'Draft posts in Astro with a published flag'
+description: 'Simple pattern for hiding draft posts in production while keeping them visible during development.'
+date: '2026-04-17'
+slug: 'draft-posts-in-astro'
+category: code
+tags:
+  - astro
+  - note-to-myself
+published: false
+author: Nicklas Jarnesjö
+---
+
+I wanted to write blog posts ahead of time and publish them later. Astro doesn't have a built-in draft system for Content Collections so I made a simple one with a `published` flag in frontmatter.
+
+## The schema
+
+Add `published` as an optional boolean that defaults to `true` in your content config:
+
+```ts
+// src/content.config.ts
+const blog = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    slug: z.string(),
+    published: z.boolean().optional().default(true),
+    // ...
+  })
+})
+```
+
+Existing posts without the field are published by default. To make a draft just add `published: false` to the frontmatter.
+
+## Filter everywhere
+
+Every place you call `getCollection` needs to filter out unpublished posts:
+
+```ts
+const posts = await getCollection('blog', ({data}) => data.published !== false)
+```
+
+That includes your blog index, tag pages, category pages, RSS feed, sitemap, OG image generation -- anywhere you list or generate pages from posts. Miss one and the draft leaks into production.
+
+## Show drafts in dev
+
+The nice thing is you can still see your drafts locally. In your blog post page, check `import.meta.env.DEV`:
+
+```ts
+export async function getStaticPaths() {
+  const isDev = import.meta.env.DEV
+  const posts = await getCollection('blog', ({data}) => isDev || data.published !== false)
+  return posts.map(post => ({
+    params: {slug: post.data.slug},
+    props: {post}
+  }))
+}
+```
+
+In dev mode all posts show up. In production builds drafts are excluded. No separate branch, no CMS, just a boolean in the markdown file.
+
+## Publishing
+
+When you're ready just change `published: false` to `true` (or remove the line entirely), build and deploy. That's it.
