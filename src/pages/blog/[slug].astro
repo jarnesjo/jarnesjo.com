@@ -15,7 +15,7 @@ const {post} = Astro.props
 const {title, description, date, category, tags, author, image} = post.data
 const {Content} = await render(post)
 
-const siteUrl = 'https://jarnesjo.com'
+const siteUrl = Astro.site?.origin || 'https://jarnesjo.com'
 
 const formatted = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',

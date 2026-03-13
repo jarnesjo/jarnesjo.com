@@ -3,5 +3,5 @@ const props = Astro.props
 ---
 
 <div class="-mx-4 md:-mx-8 text-center relative overflow-hidden flex sm:rounded-md">
-  <img {...props} />
+  <img {...props} loading="lazy" decoding="async" />
 </div>

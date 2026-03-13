@@ -54,6 +54,15 @@ const projects = [
 ---
 
 <Layout title="Nicklas Jarnesjö - web, dev and business">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Nicklas Jarnesjö',
+    url: 'https://jarnesjo.com',
+    jobTitle: 'Web Developer',
+    worksFor: {'@type': 'Organization', name: 'Webready'},
+    sameAs: ['https://x.com/jarnesjo', 'https://github.com/jarnesjo']
+  })} />
   <div class="py-12 md:py-20">
     <div class="uppercase tracking-wide text-lg font-semibold text-red-600 dark:text-red-500">
       Hi, my name is Nicklas
