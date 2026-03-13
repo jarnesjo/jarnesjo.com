@@ -6,7 +6,6 @@ import satori from 'satori'
 import {Resvg} from '@resvg/resvg-js'
 
 const fontBold = readFileSync(join(process.cwd(), 'src/fonts/Inter-Bold.ttf'))
-const fontMono = readFileSync(join(process.cwd(), 'src/fonts/JetBrainsMono-Regular.ttf'))
 const pattern = readFileSync(join(process.cwd(), 'src/fonts/og-pattern.png'))
 const patternBase64 = `data:image/png;base64,${pattern.toString('base64')}`
 
@@ -109,12 +108,6 @@ export async function GET({props}: APIContext) {
           weight: 700,
           style: 'normal'
         },
-        {
-          name: 'JetBrains Mono',
-          data: fontMono,
-          weight: 400,
-          style: 'normal'
-        }
       ]
     }
   )
