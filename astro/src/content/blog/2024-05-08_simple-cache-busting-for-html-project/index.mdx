@@ -10,11 +10,6 @@ tags:
   - tailwindcss
   - note-to-myself
 author: Nicklas Jarnesjö
-image:
-  {
-    src: '/static/post-content/simple-cache-busting-for-html-project/card.png',
-    alt: 'Text "Simple cache busting for HTML project"'
-  }
 ---
 
 I did a small project where I didn't needed a big framework just for simple landing page as
@@ -43,7 +38,6 @@ fs.readdirSync("./src").forEach((file) => {
     fs.writeFileSync(`./src/${file}`, htmlTemplate, {
       encoding: "utf-8",
     })
-  }
 })
 ```
 
