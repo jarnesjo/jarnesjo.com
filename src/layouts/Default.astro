@@ -106,10 +106,9 @@ const menuItems = [
 
     <!-- Dark mode: prevent flash -->
     <script is:inline>
-      const theme = localStorage.getItem('theme')
-      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
-      }
+      const theme = localStorage.getItem('theme') || 'system'
+      const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      if (isDark) document.documentElement.classList.add('dark')
     </script>
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
@@ -141,17 +140,23 @@ const menuItems = [
             ))}
           </ul>
 
-          <!-- Dark mode toggle -->
+          <!-- Dark mode toggle (system → light → dark) -->
           <button
             id="theme-toggle"
             class="rounded-full p-2 w-10 h-10 text-red-600 dark:text-gray-200 hover:text-red-700 bg-red-100 hover:bg-red-200 dark:bg-transparent focus:outline-none dark:hover:bg-gray-800 dark:ring-2 dark:ring-gray-800 dark:hover:ring-gray-700 transition-all duration-200"
-            aria-label="Toggle dark mode"
+            aria-label="Toggle theme"
           >
-            <svg class="w-6 h-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            <!-- Sun (light) -->
+            <svg id="icon-light" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
-            <svg class="w-6 h-6 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+            <!-- Moon (dark) -->
+            <svg id="icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <!-- Monitor (system) -->
+            <svg id="icon-system" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </button>
 
@@ -197,8 +202,21 @@ const menuItems = [
     </div>
 
     <script>
-      // Dark mode toggle
+      // Three-way theme toggle: system → light → dark
+      const themes = ['system', 'light', 'dark'] as const
       let switchSound: HTMLAudioElement | null = null
+      let currentTheme = localStorage.getItem('theme') || 'system'
+
+      function applyTheme(theme: string) {
+        const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.classList.toggle('dark', isDark)
+
+        document.getElementById('icon-light')!.classList.toggle('hidden', theme !== 'light')
+        document.getElementById('icon-dark')!.classList.toggle('hidden', theme !== 'dark')
+        document.getElementById('icon-system')!.classList.toggle('hidden', theme !== 'system')
+      }
+
+      applyTheme(currentTheme)
 
       document.getElementById('theme-toggle')?.addEventListener('click', () => {
         if (!switchSound) {
@@ -207,9 +225,17 @@ const menuItems = [
         switchSound.currentTime = 0
         switchSound.play()
 
-        document.documentElement.classList.toggle('dark')
-        const isDark = document.documentElement.classList.contains('dark')
-        localStorage.setItem('theme', isDark ? 'dark' : 'light')
+        const idx = themes.indexOf(currentTheme as typeof themes[number])
+        currentTheme = themes[(idx + 1) % themes.length]
+        localStorage.setItem('theme', currentTheme)
+        applyTheme(currentTheme)
+      })
+
+      // Listen for system theme changes when in system mode
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if ((localStorage.getItem('theme') || 'system') === 'system') {
+          applyTheme('system')
+        }
       })
 
       // Mobile menu
