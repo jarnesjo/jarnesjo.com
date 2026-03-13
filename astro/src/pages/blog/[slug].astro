@@ -7,7 +7,7 @@ import {getCollection, render} from 'astro:content'
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({data}) => data.published !== false)
   return posts.map(post => ({
-    params: {slug: post.id},
+    params: {slug: post.data.slug},
     props: {post}
   }))
 }
@@ -62,7 +62,7 @@ const metaImage = image ? {...image, src: `${siteUrl}${image.src}`} : undefined
         <a
           class="text-gray-600 dark:text-gray-300 hover:text-gray-700 transition-colors"
           rel="noopener"
-          href={`http://twitter.com/share?text=Hi @jarnesjo&url=${encodeURIComponent(`${siteUrl}/blog/${post.id}`)}`}
+          href={`http://twitter.com/share?text=Hi @jarnesjo&url=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
         >
           With me
         </a>
@@ -70,7 +70,7 @@ const metaImage = image ? {...image, src: `${siteUrl}${image.src}`} : undefined
         <a
           class="text-gray-600 dark:text-gray-300 hover:text-gray-700"
           rel="noopener"
-          href={`https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteUrl}/blog/${post.id}`)}`}
+          href={`https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
         >
           With others
         </a>

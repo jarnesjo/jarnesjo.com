@@ -66,7 +66,7 @@ const projects = [
     <h2 class="text-3xl font-bold tracking-tight mb-4">Latest writings</h2>
     <div class="space-y-5">
       {posts.map(post => (
-        <Teaser title={post.data.title} slug={post.id} date={post.data.date} />
+        <Teaser title={post.data.title} slug={post.data.slug} date={post.data.date} />
       ))}
       <div class="font-semibold text-red-600 hover:text-red-700 dark:text-red-500">
         <a href="/blog">See all posts →</a>
