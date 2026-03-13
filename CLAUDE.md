@@ -4,6 +4,7 @@
 Personal blog/portfolio site for Nicklas Jarnesjo (jarnesjo.com). Built with Astro, MDX blog posts, and Tailwind CSS.
 
 ## Tech Stack
+
 - **Framework:** Astro 6 (static output)
 - **Styling:** Tailwind CSS 4 + @tailwindcss/typography, dark mode via class-based toggle
 - **Content:** MDX blog posts via @astrojs/mdx + Content Collections
@@ -12,18 +13,21 @@ Personal blog/portfolio site for Nicklas Jarnesjo (jarnesjo.com). Built with Ast
 - **Package manager:** npm
 
 ## Commands
+
 - `npm run dev` -- Dev server (port 4321)
 - `npm run build` -- Production build (static files to `dist/`)
 - `npm run preview` -- Preview production build locally
 
 ## Deployment
+
 - Static files committed in `dist/` -- no build step on server
 - Hosted on DigitalOcean via Laravel Forge
 - Forge pulls from `main` and serves `dist/` directly
 - SSL via Let's Encrypt (managed by Forge)
 
 ## Project Structure
-```
+
+```text
 src/
 ├── pages/              # Astro pages
 │   ├── index.astro     # Home (latest posts + projects)
@@ -52,6 +56,7 @@ public/
 ```
 
 ## Key Patterns
+
 - Fully static site -- no server-side rendering
 - Blog posts: frontmatter with title, date, description, slug, category, tags
 - `post.data.slug` is source of truth for URLs (not directory name)
@@ -60,5 +65,6 @@ public/
 - Dark mode: vanilla JS in layout, no React dependency
 
 ## Language
+
 - Code and commits in English
 - User communication in Swedish (user preference)
