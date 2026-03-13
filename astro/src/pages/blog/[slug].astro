@@ -24,7 +24,9 @@ const formatted = new Intl.DateTimeFormat('en-US', {
   day: 'numeric'
 }).format(date)
 
-const metaImage = image ? {...image, src: `${siteUrl}${image.src}`} : undefined
+const metaImage = image
+  ? {...image, src: `${siteUrl}${image.src}`}
+  : {src: `${siteUrl}/og/${post.data.slug}.png`, alt: title, width: 1200, height: 630}
 ---
 
 <Layout
