@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Default.astro'
+import Teaser from '../../components/Teaser.astro'
+import {getCollection} from 'astro:content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({data}) => data.published !== false)
+  const tags = [...new Set(posts.flatMap(p => p.data.tags || []))]
+
+  return tags.map(tag => ({
+    params: {slug: tag},
+    props: {
+      tag,
+      posts: posts
+        .filter(p => p.data.tags?.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    }
+  }))
+}
+
+const {tag, posts} = Astro.props
+---
+
+<Layout title={`All posts tagged with #${tag.toUpperCase()}`} description={`Here you found every posts and writing tagged with #${tag}`}>
+  <div class="text-center py-20">
+    <h1 class="text-5xl font-bold tracking-tight mb-4 uppercase">{tag}</h1>
+    <p class="text-gray-500">This is a tag page about #{tag}</p>
+  </div>
+  <div class="space-y-4">
+    {posts.map(post => (
+      <Teaser title={post.data.title} slug={post.data.slug} date={post.data.date} size="large" />
+    ))}
+  </div>
+</Layout>

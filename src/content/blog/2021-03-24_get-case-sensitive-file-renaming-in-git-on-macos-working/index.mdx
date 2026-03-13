@@ -1,0 +1,35 @@
+---
+title: 'Get case sensitive renaming in git on macOS working'
+description:
+  'Many times I have created a file and then find a case error in after adding it to Git. Now I find a working solution
+  without delete commit -> add commit'
+date: '2021-03-24'
+slug: 'get-case-sensitive-file-renaming-in-git-on-macos-working'
+category: code
+tags:
+  - tips
+  - note-to-myself
+---
+
+More then once I have changed name on a file and then deployed it and then discovered something broke the deploy. And in
+some of this cases was because git didn't pick up my renaming of some file but the references got changed.
+
+And this because macOS isn't case sensitive but Linux are and here is where the mismatch is happening.
+
+So my go to solution for this has been either copy the source of the file deleted it and made a commit and then added it
+back with correct name. Or change it some stupid name commit and the change again to my preferred name and commit again
+🙄
+
+So instead of doing (which isn't working)
+
+```bash
+mv defaultLayout.tsx DefaultLayout.tsx
+```
+
+I found out you can do it with `git mv`
+
+```bash
+git mv defaultLayout.tsx DefaultLayout.tsx
+```
+
+and git will pick up and everything works as expected 👌

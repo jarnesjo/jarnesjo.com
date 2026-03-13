@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Default.astro'
+import Teaser from '../../components/Teaser.astro'
+import {getCollection} from 'astro:content'
+
+const posts = (await getCollection('blog', ({data}) => data.published !== false))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+---
+
+<Layout title="Blog - Nicklas Jarnesjö" description="Here I will share my thoughts and cool bits of the internet I find. Code, dev, js and similar stuff.">
+  <h1 class="text-5xl tracking-tight font-bold py-12 md:py-16 js-darkmode-flicker" data-flicker-chars="1">Writings</h1>
+  <div class="prose md:prose-lg lg:prose-xl dark:prose-dark">
+    <p>
+      I started my first blog 2009 as my first PHP-project in WordPress. It was on my first
+      local hack in Kalmar, Sweden. Worked mainly with PHP but in recent years leaning more to
+      JS.
+    </p>
+    <p>So I'm going trying to share interesting thing I trip over and develop here. Enjoy!</p>
+  </div>
+  <div class="pt-12 space-y-8">
+    {posts.map(post => (
+      <Teaser title={post.data.title} slug={post.data.slug} date={post.data.date} category={post.data.category} size="large" />
+    ))}
+  </div>
+</Layout>

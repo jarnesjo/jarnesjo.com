@@ -1,0 +1,13 @@
+---
+interface Props {
+  src: string
+  type?: string
+  width?: number
+}
+
+const {src, type = 'video/mp4', width} = Astro.props
+---
+
+<video class="w-full" width={width}>
+  <source src={src} type={type} />
+</video>

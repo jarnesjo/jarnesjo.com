@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Default.astro'
+import Teaser from '../../components/Teaser.astro'
+import {getCollection} from 'astro:content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({data}) => data.published !== false)
+  const categories = [...new Set(posts.map(p => p.data.category))]
+
+  return categories.map(category => ({
+    params: {slug: category},
+    props: {
+      category,
+      posts: posts
+        .filter(p => p.data.category === category)
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    }
+  }))
+}
+
+const {category, posts} = Astro.props
+---
+
+<Layout title={`All posts in category ${category.toUpperCase()}`} description={`Here you found every posts and writing about ${category}`}>
+  <div class="text-center py-20">
+    <h1 class="text-5xl font-bold tracking-tight mb-4 uppercase">{category}</h1>
+    <p class="text-gray-500">This is a category page about {category}</p>
+  </div>
+  <div class="space-y-4">
+    {posts.map(post => (
+      <Teaser title={post.data.title} slug={post.data.slug} date={post.data.date} size="large" />
+    ))}
+  </div>
+</Layout>
