@@ -1,10 +1,9 @@
 # jarnesjo.com
 
-- Framework: Next.js
+- Framework: Astro
 - Content: MDX
-- Styling: Tailwind CSS
-- Deployment: Digital Ocean
-- Production build: Docker
+- Styling: Tailwind CSS v4
+- Deployment: Laravel Forge (static files)
 
 ## Dev
 
@@ -15,30 +14,36 @@ npm ci
 npm run dev
 ```
 
-Enjoy content on [localhost:3000](http://localhost:3000)
+## Build & deploy
 
-### Generate meta images
+Build locally and commit `dist/`:
 
 ```bash
-// Create meta image for single post
-node ./src/scripts/generate-meta-image-by-slug.mjs slug-to-your-post
-
-// Create meta images for all posts missing meta card
-node ./src/scripts/generate-meta-images.mjs
-
-// Create meta images for all posts
-node ./src/scripts/generate-meta-images.mjs --all
-
+npm run build
+git add dist/
+git commit -m "Build"
+git push
 ```
 
-## Production
+Forge pulls and serves `dist/` directly -- no Node.js needed on the server.
 
-### Deploying with Docker and github workflows to Digital Ocean
+## Nginx (add to Forge config)
 
-GitHub secrect
+Add inside the `server` block:
 
-**DEPLOY_HOST** - IP to Digital Ocean (DO) droplet  
-**DEPLOY_KEY** - SSH secret and the public key should be added to `.ssh/authorized_keys` on server  
-**DEPLOY_PORT** - SSH port (22)  
-**DEPLOY_USER** - User on droplet (for Forge: `forge`)  
-**USERNAME** - Your github name
+```nginx
+# Hashed assets (Astro _astro/) -- cache forever
+location /_astro/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+
+# Static files (images, sounds etc) -- cache 30 days
+location /static/ {
+    expires 30d;
+    add_header Cache-Control "public";
+}
+
+# Custom 404
+error_page 404 /404.html;
+```
