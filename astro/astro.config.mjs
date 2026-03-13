@@ -16,6 +16,10 @@ export default defineConfig({
     mdx(),
     sitemap()
   ],
+  redirects: {
+    '/rss': '/feed.xml',
+    '/feed': '/feed.xml'
+  },
   markdown: {
     syntaxHighlight: false,
     rehypePlugins: [rehypeCodeTitles, rehypePrism, rehypeAutolinkHeadings]
