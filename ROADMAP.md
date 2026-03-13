@@ -8,33 +8,30 @@
 - [x] SEO best practices (JSON-LD, article OG tags, og:locale, sitemap lastmod)
 - [x] Small improvements (lazy-load sound, prettierrc)
 
-## Epic: Migrate to Astro
+## Completed: Migrate to Astro
 
-Decision: Next.js Pages Router is in maintenance mode and overkill for a static content site.
-Astro is purpose-built for this, ships zero JS by default, and removes the need for Docker hosting.
+- [x] Scaffold Astro project
+- [x] Set up Tailwind CSS with existing config
+- [x] Create base layout (navigation, footer, dark mode toggle)
+- [x] Set up Content Collections for blog posts (move MDX files)
+- [x] Migrate pages: home, blog index, about, uses
+- [x] Migrate dynamic routes: blog/[slug], category/[slug], tag/[slug]
+- [x] Portfolio/projects section on home page
+- [x] SEO: meta tags, JSON-LD, sitemap, RSS feed
+- [x] OG image generation (satori + resvg)
+- [x] Set up hosting (DigitalOcean via Laravel Forge, static dist/)
+- [x] Verify visual parity with current site
+- [x] Remove Next.js files and Docker setup
+- [x] Update CI/CD workflows
 
-- [ ] Scaffold Astro project in `astro/` subdirectory
-- [ ] Set up Tailwind CSS with existing config
-- [ ] Create base layout (navigation, footer, dark mode toggle)
-- [ ] Set up Content Collections for blog posts (move MDX files)
-- [ ] Migrate pages: home, blog index, about, uses
-- [ ] Migrate dynamic routes: blog/[slug], category/[slug], tag/[slug]
-- [ ] Portfolio/projects section on home page
-- [ ] SEO: meta tags, JSON-LD, sitemap, RSS feed
-- [ ] OG image generation (replace Puppeteer with satori/vercel-og)
-- [ ] Set up hosting (Cloudflare Pages / Vercel) with auto-deploy
-- [ ] Verify visual parity with current site
-- [ ] Remove Next.js files and Docker setup
-- [ ] Update CI/CD workflows
+## Completed: Restructure blog posts
 
-## Epic: Restructure blog posts
+- [x] Add `slug` to frontmatter — slug becomes the source of truth instead of directory name
+- [x] Rename post directories with date prefix (`2024-03-12_short-name/`)
+- [x] Update Content Collection config to use frontmatter slug
 
-- [ ] Add `slug` to frontmatter — slug becomes the source of truth instead of directory name
-- [ ] Rename post directories with date prefix (`2024-03-12_short-name/`)
-- [ ] Update Content Collection config to use frontmatter slug
+## Completed: Update site content
 
-## Epic: Update site content
-
-- [ ] Remove "Hotad skog" from projects
-- [ ] Update screenshot for "Snittränta"
-- [ ] Add "Odlingsguiden" as a new project
+- [x] Remove "Hotad skog" from projects
+- [x] Update screenshot for "Snittränta"
+- [x] Add "Odlingsguiden" as a new project
