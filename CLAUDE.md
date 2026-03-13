@@ -1,67 +1,63 @@
 # CLAUDE.md - Project Guide
 
 ## Project Overview
-Personal blog/portfolio site for Nicklas Jarnesjö (jarnesjo.com). Built with Next.js (Pages Router), MDX blog posts, Tailwind CSS, and TypeScript.
+Personal blog/portfolio site for Nicklas Jarnesjo (jarnesjo.com). Built with Astro, MDX blog posts, and Tailwind CSS.
 
 ## Tech Stack
-- **Framework:** Next.js 14 (Pages Router) with `output: 'standalone'` for Docker
-- **Styling:** Tailwind CSS 3 + @tailwindcss/typography, dark mode via `next-themes` (class-based)
-- **Content:** MDX blog posts via `next-mdx-remote` + `gray-matter`
-- **Language:** TypeScript (strict: false)
-- **Node:** v20 (.nvmrc)
+- **Framework:** Astro 6 (static output)
+- **Styling:** Tailwind CSS 4 + @tailwindcss/typography, dark mode via class-based toggle
+- **Content:** MDX blog posts via @astrojs/mdx + Content Collections
+- **Language:** TypeScript
+- **Node:** v22+ (.nvmrc)
 - **Package manager:** npm
 
 ## Commands
-- `npm run dev` — Dev server with hot reload on posts (uses next-remote-watch)
-- `npm run dev:next` — Standard Next.js dev server
-- `npm run build` — Production build (+ postbuild: RSS feed + sitemap generation)
-- `npm start` — Production server
-- `npm test` — Run test suite (Vitest)
-
-## CI/CD (GitHub Actions)
-- **PR Test build** (`.github/workflows/pr-test-build.yml`) — Runs on PRs: `npm test` then Docker build
-- **Build and Deploy** (`.github/workflows/build-and-deploy.yml`) — Push to main: builds Docker image, publishes to GitHub Packages, deploys to DigitalOcean via SSH
+- `npm run dev` -- Dev server (port 4321)
+- `npm run build` -- Production build (static files to `dist/`)
+- `npm run preview` -- Preview production build locally
 
 ## Deployment
-- Docker multi-stage build (`Dockerfile`) → standalone Next.js output
-- Hosted on DigitalOcean, deployed via `docker pull` + `docker run` on port 3000
-- Google Analytics ID passed as build arg (`NEXT_PUBLIC_GOOGLE_ANALYTICS_ID`)
+- Static files committed in `dist/` -- no build step on server
+- Hosted on DigitalOcean via Laravel Forge
+- Forge pulls from `main` and serves `dist/` directly
+- SSL via Let's Encrypt (managed by Forge)
 
 ## Project Structure
 ```
 src/
-├── pages/              # Next.js Pages Router
-│   ├── index.tsx       # Home (latest posts + projects)
+├── pages/              # Astro pages
+│   ├── index.astro     # Home (latest posts + projects)
 │   ├── blog/           # Blog index + [slug] dynamic route
 │   ├── category/[slug] # Category archive
 │   ├── tag/[slug]      # Tag archive
-│   ├── about.tsx       # About page
-│   ├── uses.tsx        # Equipment/tools page
-│   └── 404.tsx         # Custom 404
-├── client/components/  # React components
-│   ├── layouts/DefaultLayout.tsx  # Main layout (nav, footer, meta)
-│   ├── Teaser.tsx      # Post preview card
-│   ├── MdxComponents.tsx # Custom MDX overrides (Image, Video, links)
-│   └── ...
-├── lib/
-│   ├── mdx.ts          # Core MDX processing (getPostsSortedByDate, getPostBySlug, etc.)
-│   └── googleAnalytics.ts
-├── posts/              # Blog posts as {slug}/index.mdx
-├── types/              # TypeScript types (FrontMatterType)
-├── css/                # Tailwind CSS
-└── scripts/            # Build scripts (RSS, sitemap, OG images)
-    └── _lib/           # Shared script utilities
+│   ├── about.astro     # About page
+│   ├── uses.astro      # Equipment/tools page
+│   ├── 404.astro       # Custom 404
+│   ├── feed.xml.ts     # RSS feed endpoint
+│   └── og/[slug].png.ts # OG image generation (satori)
+├── components/         # Astro components
+│   ├── Teaser.astro    # Post preview card
+│   └── mdx/            # MDX overrides (Image, Video)
+├── content/
+│   ├── blog/           # Blog posts as date-prefixed dirs (2024-05-08_slug/)
+│   └── content.config.ts # Content Collection schema
+├── layouts/
+│   └── Default.astro   # Main layout (nav, footer, dark mode, meta)
+├── fonts/              # Inter-Bold.ttf, og-pattern.png (for OG images)
+└── styles/
+    └── global.css      # Tailwind CSS
+dist/                   # Built static files (committed to repo)
 public/
-├── static/             # Images, favicons, sounds, post-content
-├── feed.xml            # Generated RSS
-└── sitemap.xml         # Generated sitemap
+└── static/             # Images, favicons, sounds
 ```
 
 ## Key Patterns
-- All pages use `getStaticProps`/`getStaticPaths` — fully static site, no API routes
-- Blog posts: frontmatter with title, date, description, category, tags, image
-- Path aliases: `@/components/*`, `@/lib/*`, `@/css/*`, `@/types/*`, `@/public/*`
-- Redirects: `/rss` and `/feed` → `/feed.xml`
+- Fully static site -- no server-side rendering
+- Blog posts: frontmatter with title, date, description, slug, category, tags
+- `post.data.slug` is source of truth for URLs (not directory name)
+- OG images generated via satori + @resvg/resvg-js at build time
+- Redirects: `/rss` and `/feed` -> `/feed.xml` (via Astro redirects)
+- Dark mode: vanilla JS in layout, no React dependency
 
 ## Language
 - Code and commits in English
