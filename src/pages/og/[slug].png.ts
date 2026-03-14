@@ -10,7 +10,7 @@ const pattern = readFileSync(join(process.cwd(), 'src/fonts/og-pattern.png'))
 const patternBase64 = `data:image/png;base64,${pattern.toString('base64')}`
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({data}) => data.published !== false)
+  const posts = await getCollection('writing', ({data}) => data.published !== false)
   return posts.map(post => ({
     params: {slug: post.data.slug},
     props: {title: post.data.title}

@@ -3,7 +3,7 @@ import Layout from '../layouts/Default.astro'
 import Teaser from '../components/Teaser.astro'
 import {getCollection} from 'astro:content'
 
-const posts = (await getCollection('blog', ({data}) => data.published !== false))
+const posts = (await getCollection('writing', ({data}) => data.published !== false))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5)
 
@@ -53,7 +53,7 @@ const projects = [
 ]
 ---
 
-<Layout title="Nicklas Jarnesjö - web, dev and business">
+<Layout title="Nicklas Jarnesjö - code, side projects and things I learn">
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -85,7 +85,7 @@ const projects = [
         <Teaser title={post.data.title} slug={post.data.slug} date={post.data.date} />
       ))}
       <div class="font-semibold text-red-600 hover:text-red-700 dark:text-red-500">
-        <a href="/blog">See all posts →</a>
+        <a href="/writing">See all posts →</a>
       </div>
     </div>
   </div>

@@ -5,7 +5,7 @@ import {getCollection, render} from 'astro:content'
 
 export async function getStaticPaths() {
   const isDev = import.meta.env.DEV
-  const posts = await getCollection('blog', ({data}) => isDev || data.published !== false)
+  const posts = await getCollection('writing', ({data}) => isDev || data.published !== false)
   return posts.map(post => ({
     params: {slug: post.data.slug},
     props: {post}
@@ -64,7 +64,7 @@ const metaImage = image
         <a
           class="text-gray-600 dark:text-gray-300 hover:text-gray-700 transition-colors"
           rel="noopener"
-          href={`https://x.com/intent/tweet?text=Hi @jarnesjo&url=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
+          href={`https://x.com/intent/tweet?text=Hi @jarnesjo&url=${encodeURIComponent(`${siteUrl}/writing/${post.data.slug}`)}`}
         >
           With me
         </a>
@@ -72,7 +72,7 @@ const metaImage = image
         <a
           class="text-gray-600 dark:text-gray-300 hover:text-gray-700"
           rel="noopener"
-          href={`https://x.com/search?q=${encodeURIComponent(`${siteUrl}/blog/${post.data.slug}`)}`}
+          href={`https://x.com/search?q=${encodeURIComponent(`${siteUrl}/writing/${post.data.slug}`)}`}
         >
           With others
         </a>

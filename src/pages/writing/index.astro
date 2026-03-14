@@ -3,11 +3,11 @@ import Layout from '../../layouts/Default.astro'
 import Teaser from '../../components/Teaser.astro'
 import {getCollection} from 'astro:content'
 
-const posts = (await getCollection('blog', ({data}) => data.published !== false))
+const posts = (await getCollection('writing', ({data}) => data.published !== false))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
-<Layout title="Blog - Nicklas Jarnesjö" description="Here I will share my thoughts and cool bits of the internet I find. Code, dev, js and similar stuff.">
+<Layout title="Writing - Nicklas Jarnesjö" description="Writing about web development, side projects and things I learn along the way">
   <h1 class="text-5xl tracking-tight font-bold py-12 md:py-16 js-darkmode-flicker" data-flicker-chars="1">Writings</h1>
   <div class="prose md:prose-lg lg:prose-xl dark:prose-dark">
     <p>

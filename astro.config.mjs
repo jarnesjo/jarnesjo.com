@@ -18,7 +18,8 @@ export default defineConfig({
   ],
   redirects: {
     '/rss': '/feed.xml',
-    '/feed': '/feed.xml'
+    '/feed': '/feed.xml',
+    '/blog': '/writing'
   },
   markdown: {
     syntaxHighlight: false,

@@ -14,12 +14,12 @@ interface Props {
 
 const defaultMeta = {
   title: 'Nicklas Jarnesjö',
-  description: 'Web developer who loves building and learning new things',
+  description: 'Writing about web development, side projects and things I learn along the way',
   siteUrl: 'https://jarnesjo.com',
   twitterHandle: '@jarnesjo',
   image: {
     src: 'https://jarnesjo.com/static/images/default-sharing.png',
-    alt: 'jarnesjo.com written in red on white background',
+    alt: 'jarnesjo.com logo on dark background',
     width: 1200,
     height: 630
   }
@@ -34,7 +34,7 @@ const url = `${defaultMeta.siteUrl}${Astro.url.pathname}`
 
 const menuItems = [
   {title: 'Home', href: '/'},
-  {title: 'Blog', href: '/blog'},
+  {title: 'Writing', href: '/writing'},
   {title: 'About', href: '/about'}
 ]
 ---

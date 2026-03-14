@@ -4,7 +4,7 @@ import {join, resolve} from 'node:path'
 
 const ROOT = resolve(import.meta.dirname, '..')
 const DIST = join(ROOT, 'dist')
-const BLOG_DIR = join(ROOT, 'src', 'content', 'blog')
+const BLOG_DIR = join(ROOT, 'src', 'content', 'writing')
 
 async function fileExists(filePath) {
   try {
@@ -40,7 +40,7 @@ describe('Build routes', async () => {
   const slugs = await getPublishedSlugs()
 
   describe('Static pages', () => {
-    it.each(['/', '/blog/', '/about/', '/uses/'])('%s', async (route) => {
+    it.each(['/', '/writing/', '/about/', '/uses/'])('%s', async (route) => {
       expect(await routeExists(route)).toBe(true)
     })
 
@@ -50,8 +50,8 @@ describe('Build routes', async () => {
   })
 
   describe('Blog posts', () => {
-    it.each(slugs)('/blog/%s/', async (slug) => {
-      expect(await routeExists(`/blog/${slug}/`)).toBe(true)
+    it.each(slugs)('/writing/%s/', async (slug) => {
+      expect(await routeExists(`/writing/${slug}/`)).toBe(true)
     })
   })
 
@@ -96,7 +96,7 @@ describe('Sitemap', () => {
     const content = await readFile(path, 'utf-8')
     const slugs = await getPublishedSlugs()
     for (const slug of slugs) {
-      expect(content, `sitemap should contain ${slug}`).toContain(`/blog/${slug}`)
+      expect(content, `sitemap should contain ${slug}`).toContain(`/writing/${slug}`)
     }
   })
 })
