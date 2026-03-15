@@ -64,6 +64,11 @@ public/
 - Redirects: `/rss` and `/feed` -> `/feed.xml`, `/blog/*` -> `/writing/*` (via Astro redirects)
 - Dark mode: vanilla JS in layout, no React dependency
 
+## Releases
+
+- `npm run release:patch` / `release:minor` / `release:major`
+- Use semver correctly: patch for fixes, minor for new posts/features, major for breaking changes
+
 ## Language
 
 - Code and commits in English
