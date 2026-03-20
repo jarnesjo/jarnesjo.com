@@ -9,6 +9,13 @@ const posts = (await getCollection('writing', ({data}) => data.published !== fal
 
 const projects = [
   {
+    title: 'Puls',
+    description: 'Cookieless, lightweight analytics in a single PHP file. No frameworks, no dependencies, no cookie banners. SQLite, multi-site, bot detection. Open source.',
+    image: {src: '/static/images/puls-screenshot.png', alt: 'Screenshot of Puls analytics dashboard', width: 2230, height: 2324},
+    url: 'https://github.com/webready-se/puls',
+    tech: ['PHP', 'SQLite', 'JavaScript']
+  },
+  {
     title: 'FeedBackPack',
     description: 'SaaS-app for collecting feedback with screenshot from your customers. Specially good when you have static-sites with no backend such as JAMStack.',
     image: {src: '/static/images/feedbackpack-screenshot.png', alt: 'Screenshot from frontpage of feedbackpack.app', width: 2368, height: 2206},
