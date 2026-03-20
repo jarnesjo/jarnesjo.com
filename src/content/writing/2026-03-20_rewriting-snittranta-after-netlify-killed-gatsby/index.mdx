@@ -9,15 +9,16 @@ tags:
   - astro
   - gatsby
   - react
-published: false
+published: true
 author: Nicklas Jarnesjö
 ---
 
-I have a side project called [Snittränta.se](https://snittranta.se) that tracks average mortgage interest rates from
-Swedish banks. It started because we were negotiating our mortgage and I felt like we were at a disadvantage as
-customers. Then I found out that banks in Sweden are required by law to publish their average interest rates. The data
-is out there but it's not exactly easy to find. So I built a site to collect it all in one place and make it easier for
-people going into negotiations with their bank.
+I have a side project called
+[Snittränta.se](https://snittränta.se?utm_source=jarnesjo.com&utm_campaign=netlify-killed-gatsby) that tracks average
+mortgage interest rates from Swedish banks. It started because we were negotiating our mortgage and I felt like we were
+at a disadvantage as customers. Then I found out that banks in Sweden are required by law to publish their average
+interest rates. The data is out there but it's not exactly easy to find. So I built a site to collect it all in one
+place and make it easier for people going into negotiations with their bank.
 
 That was 2020. It started as a Gatsby site and it's been one of my favorite things to build. 18 banks, monthly data
 going back years, trend charts, sortable tables, search. All generated as static HTML from JSON files.
@@ -61,8 +62,8 @@ with `createPages` and template files. It worked but it was a lot of ceremony fo
 
 ## Why Astro
 
-I had just [moved this blog from Next.js to Astro](/writing/moving-from-nextjs-to-astro) so I already knew the framework.
-And honestly it felt like a natural fit for Snittränta too.
+I had just [moved this blog from Next.js to Astro](/writing/moving-from-nextjs-to-astro) so I already knew the
+framework. And honestly it felt like a natural fit for Snittränta too.
 
 The biggest win is how dynamic pages work. In Astro you just export a `getStaticPaths` function right in the page file.
 One catch-all route generates all 175 pages -- bank pages, monthly archives, yearly overviews. No separate config file,
@@ -95,9 +96,9 @@ When you're young and have nothing but time you can spend weekends rewriting a s
 life anymore. I have kids, a farm, two companies to run. Finding out your framework is dead and facing a full rewrite --
 that's the kind of thing that kills side projects. You look at the scope and you just... when and how?
 
-I think it saved the project. I could focus on learning Astro, understanding the
-architecture, and making decisions about how the site should work while it handled the grunt work. The project got to
-live on instead of slowly dying on an abandoned framework.
+I think it saved the project. I could focus on learning Astro, understanding the architecture, and making decisions
+about how the site should work while it handled the grunt work. The project got to live on instead of slowly dying on an
+abandoned framework.
 
 ## If your framework dies
 
@@ -105,4 +106,5 @@ It sucks. There's no way around it. But if you're sitting on a Gatsby site wonde
 landing spot. Especially if your site is content or data driven. The static generation is great, Content Collections
 replace GraphQL nicely, and you keep React where you need it.
 
-The site is at [snittränta.se](https://snittränta.se) if you want to see the end result.
+The site is at [snittränta.se](https://snittränta.se?utm_source=jarnesjo.com&utm_campaign=netlify-killed-gatsby) if you
+want to see the end result.
