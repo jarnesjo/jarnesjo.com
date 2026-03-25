@@ -1,0 +1,49 @@
+---
+title: 'Stop running artisan on stale code'
+description:
+  'A small shell function that warns you when your current directory no longer matches the active deploy. Saved me from debugging phantom issues after a Forge deploy.'
+date: '2026-03-25'
+slug: 'stop-running-artisan-on-stale-code'
+category: code
+tags:
+  - laravel
+  - tips
+  - forge
+  - note-to-myself
+published: true
+author: Nicklas Jarnesjo
+---
+
+I had written an import script for one of my sites on Forge. Running it locally, tweaking, deploying, running it in production - over and over. It just wouldn't pick up my changes. I was rewriting the script, adding debug output, questioning my sanity.
+
+The tricky part was that I was working against two environments - local dev and production. They could behave differently for all kinds of legitimate reasons. So when prod didn't match what I saw locally, I kept blaming the code instead of stepping back and asking why.
+
+Most of my sites use regular deploys where none of this matters. You SSH in, deploy, and your shell is already in the right place. But this site had zero-downtime deployment enabled. Each deploy creates a new release directory and moves the `current` symlink. My terminal was still sitting in the old release. Every artisan command I ran was hitting stale code.
+
+Once I realized what was going on, I felt pretty stupid. But also - this is exactly the kind of thing muscle memory hides from you. You've been doing it the same way for years and it's never been a problem. Until it is.
+
+## The fix
+
+I've always had `alias art="php artisan"` on my servers. So I replaced that alias with a function that does the same thing but catches you when you're in the wrong place:
+
+```bash
+art() {
+    local site_root=$(pwd -P | sed 's|/releases/.*||; s|/current.*||')
+    if [ -L "$site_root/current" ]; then
+        local real=$(readlink -f "$site_root/current")
+        if [ "$(pwd -P)" != "$real" ]; then
+            echo "Deploy has happened - run: cd $site_root/current"
+            return 1
+        fi
+    fi
+    php artisan "$@"
+}
+```
+
+It checks if the `current` symlink still points to the directory you're in. If a deploy has happened since you `cd`'d in, it warns you instead of running the command against old code.
+
+Drop it in your `.bashrc` or `.zshrc` on the server and you're good. Since I was already using `art` as an alias, nothing changed about how I work. Same command, same muscle memory - it just protects me now.
+
+The alternative is remembering to `cd` out and back into `current` after every deploy. That's never going to happen. I'll forget, and three months from now I'll be staring at logs again wondering why nothing makes sense. This way the safety net is built into the habit I already have.
+
+Hope it saves someone else the time I lost banging my head against the wall.
