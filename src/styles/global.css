@@ -143,6 +143,10 @@
   transition: all 200ms;
 }
 
+.prose pre code {
+  @apply bg-transparent border-none rounded-none p-0;
+}
+
 .prose a {
   @apply text-gray-700 font-bold relative;
   transition: color 200ms;
