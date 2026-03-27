@@ -11,7 +11,7 @@ const projects = [
   {
     title: 'Puls',
     description: 'Cookieless, lightweight analytics in a single PHP file. No frameworks, no dependencies, no cookie banners. SQLite, multi-site, bot detection. Open source.',
-    image: {src: '/static/images/puls-screenshot.png', alt: 'Screenshot of Puls analytics dashboard', width: 2230, height: 2324},
+    image: {src: '/static/images/puls-screenshot.png', alt: 'Screenshot of Puls analytics dashboard', width: 1400, height: 1800},
     url: 'https://github.com/webready-se/puls',
     tech: ['PHP', 'SQLite', 'JavaScript']
   },
@@ -25,21 +25,21 @@ const projects = [
   {
     title: 'PR LOG',
     description: 'Everything you need to keep track of your PRs (personal records) in training. Optimized and build for where to use it - your mobile.',
-    image: {src: '/static/images/prlog-screenshot.png', alt: 'Screenshot from frontpage of prlog.app', width: 1400, height: 1200},
+    image: {src: '/static/images/prlog-screenshot.png', alt: 'Screenshot from frontpage of prlog.app', width: 1400, height: 1800},
     url: 'https://prlog.app?utm_source=jarnesjo.com&utm_campaign=portfolio&utm_medium=referral',
     tech: ['Next.js', 'NextAuth.js', 'MySQL', 'Prisma', 'Typescript', 'Tailwind CSS', 'Docker']
   },
   {
     title: 'Snittränta',
     description: 'A comparison site for average interest rates between Swedish banks.',
-    image: {src: '/static/images/snittranta-screenshot.png', alt: 'Screenshot of frontpage of snittränta.se', width: 1757, height: 1404},
+    image: {src: '/static/images/snittranta-screenshot.png', alt: 'Screenshot of frontpage of snittränta.se', width: 1400, height: 1800},
     url: 'https://snittränta.se?utm_source=jarnesjo.com&utm_campaign=portfolio&utm_medium=referral',
     tech: ['Astro', 'Tailwind CSS', 'Puppeteer']
   },
   {
     title: 'FeedBackPack',
     description: 'SaaS-app for collecting feedback with screenshot from your customers. Specially good when you have static-sites with no backend such as JAMStack.',
-    image: {src: '/static/images/feedbackpack-screenshot.png', alt: 'Screenshot from frontpage of feedbackpack.app', width: 2368, height: 2206},
+    image: {src: '/static/images/feedbackpack-screenshot.png', alt: 'Screenshot from frontpage of feedbackpack.app', width: 1400, height: 1800},
     url: 'https://feedbackpack.app?utm_source=jarnesjo.com&utm_campaign=portfolio&utm_medium=referral',
     tech: ['Next.js', 'Docker', 'Typescript', 'Tailwind CSS']
   }
@@ -99,7 +99,7 @@ const projects = [
             height={project.image.height}
             alt={project.image.alt}
             loading="lazy"
-            class="rounded-md"
+            class="rounded-md ring-1 ring-gray-200 dark:ring-gray-700"
           />
         </div>
         <div class="mt-6 md:mt-0 md:col-span-2">
