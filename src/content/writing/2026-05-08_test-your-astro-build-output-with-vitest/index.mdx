@@ -1,0 +1,132 @@
+---
+title: 'Test your Astro build output with Vitest'
+description: 'A simple test suite that checks your static site build for missing pages, broken OG images, and empty feeds before you release.'
+date: '2026-05-08'
+slug: 'test-your-astro-build-output-with-vitest'
+category: code
+tags:
+  - astro
+  - testing
+  - tips
+published: false
+author: Nicklas Jarnesjö
+---
+
+I've had a few times where I published a new post and something was off. A missing OG image, a route that didn't generate, a sitemap that was out of date. Nothing broke visually but the kind of stuff you notice when you share a link and the preview looks wrong.
+
+So I wrote a small Vitest suite that checks the build output before every release. If something is missing, the release stops.
+
+## The setup
+
+I have a `preversion` hook in package.json that builds the site and runs the tests:
+
+```json
+{
+  "scripts": {
+    "preversion": "npm run build && npm run test:routes"
+  }
+}
+```
+
+When I run `npm run release:minor`, npm automatically runs `preversion` first. If the build or tests fail, the version bump never happens. No broken release.
+
+## Getting the slugs
+
+The test file reads the MDX source files directly to figure out which posts are published:
+
+```ts
+async function getPublishedSlugs() {
+  const dirs = await readdir(BLOG_DIR)
+  const slugs = []
+
+  for (const dir of dirs) {
+    const content = await readFile(join(BLOG_DIR, dir, 'index.mdx'), 'utf-8')
+    if (content.includes('published: false')) continue
+    const match = content.match(/slug:\s*['"](.+?)['"]/)
+    if (match) slugs.push(match[1])
+  }
+
+  return slugs
+}
+```
+
+It skips drafts and extracts the slug from frontmatter. This gives us the source of truth for what should exist in the build output.
+
+## Checking routes
+
+Every published post should have an HTML page and an OG image:
+
+```ts
+describe('Blog posts', () => {
+  it.each(slugs)('/writing/%s/', async (slug) => {
+    expect(await routeExists(`/writing/${slug}/`)).toBe(true)
+  })
+})
+
+describe('OG images', () => {
+  it.each(slugs)('/og/%s.png', async (slug) => {
+    const path = join(DIST, 'og', `${slug}.png`)
+    expect(await fileExists(path)).toBe(true)
+  })
+
+  it('OG images are valid PNGs (> 1 KB)', async () => {
+    for (const slug of slugs) {
+      const path = join(DIST, 'og', `${slug}.png`)
+      const stat = await import('node:fs/promises').then(fs => fs.stat(path))
+      expect(stat.size, `${slug}.png should be > 1 KB`).toBeGreaterThan(1024)
+    }
+  })
+})
+```
+
+`it.each` creates one test per slug. If a single post is missing, you see exactly which one failed instead of a generic "routes test failed".
+
+The OG image check also verifies file size. A file that exists but is 0 bytes isn't a valid PNG.
+
+## Feed and sitemap
+
+The last two tests make sure the RSS feed and sitemap are generated correctly:
+
+```ts
+describe('Feed', () => {
+  it('feed.xml exists and contains posts', async () => {
+    const content = await readFile(join(DIST, 'feed.xml'), 'utf-8')
+    expect(content).toContain('<?xml')
+    expect(content).toContain('<item>')
+  })
+})
+
+describe('Sitemap', () => {
+  it('sitemap-0.xml contains blog posts', async () => {
+    const content = await readFile(join(DIST, 'sitemap-0.xml'), 'utf-8')
+    const slugs = await getPublishedSlugs()
+    for (const slug of slugs) {
+      expect(content).toContain(`/writing/${slug}`)
+    }
+  })
+})
+```
+
+The sitemap test checks that every published slug appears in the sitemap. If you forget to add a page to your Astro config or break the content collection, this catches it.
+
+## Static pages too
+
+Don't forget the basics:
+
+```ts
+describe('Static pages', () => {
+  it.each(['/', '/writing/', '/about/', '/uses/'])('%s', async (route) => {
+    expect(await routeExists(route)).toBe(true)
+  })
+
+  it('/404.html', async () => {
+    expect(await fileExists(join(DIST, '404.html'))).toBe(true)
+  })
+})
+```
+
+## Why this works for me
+
+The whole test file is about 100 lines. It doesn't test rendering or styles - just that the right files exist with the right content. That's the stuff that's easy to miss and annoying to fix after a deploy.
+
+The key part is tying it to `preversion`. You don't have to remember to run the tests. They run automatically before every release. If something is off, you find out before it goes live.

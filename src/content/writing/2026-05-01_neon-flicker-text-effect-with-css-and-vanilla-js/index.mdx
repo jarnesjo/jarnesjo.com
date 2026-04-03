@@ -1,0 +1,161 @@
+---
+title: 'Neon flicker text effect with CSS and vanilla JS'
+description:
+  'A dark mode neon sign effect where random characters flicker and tip over. Pure CSS animations and a few lines of
+  JavaScript.'
+date: '2026-05-01'
+slug: 'neon-flicker-text-effect-with-css-and-vanilla-js'
+category: code
+tags:
+  - css
+  - js
+  - tips
+published: false
+author: Nicklas Jarnesjö
+---
+
+Let's be honest - when you're a developer interested in frontend you want to show off a little. Your personal site is the one place where no one tells you to keep it simple. So I added a neon sign effect to the headings on this site. Random characters flicker and tilt like a broken neon tube.
+
+It only runs in dark mode. In light mode, headings are just headings. It's a small thing but it adds a lot of character and a bit of horror movie vibe that wasn't expected when going into dark mode.
+
+## The glow
+
+The neon look comes from stacking multiple `text-shadow` layers with increasing blur radius. All in the same red tone.
+
+```css
+.dark h1 {
+  color: #f4f4f5;
+  text-shadow:
+    0 0 0.033em #f4f4f5,
+    0 0 0.08em #f4f4f5,
+    0 0 0.1em #b91c1c,
+    0 0 0.2em #b91c1c,
+    0 0 0.3em #b91c1c,
+    0 0 1em #b91c1c,
+    0 0 1.5em #b91c1c;
+}
+```
+
+The first two layers are white-ish and tight. They give the text a bright core. The rest are red with increasing spread.
+That's what creates the glow.
+
+## The flicker
+
+Two CSS keyframe animations handle the effect. `flicker` controls the opacity and `tipping` makes the character
+physically droop - like a letter that's about to fall off a sign.
+
+```css
+@keyframes flicker {
+  0%,
+  19.999%,
+  22%,
+  62.999%,
+  64%,
+  64.999%,
+  72%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  21.999%,
+  63%,
+  63.999%,
+  65%,
+  71.999% {
+    opacity: 0.33;
+  }
+}
+
+@keyframes tipping {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  85% {
+    transform: translate(0, 1px) rotate(5deg);
+  }
+  100% {
+    transform: translate(2px, 5px) rotate(15deg);
+  }
+}
+```
+
+The flicker keyframes look weird with all those decimal percentages. That's intentional - it creates sharp on/off
+transitions instead of smooth fades. Real neon tubes don't fade, they snap.
+
+Even children get staggered timing so they don't all blink in sync:
+
+```css
+.dark .flicker {
+  animation: flicker 3s linear 0.6s forwards alternate infinite;
+}
+
+.dark .flicker:nth-child(even) {
+  animation-delay: 0.3s;
+  animation-direction: alternate-reverse;
+}
+
+.dark .tipping {
+  display: inline-block;
+  animation: tipping 0.5s ease-in 0.5s forwards;
+}
+```
+
+## Picking random characters
+
+The JavaScript part runs on page load. It finds elements with a `js-darkmode-flicker` class and wraps random characters
+in `<span>` tags so the CSS can target them.
+
+```ts
+const animatedElements = document.querySelectorAll('.js-darkmode-flicker')
+
+animatedElements.forEach(el => {
+  const text = el.textContent?.trim() || ''
+  const count = parseInt(el.getAttribute('data-flicker-chars') || '1')
+  const chars = text.split('')
+  const excluded = [' ', '-', ',', ';', ':', '(', ')', "'", '.']
+  const usedIndexes: number[] = []
+  let i = 0
+
+  while (i < count) {
+    const idx = Math.floor(Math.random() * chars.length)
+    if (!usedIndexes.includes(idx) && !excluded.includes(chars[idx])) {
+      chars[idx] = `<span class="flicker"><span class="tipping">${chars[idx]}</span></span>`
+      usedIndexes.push(idx)
+      i++
+    }
+  }
+
+  el.innerHTML = chars
+    .join('')
+    .split(/((?!\sclass)\s)/gm)
+    .map(word => (word === ' ' ? word : `<span class="word-no-wrap">${word}</span>`))
+    .join('')
+})
+```
+
+A few things to note:
+
+- `data-flicker-chars` controls how many characters flicker. I use 1-2 per heading.
+- Spaces, dashes and punctuation are excluded so you don't get invisible flickering.
+- Each word gets wrapped in a no-wrap span so the text doesn't break mid-word when characters are wrapped in extra
+  spans.
+- Every page load picks different characters. Refresh and it changes.
+
+## Respect reduced motion
+
+If someone has `prefers-reduced-motion` enabled, all animations are disabled:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
+```
+
+## That's it
+
+No libraries. Just CSS keyframes and a small script that wraps random characters. It makes dark mode feel like a neon
+sign in a bar window - a little broken, a little alive, a little horror. Switch to dark mode on this site and you'll see
+it.
