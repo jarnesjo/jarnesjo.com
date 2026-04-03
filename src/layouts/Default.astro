@@ -104,6 +104,11 @@ const menuItems = [
       })} />
     )}
 
+    <!-- Konami Code easter egg -->
+    <script>
+      import '../scripts/konami-c64'
+    </script>
+
     <!-- Dark mode: prevent flash -->
     <script is:inline>
       const theme = localStorage.getItem('theme') || 'system'
