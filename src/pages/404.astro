@@ -3,12 +3,17 @@ import Layout from '../layouts/Default.astro'
 ---
 
 <Layout title="404 - Nicklas Jarnesjö">
-  <h1 class="text-5xl tracking-tight font-bold py-12 md:py-16 text-center js-darkmode-flicker" data-flicker-chars="2">404</h1>
-  <div class="text-center">
-    <p>Page not found...</p>
-    <div class="mt-6 space-x-4 text-red-600 dark:text-red-500 font-semibold">
-      <a href="/">Home</a>
-      <a href="/writing">Writing</a>
+  <div class="py-16 md:py-24 text-center">
+    <h1 class="text-7xl md:text-9xl tracking-tight font-bold js-darkmode-flicker" data-flicker-chars="1">404</h1>
+    <p class="text-xl md:text-2xl text-gray-500 dark:text-gray-400 mt-6">
+      Nothing here. Maybe there was, maybe there wasn't.
+    </p>
+    <p class="text-gray-400 dark:text-gray-500 mt-2">
+      Either way, this page doesn't exist.
+    </p>
+    <div class="mt-10 space-x-6 text-lg">
+      <a href="/" class="text-red-600 dark:text-red-500 font-semibold hover:underline">Home</a>
+      <a href="/writing" class="text-red-600 dark:text-red-500 font-semibold hover:underline">Writing</a>
     </div>
   </div>
 </Layout>

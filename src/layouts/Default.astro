@@ -116,7 +116,7 @@ const menuItems = [
       <a class="sr-only" href="#main">skip to main content</a>
       <header class="flex justify-between items-center text-gray-700 dark:text-gray-200 transition-colors duration-200">
         <div>
-          <a class="flex items-center" href="/">
+          <a class="flex items-center header-identity" href="/">
             <div class="rounded-full ring-1 ring-gray-300 dark:ring-gray-100 overflow-hidden w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
               <img
                 src="/static/images/avatar.jpg"
@@ -135,7 +135,7 @@ const menuItems = [
           <ul class="space-x-10 font-semibold items-center hidden md:flex">
             {menuItems.map(({title, href}) => (
               <li>
-                <a class="hover:text-gray-900 dark:hover:text-white neon" href={href}>{title}</a>
+                <a class="hover:text-gray-900 dark:hover:text-white neon nav-link" href={href}>{title}</a>
               </li>
             ))}
           </ul>
@@ -193,11 +193,11 @@ const menuItems = [
 
       <footer class="text-gray-500 dark:text-gray-300 text-center mt-10 pb-8 md:mt-16 flex flex-row flex-wrap justify-center">
         {menuItems.map(item => (
-          <a href={item.href} class="p-4 dark:hover:text-gray-400">{item.title}</a>
+          <a href={item.href} class="p-4 dark:hover:text-gray-400 footer-link">{item.title}</a>
         ))}
-        <a href="/uses" class="p-4 dark:hover:text-gray-400">Uses</a>
-        <a class="p-4 dark:hover:text-gray-400" rel="noopener" href="https://x.com/jarnesjo">X</a>
-        <a href="/feed.xml" class="p-4 dark:hover:text-gray-400">RSS</a>
+        <a href="/uses" class="p-4 dark:hover:text-gray-400 footer-link">Uses</a>
+        <a class="p-4 dark:hover:text-gray-400 footer-link" rel="noopener" href="https://x.com/jarnesjo">X</a>
+        <a href="/feed.xml" class="p-4 dark:hover:text-gray-400 footer-link">RSS</a>
       </footer>
     </div>
 
@@ -271,6 +271,36 @@ const menuItems = [
           .map(word => word === ' ' ? word : `<span class="word-no-wrap">${word}</span>`)
           .join('')
       })
+
+      // Footer zalgo glitch (dark mode only)
+      function zalgoify(text: string) {
+        const zalgo = ['\u0334', '\u0335', '\u0336', '\u0337', '\u0338']
+        return text.split('').map(c => {
+          if (c === ' ') return c
+          const z = zalgo[Math.floor(Math.random() * zalgo.length)]
+          return c + z
+        }).join('')
+      }
+
+      function glitchRandomLink() {
+        if (!document.documentElement.classList.contains('dark')) return
+
+        const allLinks = [...document.querySelectorAll('.footer-link'), ...document.querySelectorAll('.nav-link')]
+        if (!allLinks.length) return
+
+        const link = allLinks[Math.floor(Math.random() * allLinks.length)] as HTMLAnchorElement
+        const original = link.textContent || ''
+
+        link.textContent = zalgoify(original)
+        link.classList.add('footer-glitching')
+
+        setTimeout(() => {
+          link.textContent = original
+          link.classList.remove('footer-glitching')
+        }, 600)
+      }
+
+      setInterval(glitchRandomLink, 4000 + Math.random() * 5000)
     </script>
 
     {import.meta.env.PROD && (
