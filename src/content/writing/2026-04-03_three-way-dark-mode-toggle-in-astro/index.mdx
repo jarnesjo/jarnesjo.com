@@ -8,11 +8,13 @@ tags:
   - astro
   - js
   - tips
-published: false
+published: true
 author: Nicklas Jarnesjö
 ---
 
-Most dark mode tutorials give you a simple on/off toggle. That works but it ignores what the user already set in their OS. I've been annoyed by this on other sites where you try dark mode and then can't reset it back to follow the system. Then I realized my own site had the exact same problem. Time to fix that.
+Most dark mode tutorials give you a simple on/off toggle. That works but it ignores what the user already set in their
+OS. I've been annoyed by this on other sites where you try dark mode and then can't reset it back to follow the system.
+Then I realized my own site had the exact same problem. Time to fix that.
 
 I wanted three states -- system, light and dark -- where system follows whatever the OS says.
 
@@ -20,7 +22,8 @@ No React, no `next-themes`, just vanilla JS in an Astro layout.
 
 ## Prevent the flash
 
-The first thing you need is an inline script in `<head>` that runs before the page renders. Without this you get a white flash on dark mode page loads because the browser renders the HTML before your JS runs.
+The first thing you need is an inline script in `<head>` that runs before the page renders. Without this you get a white
+flash on dark mode page loads because the browser renders the HTML before your JS runs.
 
 ```html
 <script is:inline>
@@ -34,7 +37,8 @@ The first thing you need is an inline script in `<head>` that runs before the pa
 
 ## The toggle button
 
-Three SVG icons -- sun, moon and monitor. Only the active one is visible. The button cycles through system, light, dark on each click.
+Three SVG icons -- sun, moon and monitor. Only the active one is visible. The button cycles through system, light, dark
+on each click.
 
 ```html
 <button id="theme-toggle" aria-label="Toggle theme">
@@ -64,14 +68,15 @@ function applyTheme(theme: string) {
 applyTheme(currentTheme)
 
 document.getElementById('theme-toggle')?.addEventListener('click', () => {
-  const idx = themes.indexOf(currentTheme as typeof themes[number])
+  const idx = themes.indexOf(currentTheme as (typeof themes)[number])
   currentTheme = themes[(idx + 1) % themes.length]
   localStorage.setItem('theme', currentTheme)
   applyTheme(currentTheme)
 })
 ```
 
-`applyTheme` does two things -- toggles the `dark` class on `<html>` and shows the correct icon. The click handler just cycles to the next theme in the array.
+`applyTheme` does two things -- toggles the `dark` class on `<html>` and shows the correct icon. The click handler just
+cycles to the next theme in the array.
 
 ## Listen for OS changes
 
@@ -99,6 +104,8 @@ Then you use `dark:bg-gray-900`, `dark:text-white` and so on like normal.
 
 ## That's it
 
-No npm packages. No React context. No hydration. Just a script tag, three SVG icons and localStorage. Works on first paint, respects the OS, and the user can override it.
+No npm packages. No React context. No hydration. Just a script tag, three SVG icons and localStorage. Works on first
+paint, respects the OS, and the user can override it.
 
-You can see it in action on this site -- the button is in the top right corner. Hope it gives you a nudge if you've been thinking about this.
+You can see it in action on this site - the button is in the top right corner. Hope it gives you a nudge if you've been
+thinking about this.
