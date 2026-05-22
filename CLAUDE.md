@@ -69,6 +69,11 @@ public/
 - `npm run release:patch` / `release:minor` / `release:major`
 - Use semver correctly: patch for fixes, minor for new posts/features, major for breaking changes
 
+## Dependencies
+
+- `overrides.vite` is pinned to `7.3.2` in package.json. Reason: Astro 6.3.x requires vite ^7, while vitest/@tailwindcss/vite accept vite ^8, which hoists vite 8 to the top and leaves Astro on a nested vite 7. The two vite majors cause a rolldown native-binding mismatch and the build fails with `Missing field tsconfigPaths on BindingViteResolvePluginConfig.resolveOptions`.
+- Remove this override once Astro, vitest and @tailwindcss/vite all agree on a single vite major (verify `npm run build` stays green after removing).
+
 ## Language
 
 - Code and commits in English
