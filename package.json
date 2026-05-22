@@ -25,15 +25,18 @@
     "@astrojs/sitemap": "^3.7.1",
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.0.8",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.3.7",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-code-titles": "^1.2.1",
     "rehype-prism-plus": "^2.0.2",
     "satori": "^0.26.0",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "vitest": "^4.1.0"
+  },
+  "overrides": {
+    "vite": "7.3.2"
   }
 }
