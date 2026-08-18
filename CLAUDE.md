@@ -5,7 +5,7 @@ Personal writing/portfolio site for Nicklas Jarnesjo (jarnesjo.com). Built with 
 
 ## Tech Stack
 
-- **Framework:** Astro 6 (static output)
+- **Framework:** Astro 7 (static output)
 - **Styling:** Tailwind CSS 4 + @tailwindcss/typography, dark mode via class-based toggle
 - **Content:** MDX posts via @astrojs/mdx + Content Collections (collection: `writing`)
 - **Language:** TypeScript
@@ -63,6 +63,7 @@ public/
 - OG images generated via satori + @resvg/resvg-js at build time
 - Redirects: `/rss` and `/feed` -> `/feed.xml`, `/blog/*` -> `/writing/*` (via Astro redirects)
 - Dark mode: vanilla JS in layout, no React dependency
+- Markdown plugins go in `markdown.processor: unified({rehypePlugins: [...]})` in astro.config.mjs, not the old top-level `markdown.rehypePlugins` (deprecated in Astro 7). `syntaxHighlight` stays at `markdown` level.
 
 ## Releases
 
