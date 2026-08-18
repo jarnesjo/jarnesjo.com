@@ -16,16 +16,20 @@ npm run dev
 
 ## Build & deploy
 
-Build locally and commit `dist/`:
+Releases are cut locally. `npm version` builds, runs the route tests, and
+force-adds the gitignored `dist/` into the release commit:
 
 ```bash
-npm run build
-git add dist/
-git commit -m "Build"
-git push
+npm run release:patch   # or release:minor / release:major
+git push --follow-tags
 ```
 
 Forge pulls and serves `dist/` directly -- no Node.js needed on the server.
+
+`dist/` is gitignored but committed. If you ever stage it by hand, use
+`git add -f dist` -- a plain `git add dist/` picks up already-tracked files
+but silently skips new ones, which ships HTML referencing asset hashes that
+never made it into the commit.
 
 ## Nginx (add to Forge config)
 
