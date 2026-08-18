@@ -2,6 +2,7 @@
 import {defineConfig} from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import mdx from '@astrojs/mdx'
+import {unified} from '@astrojs/markdown-remark'
 import sitemap from '@astrojs/sitemap'
 import rehypePrism from 'rehype-prism-plus'
 import rehypeCodeTitles from 'rehype-code-titles'
@@ -23,6 +24,8 @@ export default defineConfig({
   },
   markdown: {
     syntaxHighlight: false,
-    rehypePlugins: [rehypeCodeTitles, rehypePrism, rehypeAutolinkHeadings]
+    processor: unified({
+      rehypePlugins: [rehypeCodeTitles, rehypePrism, rehypeAutolinkHeadings]
+    })
   }
 })
