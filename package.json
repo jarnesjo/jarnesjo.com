@@ -31,7 +31,7 @@
     "rehype-autolink-headings": "^7.1.0",
     "rehype-code-titles": "^1.2.1",
     "rehype-prism-plus": "^2.0.2",
-    "satori": "^0.26.0",
+    "satori": "^0.29.0",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
