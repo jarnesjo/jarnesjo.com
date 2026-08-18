@@ -71,8 +71,8 @@ public/
 
 ## Dependencies
 
-- `overrides.vite` is pinned to `7.3.2` in package.json. Reason: Astro 6.3.x requires vite ^7, while vitest/@tailwindcss/vite accept vite ^8, which hoists vite 8 to the top and leaves Astro on a nested vite 7. The two vite majors cause a rolldown native-binding mismatch and the build fails with `Missing field tsconfigPaths on BindingViteResolvePluginConfig.resolveOptions`.
-- Remove this override once Astro, vitest and @tailwindcss/vite all agree on a single vite major (verify `npm run build` stays green after removing).
+- No `overrides` needed. Astro 7 requires vite ^8, the same major vitest and @tailwindcss/vite accept, so vite dedupes to a single copy.
+- The old `overrides.vite: 7.3.2` pin existed because Astro 6 wanted vite ^7 while the others hoisted vite 8, which caused a rolldown native-binding mismatch (`Missing field tsconfigPaths on BindingViteResolvePluginConfig.resolveOptions`). If two vite majors ever end up in the tree again, that is the error to expect - check `npm ls vite` first.
 
 ## Language
 
