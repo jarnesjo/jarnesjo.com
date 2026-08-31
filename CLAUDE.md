@@ -69,6 +69,8 @@ public/
 
 - `npm run release:patch` / `release:minor` / `release:major`
 - Use semver correctly: patch for fixes, minor for new posts/features, major for breaking changes
+- The `postversion` hook runs `git push --follow-tags`, so a release is never left unpushed
+- `npm version` checks for a clean tree before `preversion` rebuilds, so a stale `dist/` blocks it. Use `npm version <level> --force` to let the fresh build land in the release commit
 
 ## Dependencies
 
