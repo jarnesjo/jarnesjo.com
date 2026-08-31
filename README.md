@@ -16,13 +16,22 @@ npm run dev
 
 ## Build & deploy
 
-Releases are cut locally. `npm version` builds, runs the route tests, and
-force-adds the gitignored `dist/` into the release commit:
+Releases are cut locally. `npm version` builds, runs the route tests,
+force-adds the gitignored `dist/` into the release commit, and pushes it
+with its tag:
 
 ```bash
 npm run release:patch   # or release:minor / release:major
-git push --follow-tags
 ```
+
+The push happens in the `postversion` hook, so a release can never sit
+unpushed. That used to be easy to miss, since `dist/` is always dirty
+after a build and hides an unpushed commit in `git status`.
+
+If `npm version` refuses with "Git working directory not clean", it is the
+stale `dist/` from an earlier build - the check runs before `preversion`
+rebuilds it. Add `--force` (`npm version minor --force`) to let the fresh
+build land in the release commit.
 
 Forge pulls and serves `dist/` directly -- no Node.js needed on the server.
 
