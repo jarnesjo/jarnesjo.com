@@ -59,6 +59,17 @@ describe('Build routes', async () => {
     })
   })
 
+  describe('Drafts', () => {
+    it('are not built or listed', async () => {
+      const drafts = await getSlugs({drafts: true})
+      const listing = await readFile(join(DIST, 'writing', 'index.html'), 'utf-8')
+      for (const slug of drafts) {
+        expect(await routeExists(`/writing/${slug}/`)).toBe(false)
+        expect(listing).not.toContain(`/writing/${slug}`)
+      }
+    })
+  })
+
   describe('OG images', () => {
     it.each(slugs)('/og/%s.png', async (slug) => {
       const path = join(DIST, 'og', `${slug}.png`)

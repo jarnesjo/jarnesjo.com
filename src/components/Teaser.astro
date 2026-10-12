@@ -5,9 +5,10 @@ interface Props {
   date: Date
   category?: string
   size?: 'normal' | 'large'
+  draft?: boolean
 }
 
-const {title, slug, date, category, size = 'normal'} = Astro.props
+const {title, slug, date, category, size = 'normal', draft = false} = Astro.props
 
 const formatted = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -23,5 +24,6 @@ const formatted = new Intl.DateTimeFormat('en-US', {
   <span class="uppercase text-xs text-gray-500 dark:text-gray-400 font-medium tracking-widest">
     <time datetime={date.toISOString()}>{formatted}</time>
     {category && <>&bull; {category}</>}
+    {draft && <>&bull; <span class="text-red-600 dark:text-red-500">Draft</span></>}
   </span>
 </article>
