@@ -22,19 +22,23 @@ async function routeExists(route) {
   return fileExists(file)
 }
 
-async function getPublishedSlugs() {
+async function getSlugs({drafts = false} = {}) {
   const dirs = await readdir(BLOG_DIR)
   const slugs = []
 
   for (const dir of dirs) {
     const content = await readFile(join(BLOG_DIR, dir, 'index.mdx'), 'utf-8')
-    if (content.includes('published: false')) continue
-    const match = content.match(/slug:\s*['"](.+?)['"]/)
+    // Only read the frontmatter, posts can mention `published: false` in their body
+    const frontmatter = content.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? ''
+    if (/^published:\s*false/m.test(frontmatter) !== drafts) continue
+    const match = frontmatter.match(/slug:\s*['"](.+?)['"]/)
     if (match) slugs.push(match[1])
   }
 
   return slugs
 }
+
+const getPublishedSlugs = () => getSlugs()
 
 describe('Build routes', async () => {
   const slugs = await getPublishedSlugs()
