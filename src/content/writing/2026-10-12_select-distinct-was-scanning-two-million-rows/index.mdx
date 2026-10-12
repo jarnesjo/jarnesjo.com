@@ -1,0 +1,75 @@
+---
+title: 'SELECT DISTINCT was scanning two million rows'
+description:
+  'Listing the sites in Puls got slower the longer you used it. A loose index scan with a recursive CTE took it from
+  92 ms to 0.01 ms.'
+date: '2026-10-12'
+slug: 'select-distinct-was-scanning-two-million-rows'
+category: code
+tags:
+  - sqlite
+  - performance
+  - puls
+  - note-to-myself
+published: false
+author: Nicklas Jarnesjö
+---
+
+Every time you open the [Puls](/writing/puls-cookieless-analytics-in-a-single-php-file) dashboard it asks the API which
+sites there are. Simple query:
+
+```sql
+SELECT DISTINCT site FROM pageviews;
+```
+
+There's an index on `site`, so that should be fast. Right?
+
+Not really. SQLite uses the index, but it still walks through every single entry in it just to give you one row per
+site. `EXPLAIN QUERY PLAN` says `SCAN pageviews USING COVERING INDEX`. Scan is the word to look out for.
+
+So the cost grows with the history. With three sites and two million pageviews, you read two million index entries to
+get three names back. And it gets a bit slower every day you use it.
+
+## Jumping through the index
+
+What I wanted was to jump from one site to the next in the index, instead of reading everything in between. Postgres
+people call this a loose index scan, or skip scan. SQLite doesn't do it for you, but you can write it with a recursive
+CTE:
+
+```sql
+WITH RECURSIVE tracked(site) AS (
+    SELECT MIN(site) FROM pageviews
+    UNION ALL
+    SELECT (SELECT MIN(site) FROM pageviews WHERE site > tracked.site)
+    FROM tracked WHERE tracked.site IS NOT NULL
+)
+SELECT site FROM tracked WHERE site IS NOT NULL ORDER BY site;
+```
+
+Start with the smallest site. Then ask for the smallest site that is bigger than that one. And again. Each of those
+`MIN()` lookups is a single seek in the index, not a scan.
+
+When there are no more sites the subquery returns `NULL` and the recursion stops. That's also why the empty table case
+matters. `MIN()` on an empty table gives `NULL`, so you have to filter it out at the end or you get one `NULL` row back.
+
+## The numbers
+
+Measured on a table with two million rows and three sites:
+
+```text
+SELECT DISTINCT      92.35 ms
+loose index scan      0.01 ms
+```
+
+Now the cost follows the number of sites, not the number of rows.
+
+92 ms doesn't sound like much. But it's on every dashboard load and it only goes one direction. That's the kind of thing
+you don't notice until the day you do.
+
+## Don't do it everywhere
+
+The goals table still uses a plain `DISTINCT`. It's small and not on any hot path. The recursive version is harder to
+read, so I'd only use it where the table is big and the query runs often.
+
+I wrote the tests against the old query first and ran the same tests against the new one. Same results, including the
+empty table. That gave me a lot more confidence than just looking at the SQL and nodding.

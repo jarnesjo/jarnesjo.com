@@ -1,0 +1,98 @@
+---
+title: 'My growing guide wrote the roadmap for my analytics tool'
+description:
+  'Odlingsguiden needed real answers about how people use it. Puls could not give them. So Puls got event analytics,
+  funnels, release markers and chart notes.'
+date: '2026-10-12'
+slug: 'my-growing-guide-wrote-the-roadmap-for-my-analytics-tool'
+category: code
+tags:
+  - puls
+  - odlingsguiden
+  - php
+  - side-project
+published: false
+author: Nicklas Jarnesjö
+---
+
+In March I wrote about [Puls](/writing/puls-cookieless-analytics-in-a-single-php-file), my own cookieless analytics in a
+single PHP file. Since then it has gone from 1.0 to 1.22. A lot of that happened in a few days in October, and almost
+all of it because of [Odlingsguiden](/writing/odlingsguiden-seven-months-later).
+
+## Every event is a question
+
+When we decided to work more data driven with Odlingsguiden, I set one rule. Every event we send has to answer a
+question we actually have.
+
+Do people choose their growing zone? `zone_set`. Do they finish the guides? `guide_finished`. What do they search for
+that we don't have? `search_miss`. Do they use Min odling? `plant_added`, `plant_removed`, `note_saved`.
+
+About fifteen named events. Not "track everything and look later". That never happens anyway.
+
+Puls already had custom events since the spring. But once I started asking real questions, it couldn't answer most of
+them. So I wrote down what was missing and went over to the Puls repo.
+
+{/* TODO: your own words on what it's like when one side project drives another */}
+
+## The bug that ate search queries
+
+First thing I found was a bug. Puls dedupes events, so the same event from the same visitor within 10 seconds only
+counts once. Makes sense for double clicks.
+
+But the dedup key ignored the event data. So if someone searched for two different things that both missed, only the
+first `search_miss` was kept. The exact data I wanted the most was silently thrown away.
+
+Now the data is part of the key.
+
+## Things the guide needed
+
+Here's roughly what Puls got, in the order Odlingsguiden asked for it:
+
+1. A queue stub, so `puls.track()` calls made before the script has loaded aren't lost.
+2. `data-debug` on the script tag, which logs every event to the console. Beacons are fire and forget, so before this
+   there was no way to see from the browser what Puls actually received.
+3. A drill-down per event. A trend over time, and group by any key in the event data. So `search_miss` grouped by
+   `query` shows exactly what people miss.
+4. Two-step funnels. Of the people who did A, how many went on to do B the same day?
+5. Goals that can be an event, not just a page.
+6. An app version on every hit with `data-version`. The day a new version is first seen gets a marker on the chart. So
+   when we shipped the new start page I could see the line where it went out.
+7. Saved breakdowns as their own cards on the dashboard.
+8. Events kept for 400 days instead of 90.
+
+That last one is my favourite. A growing guide is seasonal. Comparing October with September tells you nothing. You need
+to compare this spring with last spring. 90 days of history would never get you there.
+
+## Funnels got slow
+
+The first version of the funnel ran a lookup per visitor. On a test database with 500,000 events, a 30-day funnel took
+25 seconds.
+
+Rewrote it as a join against a per-visitor aggregate of the second event. Same result, verified row by row, and the
+cost basically disappeared.
+
+## A report I don't have to open a dashboard for
+
+Odlingsguiden has an `npm run puls:report` script now. It fetches traffic, goals and all events with groupings and
+funnels through a share token, and writes it all to a markdown file in the repo.
+
+So once a month there's a snapshot I can read, compare with the last one and actually make decisions from. Without
+logging into anything.
+
+## The second round
+
+After the first week of real data, Odlingsguiden had three more wishes:
+
+- **Chart notes.** One Saturday had a spike that didn't show up as any source. A film about our farm had come out, and
+  apps don't send a referrer. Now you can mark a date with "Film came out" and see it on the chart later.
+- **Bounce rate per entry page.** Not just for the whole site. Which pages do people land on and leave?
+- **More than ten events in the API.** Odlingsguiden already sends more than that.
+
+All three are in Puls 1.22.
+
+## Building the tool you need
+
+This is the fun part of owning your tools. When something is missing you just build it. And because it's open source,
+everyone else who runs Puls gets it too.
+
+Puls is [on GitHub](https://github.com/webready-se/puls), MIT licensed, still one PHP file.

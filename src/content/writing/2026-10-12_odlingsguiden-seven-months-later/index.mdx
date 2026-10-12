@@ -1,0 +1,121 @@
+---
+title: 'Odlingsguiden, seven months later'
+description:
+  'We built a growing guide we believe in. Not as many people came as we hoped. So now we are letting the data tell us
+  if anyone actually wants it.'
+date: '2026-10-12'
+slug: 'odlingsguiden-seven-months-later'
+category: code
+tags:
+  - odlingsguiden
+  - side-project
+  - puls
+published: false
+author: Nicklas Jarnesjö
+---
+
+In March I wrote about [why and how I built a Swedish growing guide](/writing/why-and-how-i-built-a-swedish-growing-guide).
+Seven months later it's time for an honest update.
+
+Spring was intense. We went from 96 crops to over 140, added flowers as a fifth category and wrote the first longer
+[guides](https://lillabosgarden.se/odlingsguiden/guider). Then summer came and basically nothing happened. The season was in full swing and the farm took all the time we
+had. That's just how it is when you grow things for real.
+
+## The honest problem
+
+When we picked it up again this autumn we had to be honest with ourselves. Not as many people had found Odlingsguiden as
+we had hoped. Or thought, really.
+
+It's hard to reach out. We're not salespeople and we don't want to beat our chests about what we've built. We'd rather
+just make something good and hope people find it. Turns out hoping isn't a strategy.
+
+{/* TODO: something of your own here? What did it feel like to see that? */}
+
+## Fixing the basics first
+
+The first thing I looked at was Google. And it turned out Google had only indexed a small fraction of our pages. Most
+of the guide was basically invisible.
+
+Some of it was my own fault. Sections that were collapsed only rendered their content when you opened them, so Google
+saw an almost empty page. Navigation was buttons instead of links, so there was nothing to follow. That kind of thing.
+I'll write about the technical parts in a separate post.
+{/* LINK when published: [Google only saw 154 words of my tomato page](/writing/google-only-saw-154-words-of-my-tomato-page) */}
+
+Search Console also showed what people actually search for. Not "tomato" but "when to sow tomatoes" and "how to grow
+tomatoes". So we reordered the crop pages to answer when and how first.
+
+## Stop guessing, ask the data
+
+Here's the thing. We had a lot of ideas about what people wanted. But they were our ideas.
+
+So I decided that before building anything big we should be able to answer whether anyone uses it. Every event we track
+in Odlingsguiden got a question attached to it. Do people choose their growing zone? Do they read the guides to the
+end? Do they use the search, and what do they search for that we don't have?
+
+To be able to answer those questions I had to build a lot of new stuff in [Puls](/writing/puls-cookieless-analytics-in-a-single-php-file),
+our own analytics tool. Funnels, grouping events by data, markers for when a new version went out. Odlingsguiden pretty
+much drove the whole Puls roadmap in October. More about that in another post.
+{/* LINK when published: [My growing guide wrote the roadmap for my analytics tool](/writing/my-growing-guide-wrote-the-roadmap-for-my-analytics-tool) */}
+
+## A new start page that didn't get to be called 2.0
+
+The start page showed vegetables. And that was the problem. Visitors saw the vegetables but never found the herbs,
+berries, fruit, flowers or the guides.
+
+So the [start page](https://lillabosgarden.se/odlingsguiden/) got rebuilt to show everything, with what's happening in your zone this month at the top.
+
+Internally the version number became 2.0.0, just to keep track of when we did it. But we decided not to call it
+"Odlingsguiden 2" anywhere. It's not a new product. It's a new look and more content. Same guide.
+
+## Min odling
+
+This one came from Elin, one of our users. She wanted a timeline and calendar that fit her own growing. Not a lot of
+data about crops she isn't growing anyway.
+
+That actually changed something fundamental for us. From the start the idea was that Odlingsguiden is a reference work,
+not a planner. Now it's a reference work at its core, with something personal on top. You add what you grow and get
+your own timeline.
+
+It lives in your browser for now. No account, no login. If people use it, we'll think about the next step.
+
+## Redrawing every illustration
+
+Small detour. All the illustrations got redrawn in a new pen style, because the old ones more or less disappeared in
+dark mode. That made the pages way heavier than I'd like, and I had to rethink how the drawings were loaded to get the
+speed back. Another post for another day.
+{/* LINK when published: [Moving SVG illustrations out of React and into files](/writing/moving-svg-illustrations-out-of-react-and-into-files) */}
+
+## The first week
+
+The new start page and Min odling went live in early October, and this is the first time we can actually see what
+people do.
+
+It's early. One week of data doesn't tell you much. But some things were interesting:
+
+- More people visited than the week before. Clearly more.
+- A handful of people started adding their own plants to Min odling. Not many, but they added a lot each.
+- Almost nobody chose a growing zone. Most people read everything for the default zone without ever changing it.
+- Nobody used the feedback button. Not one.
+
+{/* TODO: decide how much to share here. Relative is fine, exact numbers are optional. */}
+
+The zone thing surprised me the most. The whole guide is built around zones. If people don't choose one, they see
+dates that might be wrong for where they live. So that's the next thing to fix.
+
+There was also a spike one Saturday that didn't show up as any source. A film about Lilla Bosgården, our farm, came out
+around then, so it might be that. Apps don't send a referrer, so you never really know. That's exactly why Puls got
+chart notes, so I can write "film came out" on a date and remember later.
+
+## What happens now
+
+We wait and look. If people use Min odling, maybe accounts come next, so your garden follows you between devices. And
+maybe the app we've been talking about since the start.
+
+If they don't, then maybe not.
+
+It's not fun to build something nobody uses. And it's better to find that out now than after another seven months.
+
+If you grow things in Sweden, [have a look](https://lillabosgarden.se/odlingsguiden/). And if something is missing, the feedback button is right there.
+Nobody has used it yet, so you'd be the first.
+
+{/* TODO: own ending? */}

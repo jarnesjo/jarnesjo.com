@@ -1,0 +1,106 @@
+---
+title: 'Moving SVG illustrations out of React and into files'
+description:
+  'Odlingsguiden had its drawings as React components. The start page HTML ended up at 1.2 MB. Moving them to plain SVG
+  files took it to 66 kB.'
+date: '2026-10-12'
+slug: 'moving-svg-illustrations-out-of-react-and-into-files'
+category: code
+tags:
+  - react
+  - svg
+  - vite
+  - performance
+  - odlingsguiden
+published: false
+author: Nicklas Jarnesjö
+---
+
+Every crop in [Odlingsguiden](https://lillabosgarden.se/odlingsguiden/) has an illustration. A small icon in the lists and a bigger picture on the crop page. The
+guides have larger drawings too.
+
+All of them were React components. Just SVG in JSX. It's the obvious way to do it in a React app and it worked fine for
+a long time.
+
+Then we redrew all of them in a new pen style, because the old ones more or less disappeared in dark mode. The new
+style has a lot more detail. And a lot more detail means a lot more SVG nodes.
+
+{/* TODO: something about the new style or how the drawings are made? */}
+
+## 1.2 MB of HTML
+
+The guides are prerendered, so every drawing ended up inline in the HTML. The start page was 1.2 MB. The guide overview
+1.1 MB. And React had to hydrate around 3,700 SVG nodes on the start page alone.
+
+One guide drawing was 855 nodes. You don't really think about that when it's just a component you import.
+
+## Should it be images instead?
+
+My first thought was WebP or AVIF. So I measured all seven guide drawings.
+
+Pixel images only win on small low resolution screens. On retina, which is basically every phone, a WebP at 720 px
+weighs about the same as the SVG gzipped. At 1440 px, twice as much. And you'd need several widths times two themes
+times two formats.
+
+SVG is sharp at every size and it's one file. The bytes were never the problem. The problem was that the drawings were
+inline, in the HTML and in the hydration. Plain SVG files fix that just as well as pixels.
+
+## Drawings as background images
+
+The guide drawings use the page's colour variables, so they look right in both light and dark mode. A plain `<img>`
+can't read CSS variables from the page.
+
+So the build writes two files per drawing, one light and one dark. The component is just a `<span role="img">` with the
+right aspect ratio, and CSS picks the background image based on the theme. A background image only loads when its rule
+matches, so dark mode never downloads the light one.
+
+Guide overview went from 1,066 kB to 23 kB.
+
+## Icons with `<use href>`
+
+The start page was still 525 kB. Turns out 504 kB of that was the list icons, 75 of them, inlined by the prerender.
+
+Here I found something I didn't know. An SVG loaded with `<use href>` from an external file inherits the CSS variables
+from the page. So one file per icon works for both themes:
+
+```tsx
+<svg>
+  <use href={`${url}#icon`} />
+</svg>
+```
+
+The file just has a `<symbol id="icon">` in it. All the lazy loading logic I had built for the icons could be removed.
+
+Start page: 525 kB to 66 kB.
+
+## The Vite trap
+
+Of course something broke. Vite inlines small assets as data URLs, anything under 4 kB by default. And `<use href>`
+can't read a data URL. So the smallest icons just didn't show up.
+
+Changing `assetsInlineLimit` didn't help. What worked was the `?no-inline` query on the import:
+
+```ts
+import.meta.glob('./icons/*.svg', {eager: true, query: '?no-inline', import: 'default'})
+```
+
+I only caught it because the hydration test logs console errors from headless Chrome, and Chrome said "Unsafe attempt
+to load URL data:". Would have missed that one otherwise.
+
+## Then the crop pictures too
+
+Same thing for the bigger picture on each crop page. 186 of them, each a React component in its own lazy chunk with
+loading states and fade-ins. Now it's a file with a `<symbol>`, and the prerender adds a `<link rel="preload">` for it in
+the head.
+
+The carrot page went from 337 kB to 110 kB.
+
+## A budget that actually stops me
+
+The worst part is how long this went on. The index chunk carried 1.2 MB of drawings for weeks. There was a warning in
+the build. Nobody read it. Me being nobody.
+
+So now there's a size check that runs when I release, and it stops the release if the index chunk or any prerendered
+page grows past its budget. Warnings are not enough. A red release is.
+
+And a rule written down for the future: graphics are files.

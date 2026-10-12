@@ -1,0 +1,86 @@
+---
+title: "Building features I don't need so others can use Puls"
+description:
+  'Docker, one-click deploys and white-label. I run Puls on Forge and need none of it. I built it anyway, because open
+  source only matters if people can get started.'
+date: '2026-10-12'
+slug: 'building-features-i-dont-need-so-others-can-use-puls'
+category: code
+tags:
+  - puls
+  - open-source
+  - docker
+  - side-project
+published: false
+author: Nicklas Jarnesjö
+---
+
+When I released [Puls](/writing/puls-cookieless-analytics-in-a-single-php-file) I wrote that you just drop one PHP file
+on a server and you're done. And for me that's true. I run it on Forge like everything else.
+
+But I've been thinking about what open source actually means. If it's only easy for me, it's not really for anyone
+else. So during the spring I built a bunch of things I don't use myself.
+
+## Docker
+
+I don't run Puls in Docker. I don't need to.
+
+But a lot of people who self-host things do it with Docker and nothing else. If there's no image, there's no Puls for
+them. Simple as that.
+
+So there's a Dockerfile now. Alpine and PHP's built-in server, around 93 MB. The entrypoint sets everything up on the
+first start: generates the app key and creates an admin user from an `ADMIN_PASSWORD` environment variable. And a
+`docker-compose.yml` so it's one command locally.
+
+## One-click deploys
+
+Same reasoning. Some people don't want a server at all. So there are configs for Render, Railway and Fly.io, and a
+deploy button in the README.
+
+Funny detail. I host most of my stuff on DigitalOcean, so that was the first one I set up. But their App Platform doesn't have
+persistent disks for Docker apps. And Puls is SQLite, so the database would disappear on every deploy. Replaced it with
+Fly.io, which has volumes.
+
+## White-label
+
+If you run Puls for clients, maybe you don't want it to say Puls. So `APP_NAME`, `APP_TAGLINE` and `APP_ACCENT` in
+`.env` change the name, the tagline and the colour on the login, the dashboard, the manifest and the favicon. With a
+small "Powered by Puls" in the footer.
+
+## A CLI you don't have to read docs for
+
+Every CLI command works without arguments now. Run `php puls share:create` and it asks which site and when the link
+should expire, instead of failing because you forgot a flag.
+
+I added it because I kept forgetting the arguments myself. But it's even more important for someone who has never used
+it before.
+
+## Shareable dashboards
+
+This one I did need. Clients want to see their stats without getting an account. So now there are read-only links with a
+token, scoped to one site. Turned out to be useful for other things too, Odlingsguiden pulls its monthly report through
+one.
+
+## Accessibility
+
+The dashboard scored 71 on accessibility in Lighthouse. Not great for something I want others to use.
+
+It started with quick wins: labels on icon buttons, a skip link, reduced motion, better contrast on muted text. Later
+the bigger parts: tabs that work with arrow keys, dialogs that keep focus inside and give it back when you close them,
+every clickable row reachable from the keyboard, and a status line for screen readers.
+
+None of it changed how the dashboard looks.
+
+## Why bother
+
+Honestly, I don't know how many people run Puls. It doesn't phone home, so I have no idea. That's kind of the point.
+
+{/* TODO: anything you know? Stars, issues, someone who emailed? */}
+
+But if someone finds it and wants to try it, I don't want the first ten minutes to be the reason they give up. Every
+one of these things removes a reason to give up.
+
+And it's the same thing we're learning with [Odlingsguiden](/writing/odlingsguiden-seven-months-later). Building
+something good isn't enough. People have to be able to get to it.
+
+Puls is [on GitHub](https://github.com/webready-se/puls) if you want to try it. Ten minutes should be enough.

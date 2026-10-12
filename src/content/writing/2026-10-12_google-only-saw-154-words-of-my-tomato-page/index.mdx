@@ -1,0 +1,111 @@
+---
+title: 'Google only saw 154 words of my tomato page'
+description:
+  'Odlingsguiden is prerendered, so I thought SEO was fine. It was not. Collapsed sections, buttons instead of links and
+  a redirect loop I made myself.'
+date: '2026-10-12'
+slug: 'google-only-saw-154-words-of-my-tomato-page'
+category: code
+tags:
+  - seo
+  - react
+  - nginx
+  - odlingsguiden
+published: false
+author: Nicklas Jarnesjö
+---
+
+[Odlingsguiden](https://lillabosgarden.se/odlingsguiden/) is a React app, but every page is prerendered to plain HTML at build time. So Google gets real HTML, not
+an empty div waiting for JavaScript. I thought that meant SEO was handled.
+
+Then I looked in Search Console and saw that Google had only indexed a small part of the guide. So I started digging.
+Turns out prerendering doesn't help much if what you prerender is almost empty.
+
+## Collapsed sections don't exist
+
+A crop page has a bunch of sections. When to sow, how to grow, companion plants and so on. They're collapsible, and the
+code looked like this:
+
+```tsx
+{open && <div>{children}</div>}
+```
+
+Makes total sense in the browser. But when the page is prerendered every section is closed. So the content is never
+rendered. At all.
+
+The prerendered [tomato page](https://lillabosgarden.se/odlingsguiden/tomat) had 154 words. The whole profile was missing. Google saw a title and some headings and
+that's it.
+
+The fix is to always render the content and hide it instead:
+
+```tsx
+<div hidden={!open}>{children}</div>
+```
+
+Now the tomato page has about 1,490 words in the HTML. Same page, same look.
+
+I wanted `hidden="until-found"` so Cmd+F could open a closed section, but React turns it into `hidden=""`. So that one
+has to wait. The heavy stuff, like the nutrition chart, still only mounts when you open the section.
+
+## Buttons are not links
+
+Second thing. Almost all navigation in the guide was buttons calling `navigate()`. The crop list, the category tabs,
+the month navigation, companion plants. It worked perfectly for people.
+
+But Google doesn't click buttons. The prerendered start page had exactly one `<a href>` on it. One.
+
+So every page could only be found through the sitemap, and none of them got any link value from the rest of the site.
+
+Switched it all to React Router's `<Link>`, which renders a real `<a href>`. No visual change, clicks work the same, and
+the start page went from 1 link to 74.
+
+## Every URL redirected
+
+nginx had `try_files $uri/` for the prerendered pages, which live in `kålrot/index.html`. So `/odlingsguiden/kålrot`
+got a 301 to `/odlingsguiden/kålrot/`.
+
+The problem was that the sitemap, all internal links, og:url and the JSON-LD used the form without the slash. So
+literally every URL I gave Google was a redirect. Search Console listed some pages twice, with and without the slash.
+
+And no page had a canonical tag. So a portfolio link from this very site with `?utm_source=jarnesjo.com` got indexed as
+its own page. Nice.
+
+The fix:
+
+```nginx
+location ^~ /odlingsguiden {
+    error_page 404 /odlingsguiden/404.html;
+    try_files $uri $uri/index.html =404;
+}
+```
+
+`$uri/index.html` serves the page directly without the directory redirect. And a canonical tag on every prerendered
+page, so the slash version and utm links all merge into one.
+
+## Then I made it worse
+
+My first idea was to also redirect the slash version to the one without. Clean, one URL. I added it and deployed.
+
+Returning visitors started getting `ERR_TOO_MANY_REDIRECTS`.
+
+Their browsers had cached the old 301 from `/x` to `/x/`. Now I sent them from `/x/` back to `/x`. Browsers cache 301s
+hard, so they just bounced between the two forever.
+
+Removed it the same day. Both forms now answer 200 and the canonical tag decides which one Google should use.
+
+Lesson for my future self: never add a redirect that goes the opposite way of an old 301.
+
+## The small stuff
+
+A few more things I found along the way:
+
+- `robots.txt` only counts in the domain root. Mine was in `/odlingsguiden/robots.txt` and Google never read it. The
+  sitemap line has to be in the main site's `robots.txt`.
+- Unknown URLs answered 200 with the app, because of the SPA fallback. That's a soft 404. Every real page is
+  prerendered anyway, so now unknown URLs get a real 404.
+- The prerender now stops the build if a URL in the sitemap doesn't have a prerendered page.
+
+None of this was hard to fix. It just wasn't visible. Everything looked fine in the browser, which is exactly the
+problem.
+
+{/* TODO: did indexing improve? Follow up later, or leave it open */}

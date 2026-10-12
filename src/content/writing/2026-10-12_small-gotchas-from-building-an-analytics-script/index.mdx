@@ -1,0 +1,97 @@
+---
+title: 'Small gotchas from building an analytics script'
+description:
+  'A null currentScript, a forced reflow, bots breaking json_encode and a chart that was one day off. Small bugs I hit
+  while building Puls.'
+date: '2026-10-12'
+slug: 'small-gotchas-from-building-an-analytics-script'
+category: code
+tags:
+  - javascript
+  - php
+  - puls
+  - note-to-myself
+published: false
+author: Nicklas Jarnesjö
+---
+
+Building [Puls](/writing/puls-cookieless-analytics-in-a-single-php-file) I've hit a bunch of small bugs. None of them
+big enough for a post on their own. But together they're a pretty good list of things I didn't know, or knew and forgot.
+
+So for my own sake, here they are.
+
+## `document.currentScript` is null for injected scripts
+
+The tracking script reads its settings from `data-*` attributes on its own script tag. The easy way to find your own tag
+is `document.currentScript`.
+
+Works great. Until someone injects the script with `document.createElement('script')`, like a tag manager or a
+consent tool does. Then `currentScript` is `null`.
+
+The fix is a fallback that looks for the tag with `querySelector`, by its `src` and `data-site` attribute.
+
+## Reading `innerWidth` cost 116 ms
+
+PageSpeed complained about a forced reflow on one of my sites, and pointed at Puls. About 116 ms of it.
+
+The first beacon included the screen width, and it was sent right away on load. Reading `innerWidth` at that point
+forces the browser to calculate layout before it's ready.
+
+Wrapping the first beacon in `requestIdleCallback` (with a `setTimeout` fallback) fixed it. The browser settles the
+layout first, then Puls asks. Nobody needs their pageview logged in the first millisecond anyway.
+
+## Bots can break `json_encode`
+
+One day a site's dashboard was just empty. No error. Nothing.
+
+Puls logs broken links, so 404s with their path. Scanner bots try path traversal with things like `%C0%AE`, which is
+invalid UTF-8. That got stored. And when the API tried to return it, `json_encode` failed and returned `false`. Silently.
+
+```php
+json_encode($data, JSON_INVALID_UTF8_SUBSTITUTE);
+```
+
+That flag replaces invalid bytes instead of giving up. I also clean the path before storing it now, and `/etc/passwd`
+is on the list of paths that are just noise.
+
+## "Last 7 days" was 8 days
+
+The comparison mode shows the previous period next to the current one, bar by bar. And the rightmost bar, today, never
+had anything to compare with.
+
+`days=7` meant "since 7 days ago". That's today plus 7 earlier days. Eight dates. The previous period was exactly
+seven. So when the bars were paired by index, today got paired with nothing.
+
+Most visible on a one-day view, where half the bars had nothing to compare with. Now "last N days" is N dates including today.
+
+## Capture phase, and then not
+
+Puls can track form submits automatically. The first version listened on `body` and missed a lot, because forms
+handled with JavaScript often call `stopPropagation()`.
+
+So I moved it to `document` in the capture phase. That catches the event before anyone can stop it.
+
+But then it counted everything. Search boxes, forms that never actually submit, things handled by JavaScript with
+`preventDefault()`. Not really "submits".
+
+So it went back to the bubble phase, and skips the event if `defaultPrevented` is set. Sometimes the fix for the fix is
+going back, just a bit smarter.
+
+## One migration marker for all databases
+
+Puls tracked which migrations had run with a `.schema_version` file in the data folder. One file. But you can have
+several databases in that folder, and locally I often did.
+
+So one database was marked as migrated while the others still had the old schema.
+
+SQLite has this built in, per database:
+
+```sql
+PRAGMA user_version;      -- read
+PRAGMA user_version = 19; -- write
+```
+
+It's just an integer in the database header that SQLite never uses for anything else. Perfect for a migration number.
+
+That's the list for now. I'm sure there will be more. All the fixes are in the [Puls repo](https://github.com/webready-se/puls)
+if you want to see the code.

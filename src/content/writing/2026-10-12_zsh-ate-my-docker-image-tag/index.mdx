@@ -1,0 +1,84 @@
+---
+title: 'zsh ate my Docker image tag'
+description:
+  'A deploy that worked in bash broke on my server because zsh treats :e after a variable as a modifier. Turns out it
+  is not just e.'
+date: '2026-10-12'
+slug: 'zsh-ate-my-docker-image-tag'
+category: code
+tags:
+  - zsh
+  - docker
+  - github-actions
+  - note-to-myself
+published: false
+author: Nicklas Jarnesjö
+---
+
+I had just rewritten the deploy for [PR LOG](https://prlog.app), one of my side projects. GitHub Actions builds a Docker image, tags it with the
+commit sha, SSH:s into the server and swaps the container. Nothing fancy.
+
+First deploy with the new script. Red.
+
+Docker was trying to pull an image called `cfd0d641d4b5...`. No registry. No image name. Just a sha, and not even the
+whole sha, the first character was missing.
+
+The line looked completely innocent:
+
+```bash
+NEW_IMAGE="$IMAGE:${{ github.sha }}"
+```
+
+{/* TODO: how long did you look, what did you think it was first? */}
+
+The thing is that GitHub replaces `${{ github.sha }}` before any shell sees it. So what actually runs on the server is
+something like:
+
+```bash
+NEW_IMAGE="$IMAGE:ecfd0d641d4b5..."
+```
+
+And I use zsh on that server. I installed it myself, because I like it. What I didn't know was that zsh has these
+modifiers. In zsh, `:e` right after a variable means "give me the file extension". So zsh happily ate `$IMAGE:e`,
+returned an empty extension and left me with `cfd0d641d4b5...`.
+
+bash, sh and dash don't care. They expand it just like you'd expect. I've written `$VAR:something` in shell scripts for
+years without thinking twice about it.
+
+## It's not just e
+
+I got curious and tried all the letters a sha can start with. Three of them break:
+
+```bash
+IMAGE=ghcr.io/x/nextjs
+
+echo "$IMAGE:e123"  # 123
+echo "$IMAGE:a123"  # /home/forge/ghcr.io/x/nextjs123
+echo "$IMAGE:c123"  # ghcr.io/x/nextjs123
+echo "$IMAGE:b123"  # ghcr.io/x/nextjs:b123 (fine)
+```
+
+`:a` turns it into an absolute path from wherever you are. `:c` looks it up as a command. So roughly one deploy in five
+would have broken, completely depending on what the commit hash happened to look like. That's the kind of bug you chase
+for weeks.
+
+## The fix
+
+Braces.
+
+```bash
+NEW_IMAGE="${IMAGE}:${{ github.sha }}"
+```
+
+Braces end the variable name in every shell, zsh included.
+
+## The good part
+
+The new deploy script had a healthcheck. When the broken container didn't come up, it restarted the previous image and
+failed the workflow. So the site never went down. First time that healthcheck ever did anything, and it caught my own
+mistake on day one.
+
+So yeah. I picked zsh, I've used it for years, and I still had no idea it could do this. It's not even a weird edge
+case, it's a documented feature. I just never needed it, so I never knew it was there waiting for me.
+
+Braces from now on. Always.
