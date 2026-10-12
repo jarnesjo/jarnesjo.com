@@ -11,7 +11,7 @@ tags:
   - docker
   - github-actions
   - note-to-myself
-published: false
+published: true
 author: Nicklas Jarnesjö
 ---
 
@@ -28,8 +28,6 @@ The line looked completely innocent:
 ```bash
 NEW_IMAGE="$IMAGE:${{ github.sha }}"
 ```
-
-{/* TODO: how long did you look, what did you think it was first? */}
 
 The thing is that GitHub replaces `${{ github.sha }}` before any shell sees it. So what actually runs on the server is
 something like:
