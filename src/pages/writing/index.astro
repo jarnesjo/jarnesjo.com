@@ -8,7 +8,7 @@ const posts = (await getCollection('writing', ({data}) => isDev || data.publishe
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
-<Layout title="Writing - Nicklas Jarnesjö" description="Writing about web development, side projects and things I learn along the way">
+<Layout title="Writing - Nicklas Jarnesjö" description="All my posts on web development, side projects and the things I trip over along the way">
   <h1 class="text-5xl tracking-tight font-bold py-12 md:py-16 js-darkmode-flicker" data-flicker-chars="1">Writings</h1>
   <div class="prose md:prose-lg lg:prose-xl dark:prose-dark">
     <p>

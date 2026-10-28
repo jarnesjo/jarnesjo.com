@@ -51,6 +51,14 @@ describe('Build routes', async () => {
     it('/404.html', async () => {
       expect(await fileExists(join(DIST, '404.html'))).toBe(true)
     })
+
+    it('/ and /writing/ have their own descriptions', async () => {
+      const description = async route => {
+        const html = await readFile(join(DIST, route, 'index.html'), 'utf-8')
+        return html.match(/<meta name="description" content="([^"]*)"/)?.[1]
+      }
+      expect(await description('/writing/')).not.toBe(await description('/'))
+    })
   })
 
   describe('Blog posts', () => {
