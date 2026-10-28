@@ -24,5 +24,6 @@ pnpm-debug.log*
 # misc
 .claude/settings.local.json
 .claude/handoffs/
+.private/
 
 .vscode/settings*
