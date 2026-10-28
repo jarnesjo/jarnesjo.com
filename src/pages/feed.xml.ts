@@ -12,7 +12,7 @@ export async function GET(context: {site: URL}) {
     items: posts.map(post => ({
       title: post.data.title,
       pubDate: post.data.date,
-      description: `<p>${post.data.description || ''}</p><p><a href="${context.site}blog/${post.data.slug}">Read full article →</a></p>`,
+      description: `<p>${post.data.description || ''}</p><p><a href="${context.site}writing/${post.data.slug}/">Read full article →</a></p>`,
       link: `/writing/${post.data.slug}`,
       categories: [post.data.category, ...(post.data.tags || [])],
       author: post.data.author || 'Nicklas Jarnesjö'

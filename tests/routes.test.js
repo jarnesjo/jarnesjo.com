@@ -94,6 +94,11 @@ describe('Feed', () => {
     expect(content).toContain('<?xml')
     expect(content).toContain('<item>')
   })
+
+  it('links straight to posts, not through the /blog/ redirects', async () => {
+    const content = await readFile(join(DIST, 'feed.xml'), 'utf-8')
+    expect(content).not.toContain('/blog/')
+  })
 })
 
 describe('Sitemap', () => {
