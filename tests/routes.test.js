@@ -119,4 +119,9 @@ describe('Sitemap', () => {
       expect(content, `sitemap should contain ${slug}`).toContain(`/writing/${slug}`)
     }
   })
+
+  it('sitemap-0.xml leaves out the /blog/ redirects', async () => {
+    const content = await readFile(join(DIST, 'sitemap-0.xml'), 'utf-8')
+    expect(content).not.toContain('<loc>https://jarnesjo.com/blog/')
+  })
 })

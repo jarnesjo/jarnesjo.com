@@ -15,7 +15,8 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    sitemap()
+    // /blog/* are meta refresh redirects to /writing/*, so they don't belong in the sitemap
+    sitemap({filter: page => !new URL(page).pathname.startsWith('/blog/')})
   ],
   redirects: {
     '/rss': '/feed.xml',
