@@ -50,7 +50,7 @@ const metaImage = image
       <div class="text-gray-500 dark:text-gray-400 flex justify-center space-x-2 uppercase">
         <time datetime={date.toISOString()}>{formatted}</time>
         <span>&bull;</span>
-        <a href={`/category/${category}`} class="uppercase">{category}</a>
+        <a href={`/category/${category}/`} class="uppercase">{category}</a>
       </div>
     </header>
 
@@ -85,7 +85,7 @@ const metaImage = image
           Category
         </span>
         <a
-          href={`/category/${category}`}
+          href={`/category/${category}/`}
           class="uppercase font-medium transition-colors hover:text-red-600"
           title="Category"
         >
@@ -99,7 +99,7 @@ const metaImage = image
             {tags.map(tag => (
               <li class="flex-shrink-0">
                 <a
-                  href={`/tag/${tag}`}
+                  href={`/tag/${tag}/`}
                   class="uppercase transition-colors hover:text-red-600"
                 >
                   #{tag}

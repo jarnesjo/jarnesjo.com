@@ -109,6 +109,21 @@ describe('Feed', () => {
   })
 })
 
+describe('Internal links', () => {
+  it('end pages with a slash, so they skip the server redirect', async () => {
+    const files = (await readdir(DIST, {recursive: true})).filter(file => file.endsWith('.html'))
+    const missing = new Set()
+    for (const file of files) {
+      const html = await readFile(join(DIST, file), 'utf-8')
+      for (const [, href] of html.matchAll(/href="(\/[^"#?]*)/g)) {
+        // Files like /feed.xml or /og/post.png have no slash
+        if (!href.endsWith('/') && !href.split('/').pop().includes('.')) missing.add(href)
+      }
+    }
+    expect([...missing]).toEqual([])
+  })
+})
+
 describe('Sitemap', () => {
   it('sitemap-index.xml exists', async () => {
     const path = join(DIST, 'sitemap-index.xml')
