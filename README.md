@@ -40,6 +40,21 @@ Forge pulls and serves `dist/` directly -- no Node.js needed on the server.
 but silently skips new ones, which ships HTML referencing asset hashes that
 never made it into the commit.
 
+## Dependabot and the dependency graph
+
+GitHub stopped parsing this repo's `package-lock.json` in May 2026: its
+dependency graph stayed on astro 6.1.7 while main moved on, and Dependabot
+raised alerts for versions long gone. The lockfile itself was fine, and a
+public repo cannot toggle the graph off and on. So every release sends the
+lockfile itself through the dependency submission API
+(`scripts/submit-dependencies.mjs`, run by `postversion` after the push).
+It never fails a release; if it warns, run it again by hand. To check what
+GitHub thinks is on main:
+
+```sh
+gh api repos/jarnesjo/jarnesjo.com/dependency-graph/sbom --jq '.sbom.packages[] | select(.name == "astro") | .versionInfo'
+```
+
 ## Nginx (add to Forge config)
 
 Add inside the `server` block, replacing Forge's default `X-Frame-Options`,

@@ -15,7 +15,7 @@
     "test:routes": "vitest run tests/routes.test.js",
     "preversion": "npm run build && npm test",
     "version": "git add -f dist",
-    "postversion": "git push --follow-tags",
+    "postversion": "git push --follow-tags && node scripts/submit-dependencies.mjs",
     "release:major": "npm version major",
     "release:minor": "npm version minor",
     "release:patch": "npm version patch"
