@@ -52,6 +52,7 @@ add_header X-Content-Type-Options "nosniff" always;
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-ftCMM0z+3x9eae9lXOjvdPy3RxjKSKw7fRpKat2dC/8=' https://puls.wrlabs.se; style-src 'self'; img-src 'self' https://puls.wrlabs.se; connect-src 'self' https://puls.wrlabs.se; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" always;
 
 # Old addresses - real 301s. Astro's redirects are meta refresh pages,
 # which feed readers don't follow
@@ -82,7 +83,28 @@ location also set `Cache-Control "public, immutable"`. `expires` alone sets
 `X-XSS-Protection` is left out on purpose: browsers have dropped it, and
 the old filter it turned on could be abused.
 
-Not set yet: a Content-Security-Policy. The layout has inline scripts
-(dark mode, konami) and loads Puls from another domain, so it needs hashes
-or `'unsafe-inline'`. Start with `Content-Security-Policy-Report-Only` when
-picking it up.
+### Content-Security-Policy
+
+The policy allows the site's own files, Puls (script, beacon and pixel from
+`puls.wrlabs.se`) and one inline script: the dark mode script in
+`src/layouts/Default.astro`, allowed by its hash. Everything else inline is
+blocked: `style` attributes, `<style>` elements, `onclick` handlers and
+inline scripts. Astro would normally inline small component scripts, so
+`vite.build.assetsInlineLimit: 0` in `astro.config.mjs` keeps them external.
+
+`tests/csp.test.js` reads the policy from this file and checks the build
+against it: every inline script is hashed, no hash is stale, and scripts and
+images only come from allowed hosts. It runs on every release (`preversion`
+runs the whole test suite), so:
+
+- Changing the dark mode script changes its hash. The failing test prints
+  the new one: put it in the line above and in Forge, header first.
+- A new third-party script or image host goes in the policy first, then in
+  the code.
+- Styling belongs in classes, not `style=""`. Setting `el.style` from JS is
+  fine, CSP does not cover that.
+
+To try a change before enforcing it, send the same value as
+`Content-Security-Policy-Report-Only` for a while and watch the browser
+console. Vaka cannot see violations yet (a report endpoint is on its
+roadmap), so the console is the only place they show.

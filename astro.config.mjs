@@ -11,7 +11,12 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 export default defineConfig({
   site: 'https://jarnesjo.com',
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      // Never inline component scripts: the CSP allows only external scripts and
+      // the hashed dark mode script in the layout, see README
+      assetsInlineLimit: 0
+    }
   },
   integrations: [
     mdx(),
