@@ -52,7 +52,7 @@ add_header X-Content-Type-Options "nosniff" always;
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-ftCMM0z+3x9eae9lXOjvdPy3RxjKSKw7fRpKat2dC/8=' https://puls.wrlabs.se; style-src 'self'; img-src 'self' https://puls.wrlabs.se; connect-src 'self' https://puls.wrlabs.se; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" always;
+add_header Content-Security-Policy "default-src 'self'; script-src 'self' https://puls.wrlabs.se; style-src 'self'; img-src 'self' https://puls.wrlabs.se; connect-src 'self' https://puls.wrlabs.se; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" always;
 
 # Old addresses - real 301s. Astro's redirects are meta refresh pages,
 # which feed readers don't follow
@@ -85,24 +85,34 @@ the old filter it turned on could be abused.
 
 ### Content-Security-Policy
 
-The policy allows the site's own files, Puls (script, beacon and pixel from
-`puls.wrlabs.se`) and one inline script: the dark mode script in
-`src/layouts/Default.astro`, allowed by its hash. Everything else inline is
-blocked: `style` attributes, `<style>` elements, `onclick` handlers and
-inline scripts. Astro would normally inline small component scripts, so
-`vite.build.assetsInlineLimit: 0` in `astro.config.mjs` keeps them external.
+The policy names hosts only: the site's own files and Puls (script, beacon
+and pixel from `puls.wrlabs.se`). Nothing inline is allowed, no inline
+scripts, `style` attributes, `<style>` elements or `onclick` handlers. So
+the header never needs a hash, and never changes because the code did.
+
+Two things in the code keep it that way:
+
+- The dark mode script that runs before the page renders is a file,
+  `src/scripts/theme-init.js`, loaded as a blocking script in the layout
+  head. Vite gives it a hashed name under `/_astro/`, so it caches for a
+  year and gets a new name when it changes. An inline script would need
+  its sha256 in the header, in Forge, by hand, and a whitespace change on
+  a new Astro version would break it silently.
+- Astro inlines small component scripts by default, which would need the
+  same hashes. `vite.build.assetsInlineLimit: 0` in `astro.config.mjs`
+  keeps them external.
 
 `tests/csp.test.js` reads the policy from this file and checks the build
-against it: every inline script is hashed, no hash is stale, and scripts and
-images only come from allowed hosts. It runs on every release (`preversion`
-runs the whole test suite), so:
+against it: no inline scripts, no inline styles, and scripts and images
+only from allowed hosts. It runs on every release (`preversion` runs the
+whole test suite), so:
 
-- Changing the dark mode script changes its hash. The failing test prints
-  the new one: put it in the line above and in Forge, header first.
-- A new third-party script or image host goes in the policy first, then in
-  the code.
+- A new third-party script or image host goes in the policy first, in
+  Forge and here, then in the code.
 - Styling belongs in classes, not `style=""`. Setting `el.style` from JS is
   fine, CSP does not cover that.
+- A script that must run before render goes in a file like
+  `theme-init.js`, never inline.
 
 To try a change before enforcing it, send the same value as
 `Content-Security-Policy-Report-Only` for a while and watch the browser

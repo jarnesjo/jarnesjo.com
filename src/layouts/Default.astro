@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import themeInitUrl from '../scripts/theme-init.js?url'
 
 interface Props {
   title?: string
@@ -109,12 +110,8 @@ const menuItems = [
       import '../scripts/konami-c64'
     </script>
 
-    <!-- Dark mode: prevent flash -->
-    <script is:inline>
-      const theme = localStorage.getItem('theme') || 'system'
-      const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-      if (isDark) document.documentElement.classList.add('dark')
-    </script>
+    <!-- Dark mode: prevent flash. A blocking external file, not inline, so the CSP needs no hash -->
+    <script is:inline src={themeInitUrl}></script>
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
     <div class="max-w-4xl mx-auto pt-8 px-4 sm:px-8">

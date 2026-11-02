@@ -13,8 +13,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
-      // Never inline component scripts: the CSP allows only external scripts and
-      // the hashed dark mode script in the layout, see README
+      // Never inline component scripts: the CSP allows no inline scripts, see README
       assetsInlineLimit: 0
     }
   },

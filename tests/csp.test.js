@@ -1,17 +1,14 @@
 import {describe, it, expect} from 'vitest'
 import {readdir, readFile} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
-import {createHash} from 'node:crypto'
 
 // The Content-Security-Policy nginx sends lives in README.md (Forge config is
 // pasted from there). These tests check the built HTML against that policy, so a
-// new inline script, a changed dark mode script or a new third-party host fails
-// the build instead of being blocked in every visitor's browser.
+// new inline script or a new third-party host fails the build instead of being
+// blocked in every visitor's browser.
 
 const ROOT = resolve(import.meta.dirname, '..')
 const DIST = join(ROOT, 'dist')
-
-const sha256 = source => `'sha256-${createHash('sha256').update(source).digest('base64')}'`
 
 async function readPolicy() {
   const readme = await readFile(join(ROOT, 'README.md'), 'utf-8')
@@ -50,23 +47,20 @@ describe('Content-Security-Policy', async () => {
       expect(policy, `${name} should be set explicitly`).toHaveProperty(name)
     }
     expect(policy['default-src']).toEqual(["'self'"])
-    expect(policy['script-src']).not.toContain("'unsafe-inline'")
-    expect(policy['style-src']).not.toContain("'unsafe-inline'")
-  })
-
-  it('allows every inline script by hash', () => {
-    const sources = new Set(pages.flatMap(([, html]) => inlineScripts(html)))
-    for (const source of sources) {
-      const hash = sha256(source)
-      expect(policy['script-src'], `inline script is not in script-src, add ${hash} to README.md:\n${source.trim().slice(0, 200)}`).toContain(hash)
+    for (const name of ['script-src', 'style-src']) {
+      expect(policy[name], `${name} should name hosts only`).not.toContain("'unsafe-inline'")
+      expect(policy[name].filter(s => s.startsWith("'sha") || s.startsWith("'nonce")), `${name} should need no hashes`).toEqual([])
     }
   })
 
-  it('has no stale hashes', () => {
-    const hashes = new Set(pages.flatMap(([, html]) => inlineScripts(html)).map(sha256))
-    for (const source of policy['script-src'].filter(s => s.startsWith("'sha256-"))) {
-      expect([...hashes], `${source} matches no inline script in dist/, update README.md`).toContain(source)
+  it('has no inline scripts, so the header never needs a hash', () => {
+    const found = []
+    for (const [file, html] of pages) {
+      for (const source of inlineScripts(html)) {
+        found.push(`${file}: ${source.trim().slice(0, 80)}`)
+      }
     }
+    expect(found, 'put the script in a file instead, see README').toEqual([])
   })
 
   it('loads scripts and images only from allowed hosts', () => {

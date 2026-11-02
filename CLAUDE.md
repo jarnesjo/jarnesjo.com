@@ -63,7 +63,7 @@ public/
 - OG images generated via satori + @resvg/resvg-js at build time
 - Redirects: `/rss` and `/feed` -> `/feed.xml`, `/blog/*` -> `/writing/*` (via Astro redirects)
 - Dark mode: vanilla JS in layout, no React dependency
-- CSP: nginx sends a strict Content-Security-Policy (README). No `style=""`, no inline scripts except the hashed dark mode script, component scripts stay external via `assetsInlineLimit: 0`. `tests/csp.test.js` checks the build against the policy in README.
+- CSP: nginx sends a strict Content-Security-Policy with hosts only (README). Nothing inline: no `style=""`, no inline scripts. Pre-render scripts go in files (`src/scripts/theme-init.js`), component scripts stay external via `assetsInlineLimit: 0`. `tests/csp.test.js` checks the build against the policy in README.
 - Markdown plugins go in `markdown.processor: unified({rehypePlugins: [...]})` in astro.config.mjs, not the old top-level `markdown.rehypePlugins` (deprecated in Astro 7). `syntaxHighlight` stays at `markdown` level.
 
 ## Releases
