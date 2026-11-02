@@ -35,3 +35,7 @@
 - [x] Remove "Hotad skog" from projects
 - [x] Update screenshot for "Snittränta"
 - [x] Add "Odlingsguiden" as a new project
+
+## Later
+
+- Link the Vaka and Snoka cards on the home page to their repos when they go public (`url` in `src/pages/index.astro`). Left out for now since a link to a private repo gives visitors a 404.
