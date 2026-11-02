@@ -3,7 +3,7 @@ title: 'Google only saw 154 words of my tomato page'
 description:
   'Odlingsguiden is prerendered, so I thought SEO was fine. It was not. Collapsed sections, buttons instead of links and
   a redirect loop I made myself.'
-date: '2026-10-12'
+date: '2026-10-30'
 slug: 'google-only-saw-154-words-of-my-tomato-page'
 category: code
 tags:
@@ -11,7 +11,6 @@ tags:
   - react
   - nginx
   - odlingsguiden
-published: false
 author: Nicklas Jarnesjö
 ---
 
@@ -108,4 +107,28 @@ A few more things I found along the way:
 None of this was hard to fix. It just wasn't visible. Everything looked fine in the browser, which is exactly the
 problem.
 
-{/* TODO: did indexing improve? Follow up later, or leave it open */}
+## Did it help?
+
+In mid-September Google had indexed 17 pages of the guide. On 23 October it was 204, the tomato page among them, with
+the version without the slash as the canonical one. Clicks from search went from one or two a day to twenty or thirty.
+Nothing in the content changed. It was there the whole time, Google just couldn't see it.
+
+## The lesson
+
+Prerendering, SSR, static export, whatever you use: it is not the finish line. It only means Google gets some HTML.
+Whether that HTML contains what you think it does is a separate question, and your browser can't answer it. You are
+looking at the page after your JavaScript ran and after you clicked a section open. Google looks at it before.
+
+So check it the boring way. Pick one page you care about and fetch it like a crawler would:
+
+```sh
+# words, with scripts and styles stripped out first
+curl -s https://lillabosgarden.se/odlingsguiden/tomat | perl -0pe 's/<(script|style)\b.*?<\/\1>//gs; s/<[^>]*>/ /g' | wc -w
+# links
+curl -s https://lillabosgarden.se/odlingsguiden/tomat | grep -oE '<a [^>]*href' | wc -l
+```
+
+Words and links. If the numbers look like 154 and 1, that is your answer. Then open the same URL in Search Console and
+look at the crawled page, which is the same check with Google's own eyes.
+
+Five minutes. It would have saved me a month.
