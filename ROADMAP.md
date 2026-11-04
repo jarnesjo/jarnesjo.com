@@ -39,3 +39,5 @@
 ## Later
 
 - Link the Snoka card on the home page to its repo when it goes public (`url` in `src/pages/index.astro`). Left out for now since a link to a private repo gives visitors a 404.
+- Update satori from 0.33 when a version drops its exact pin on fflate 0.7.3. Tried 0.63.2 on 2026-11-04: it still pins it, so no audit finding clears, and every OG image renders slightly differently (about 0.75% of the pixels), for no gain. Satori only calls `inflateSync`, not the affected `unzipSync`.
+- Same wait for `@tailwindcss/typography`: 0.5.20 pins postcss-selector-parser 6.0.10. Build time only. Both could be forced with `overrides`, left out on purpose since neither is reachable from the site.
