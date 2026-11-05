@@ -1,8 +1,8 @@
 ---
 title: 'Stop running artisan on stale code'
 description:
-  'A small shell function that warns you when your current directory no longer matches the active deploy. Saved me from
-  debugging phantom issues after a Forge deploy.'
+  'A small shell function that always runs artisan from the live release, even when your shell is left in an old one.
+  Saved me from debugging phantom issues after a Forge deploy.'
 date: '2026-03-25'
 slug: 'stop-running-artisan-on-stale-code'
 category: code
@@ -34,24 +34,38 @@ hides from you. You've been doing it the same way for years and it's never been 
 ## The fix
 
 I've always had `alias art="php artisan"` on my servers. So I replaced that alias with a function that does the same
-thing but catches you when you're in the wrong place:
+thing but always runs from the live release:
 
 ```bash
-art() {
-    local site_root=$(pwd -P | sed 's|/releases/.*||; s|/current.*||')
-    if [ -L "$site_root/current" ]; then
-        local real=$(readlink -f "$site_root/current")
-        if [ "$(pwd -P)" != "$real" ]; then
-            echo "Deploy has happened - run: cd $site_root/current"
-            return 1
-        fi
+# Runs a command from a site's live release, wherever in the site
+# you stand. A shell left in an old release otherwise runs old code
+# against the live database. Outside a site it runs where you are.
+_in_current() {
+    local here dir live
+    here=$(pwd -P 2>/dev/null) || here=$PWD
+    dir=$here
+    while [ "$dir" != "/" ] && [ ! -L "$dir/current" ]; do dir=$(dirname "$dir"); done
+    if [ ! -L "$dir/current" ]; then
+        "$@"
+        return
     fi
-    php artisan "$@"
+    live=$(readlink -f "$dir/current")
+    case "$here/" in
+        "$live"/*) ;;
+        "$dir"/releases/*) echo "Old release: running in the live one, but this shell is still in the old one (cd $dir/current)" >&2 ;;
+    esac
+    (cd "$live" && "$@")
 }
+
+art() { _in_current "${PHP:-php}" artisan "$@"; }
 ```
 
-It checks if the `current` symlink still points to the directory you're in. If a deploy has happened since you `cd`'d
-in, it warns you instead of running the command against old code.
+It walks up from where you stand until it finds the `current` symlink, then runs the command in the release that symlink
+points to. If a deploy has happened since you `cd`'d in, you get the new code anyway, plus a line telling you your shell
+got left behind. Outside a site it's just `php artisan` where you are.
+
+It's two functions so you can wrap any other command that lives in the project the same way. And if a site needs another
+PHP version than the server default: `PHP=php8.4 art migrate`.
 
 Drop it in your `.bashrc` or `.zshrc` on the server and you're good. Since I was already using `art` as an alias,
 nothing changed about how I work. Same command, same muscle memory - it just protects me now.
@@ -61,3 +75,8 @@ I'll forget, and three months from now I'll be staring at logs again wondering w
 safety net is built into the habit I already have.
 
 Hope it saves someone else the time I lost banging my head against the wall.
+
+---
+
+**Update, November 2026:** the first version of this function stopped and told you to `cd` instead, so you had to run
+the command again. Now it just runs the right code and tells you. If you copied the old one, swap it for the one above.
