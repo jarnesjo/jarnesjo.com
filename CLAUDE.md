@@ -9,7 +9,7 @@ Personal writing/portfolio site for Nicklas Jarnesjo (jarnesjo.com). Built with 
 - **Styling:** Tailwind CSS 4 + @tailwindcss/typography, dark mode via class-based toggle
 - **Content:** MDX posts via @astrojs/mdx + Content Collections (collection: `writing`)
 - **Language:** TypeScript
-- **Node:** v22+ (.nvmrc)
+- **Node:** v26 (.nvmrc)
 - **Package manager:** npm
 
 ## Commands
@@ -77,6 +77,7 @@ public/
 
 - No `overrides` needed. Astro 7 requires vite ^8, the same major vitest and @tailwindcss/vite accept, so vite dedupes to a single copy.
 - The old `overrides.vite: 7.3.2` pin existed because Astro 6 wanted vite ^7 while the others hoisted vite 8, which caused a rolldown native-binding mismatch (`Missing field tsconfigPaths on BindingViteResolvePluginConfig.resolveOptions`). If two vite majors ever end up in the tree again, that is the error to expect - check `npm ls vite` first.
+- `@types/node` stays on 24 while the runtime is Node 26: `sitemap@9` (via @astrojs/sitemap) depends on `^24.9.2`. It is types only and no project code relies on Node 26 APIs, so it is not worth an override. It follows when sitemap widens its range.
 
 ## Language
 
