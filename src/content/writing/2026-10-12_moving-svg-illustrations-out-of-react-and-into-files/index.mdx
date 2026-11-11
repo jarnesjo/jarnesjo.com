@@ -100,9 +100,10 @@ The carrot page went from 169 kB to 110 kB. 337 kB before the icons.
 
 ## A budget that actually stops me
 
-The worst part is that the build warned the whole time. Nobody read it. Me being nobody.
+The build warned the whole time, and I knew it was big. But every way I tried to load the drawings separately made them
+blink in when the page loaded. So they stayed inline until there was a way that didn't.
 
-So now there's a size check that runs when I release, and it stops the release if the index chunk or any prerendered
-page grows past its budget. Warnings are not enough. A red release is.
+Now there's a size check that runs when I release, and it stops the release if the index chunk or any prerendered page
+grows past its budget. Warnings are not enough. A red release is.
 
 And a rule written down for the future: graphics are files.
