@@ -22,10 +22,13 @@ guides have larger drawings too.
 All of them were React components. Just SVG in JSX. It's the obvious way to do it in a React app and it worked fine for
 a long time.
 
-Then we redrew all of them in a new pen style, because the old ones more or less disappeared in dark mode. The new
-style has a lot more detail. And a lot more detail means a lot more SVG nodes.
+Then we [redrew all of them](/writing/odlingsguiden-seven-months-later/) in a new pen style, because the old ones more
+or less disappeared in dark mode. The new style has a lot more detail. And a lot more detail means a lot more SVG
+nodes.
 
-{/* TODO: something about the new style or how the drawings are made? */}
+Every shape in the new style is three to five elements. A base, a wash, a lighter wash a bit off to the side, the
+outline and a faint second pen stroke. That's what makes it look hand drawn. It's also why a simple crop like an onion
+ends up around 35 to 55 elements.
 
 ## 1.2 MB of HTML
 
@@ -93,12 +96,11 @@ Same thing for the bigger picture on each crop page. 186 of them, each a React c
 loading states and fade-ins. Now it's a file with a `<symbol>`, and the prerender adds a `<link rel="preload">` for it in
 the head.
 
-The carrot page went from 337 kB to 110 kB.
+The carrot page went from 169 kB to 110 kB. 337 kB before the icons.
 
 ## A budget that actually stops me
 
-The worst part is how long this went on. The index chunk carried 1.2 MB of drawings for weeks. There was a warning in
-the build. Nobody read it. Me being nobody.
+The worst part is that the build warned the whole time. Nobody read it. Me being nobody.
 
 So now there's a size check that runs when I release, and it stops the release if the index chunk or any prerendered
 page grows past its budget. Warnings are not enough. A red release is.
