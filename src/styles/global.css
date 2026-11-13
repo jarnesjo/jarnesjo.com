@@ -23,8 +23,8 @@
     text-decoration: none;
 
     &::after {
-      background-color: #e06c75;
-      @apply dark:bg-red-800;
+      /* Light enough to read text on: 5.2:1 against the prose gray (#e06c75 was 3.2:1) */
+      background-color: #eca7ac;
       content: '';
       position: absolute;
       z-index: -1;
@@ -126,6 +126,12 @@
 
   a {
     @apply text-gray-100;
+
+    /* Here, not as dark:bg-red-800 in .prose a::after: Tailwind 4 builds that
+       variant on a pseudo-element as ::after:where(), which never matches */
+    &::after {
+      @apply bg-red-800;
+    }
   }
 
   h2,
