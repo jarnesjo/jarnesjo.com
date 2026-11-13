@@ -74,6 +74,8 @@ add_header Content-Security-Policy "default-src 'self'; script-src 'self' https:
 location ~ ^/(rss|feed)/?$ { return 301 /feed.xml; }
 location ~ ^/blog/?$ { return 301 /writing/; }
 location ~ ^/blog/(.+?)/?$ { return 301 /writing/$1/; }
+# Tools guess /sitemap.xml; Astro's sitemap is sitemap-index.xml
+location = /sitemap.xml { return 301 /sitemap-index.xml; }
 
 # Hashed assets (Astro _astro/) -- cache forever
 location /_astro/ {
@@ -97,6 +99,10 @@ location also set `Cache-Control "public, immutable"`. `expires` alone sets
 
 `X-XSS-Protection` is left out on purpose: browsers have dropped it, and
 the old filter it turned on could be abused.
+
+Edit the file in Forge's nginx editor. Forge's API nginx endpoint for the
+site returns Forge's `site.conf`, which the real file has inlined (its
+`location /` clashed with the one above), so it is not what nginx reads.
 
 ### Content-Security-Policy
 
