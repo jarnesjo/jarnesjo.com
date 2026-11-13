@@ -104,6 +104,18 @@ Edit the file in Forge's nginx editor. Forge's API nginx endpoint for the
 site returns Forge's `site.conf`, which the real file has inlined (its
 `location /` clashed with the one above), so it is not what nginx reads.
 
+The live file has more than the block above. Worth bringing to a new host:
+
+- Bot visits to Puls: `location /` mirrors the requests it serves to an
+  internal location that forwards them to Puls when a `map` on the
+  User-Agent says bot. Bots don't run the script, so this is the only way Puls sees them.
+- 404s to Puls: the internal `/404.html` location has a `post_action`
+  that reports the path, status and referrer. That fills Puls's
+  "Pages to fix".
+- `Cache-Control: no-cache` on HTML only, from a `map` on the response
+  content type, so pages revalidate while `/_astro/` caches for a year.
+- `map` blocks go outside the `server` block.
+
 ### Content-Security-Policy
 
 The policy names hosts only: the site's own files and Puls (script, beacon
